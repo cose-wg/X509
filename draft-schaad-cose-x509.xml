@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+  <!ENTITY RFC2104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2104.xml" >
+  <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml" >
+
+  <!ENTITY RFC2633 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2633.xml" >
+  <!ENTITY RFC2898 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2898.xml" >
+  <!ENTITY RFC3394 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3394.xml" >
+  <!ENTITY RFC3447 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3447.xml" >
+  <!ENTITY RFC3610 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3610.xml" >
+  <!ENTITY RFC4231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4231.xml" >
+  <!ENTITY RFC4262 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4262.xml" >
+  <!ENTITY RFC5480 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5480.xml" >
+  <!ENTITY RFC5652 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5652.xml" >
+  <!ENTITY RFC5751 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5751.xml" >
+  <!ENTITY RFC5752 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5752.xml" >
+  <!ENTITY RFC5869 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5869.xml" >
+  <!ENTITY RFC5990 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5990.xml" >
+  <!ENTITY RFC6090 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6090.xml" >
+  <!ENTITY RFC6151 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6151.xml" >
+  <!ENTITY RFC6979 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6979.xml" >
+  <!ENTITY RFC7049 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7049.xml" >
+  <!ENTITY RFC7159 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml" >
+  <!ENTITY RFC7252 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7252.xml" >
+  <!ENTITY RFC7515 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7515.xml" >
+  <!ENTITY RFC7516 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7516.xml" >
+  <!ENTITY RFC7517 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7517.xml" >
+  <!ENTITY RFC7518 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7518.xml" >
+  <!ENTITY RFC7539 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7539.xml" >
+
+  <!ENTITY CDDL SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.greevenbosch-appsawg-cbor-cddl.xml" >
+  <!ENTITY COSE SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-cose-msg.xml" >
+  <!ENTITY CBCMAC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.mcgrew-aead-aes-cbc-hmac-sha2.xml" >
+  <!ENTITY CFRG-EC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.irtf-cfrg-curves.xml" >
+
+]>
+
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+
+<rfc ipr="trust200902" docName="draft-schaad-cose-x509-latest" category="info">
+  <front>
+    <title abbrev="COSE X.509">CBOR Encoded Message Syntax (COSE): Headers for carrying and referencing X.509 certificates</title>
+
+    <author initials="J." surname="Schaad" fullname="Jim Schaad">
+      <organization>August Cellars</organization>
+      <address>
+        <email>ietf@augustcellars.com</email>
+      </address>
+    </author>
+
+    <date/>
+
+    <area>Security</area>
+    <abstract>
+      <t>
+        This document defines the headers and usage for  referring to and transporting X.509 certificates  in the CBOR Encoded Message (COSE) Syntax.
+      </t>
+    </abstract>
+
+    <note title="Contributing to this document">
+      <!-- RFC EDITOR - Please remove this note before publishing -->
+      <t>
+        The source for this draft is being maintained in GitHub.
+        Suggested changes should be submitted as pull requests  at <eref target="https://github.com/cose-wg/X509"/>.
+        Instructions are on that page as well.
+        Editorial changes can be managed in GitHub, but any substantial issues need to be discussed on the COSE mailing list.
+      </t>
+    </note>
+  </front>
+
+  <middle>
+
+    <section anchor="introduction" title="Introduction">
+      <t>
+        In the process of writing RFCXXXX <xref target="I-D.ietf-cose-msg"/> discussions where held on the question of X.509 certificates and if there were needed.
+        At the time there were no use cases presented that appeared to hve a sufficient set of support to include these headers.
+        Since that time a number of cases where X.509 certificate support is necessary have been defined.
+        This document provides a set of headers that will allow applications to transport and refer to X.509 certificates in a consistent manner.
+      </t>
+
+      
+      <section anchor="requirements-terminology" title="Requirements Terminology">
+        <!--  NOTE FOR AUTHORS:
+             We use the following terms in the document
+             
+             field - an entry in a CBOR array
+             parameter - an element in a CBOR map (as oppose to 'member' which is frequently used in JSON
+             label - the key of an element in a CBOR map.   Unless otherwise separated from text, enclose with single quote marks
+             value - the value of an element in a CBOR map
+        -->
+
+        <t>
+          The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in <xref target="RFC2119"/>.
+        </t>
+
+        <t>
+          When the words appear in lower case, their natural language meaning is used.
+        </t>
+
+      </section>
+
+    </section>
+    
+    <section anchor="iana-considerations" title="IANA Considerations">
+
+      
+      <section anchor="cose-header-key-table" title="COSE Header Parameter Registry">
+
+        <t>
+          There are currently no registration requests here
+        </t>
+
+      </section>
+
+      
+      <section anchor="IANA-Alg-Registry" title="COSE Header Algorithm Label Table">
+
+      <t>TBD</t>
+
+      </section>
+      <section anchor="cose-algorithm-registry" title="COSE Algorithm Registry">
+
+        <t>TBD</t>
+      </section>
+      <section anchor="cose-key-map-registry" title="COSE Key Common Parameter Registry">
+
+        <t>
+          There are currently no registration tasks inthis section.
+        </t>
+
+      </section>
+
+      
+      <section anchor="cose-key-parameter-registry" title="COSE Key Type Parameter Registry">
+
+        <t>
+          It is requested that IANA create a new registry “COSE Key Type Parameters”.
+        </t>
+
+        <t>
+          The columns of the table are:
+        </t>
+
+        <t>
+          <list style="hanging">
+            <t hangText='key type'>
+              This field contains a descriptive string of a key type. 
+              This should be a value that is in the COSE General Values table and is placed in the 'kty' field of a COSE Key structure.
+            </t>
+            <t hangText='name'>
+              This is a descriptive name that enables easier reference to the item.  It is not used in the encoding.
+            </t>
+            <t hangText='label'>
+              The label is to be unique for every value of key type. 
+              The range of values is from -256 to -1.
+              Labels are expected to be reused for different keys.
+            </t>
+            <t hangText='CBOR type'>
+              This field contains the CBOR type for the field
+            </t>
+            <t hangText='description'>
+              This field contains a brief description for the field
+            </t>
+            <t hangText='specification'>
+              This contains a pointer to the public specification for the field if one exists
+            </t>
+          </list>
+        </t>
+
+        <t>
+          This registry will be initially populated by the values in <xref target="table-ec1-keys"/>, and <xref target="table-rsa-keys"/>.
+          The specification column for all of these entries will be this document.
+        </t>
+
+      </section>
+
+      <section anchor="cose-curve-registry" title="COSE Elliptic Curve Registry">
+
+        <t>
+          It is requested that IANA create a new registry “COSE Elliptic Curve Parameters”.
+        </t>
+
+        <t>
+          The columns of the table are:
+        </t>
+
+        <t>
+          <list style="hanging">
+            <t hangText='name'>
+              This is a descriptive name that enables easier reference to the item.  
+              It is not used in the encoding.
+            </t>
+            <t hangText='value'>
+              This is the value used to identify the curve.
+              These values MUST be unique.
+              The integer values from -256 to 255 are designated as Standards Track Document Required.
+              The the integer values from 256 to 65535 and -65536 to -257 are designated as Specification Required.
+              Integer values over 65535 are designated as first come first serve.
+              Integer values less than -65536 are marked as private use.
+            </t>
+            <t hangText='key type'>
+              This designates the key type(s) that can be used with this curve.
+            </t>
+            <t hangText='description'>
+              This field contains a brief description of the curve.
+            </t>
+            <t hangText='specification'>
+              This contains a pointer to the public specification for the curve if one exists.
+            </t>
+          </list>
+        </t>
+
+        <t>
+          This registry will be initially populated by the values in <xref target="table_key_types"/>.
+          The specification column for all of these entries will be this document.
+        </t>
+
+
+      </section>
+
+    </section>
+    
+    <section anchor="security-considerations" title="Security Considerations">
+
+      <t>
+        There are security considerations:
+      </t>
+
+      <t>
+        <list style="numbers">
+          <t>
+            Protect private keys
+          </t>
+          <t>
+            MAC messages with more than one recipient means one cannot figure out who sent the message
+          </t>
+          <t>
+            Use of direct key with other recipient structures hands the key to other recipients.
+          </t>
+          <t>
+            Use of direct ECDH direct encryption is easy for people to leak information on if there are other recipients in the message.
+          </t>
+          <t>
+            Considerations about protected vs unprotected header fields.
+          </t>
+          <t>
+            Need to verify that:
+            1) the kty field of the key matches the key and algorithm being used. 
+            2) that the kty field needs to be included in the trust decision as well as the other key fields.
+            3) that the algorithm be included in the trust decision.
+          </t>
+        </list>
+      </t>
+
+    </section>
+
+
+  </middle>
+
+  <back>
+
+    <references title='Normative References'>
+      &RFC2119;
+      &RFC7049;
+    </references>
+
+    <references title='Informative References'>
+      &CDDL;
+      <!-- &CBCMAC; -->
+      &RFC2104;
+      &RFC2633;
+      &RFC2898;
+      &RFC3394;
+      &RFC3447;
+      &RFC3610;
+      &RFC4231;
+      &RFC4262;
+      &RFC5480;
+      &RFC5652;
+      &RFC5751;
+      &RFC5752;
+      &RFC5869;
+      &RFC5990;
+      &RFC6090;
+      &RFC6151;
+      &RFC6979;
+      &RFC7159;
+      &RFC7252;
+      &RFC7515;
+      &RFC7516;
+      &RFC7517;
+      &RFC7518;
+      &RFC7539;
+      
+      &CFRG-EC;
+      &COSE;
+
+      <reference anchor="AES-GCM" >
+        <front>
+          <title>NIST Special Publication 800-38D: Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode (GCM) and GMAC.</title>
+          <author initials="M." surname="Dworkin">
+            <organization>U.S. National Institute of Standards and Technology</organization>
+          </author>
+          <date year="2007" month="Nov"/>
+        </front>
+        <format target="https://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf" type="PDF"/>
+      </reference>
+
+      <reference anchor="MAC">
+        <front>
+          <title>FIPS PUB 113: Computer Data Authentication</title>
+          <author initials="N" surname="NiST"/>
+          <date year="1985" month="May"/>
+        </front>
+        <format target="http://csrc.nist.gov/publications/fips/fips113/fips113.html" type="HTML"/>
+      </reference>
+      
+      <reference anchor="DSS">
+        <front>
+          <title>Digital Signature Standard (DSS)</title>
+          <author>
+            <organization>U.S. National Institute of Standards and Technology</organization>
+          </author>
+          <date year="2013" month="July"/>
+        </front>
+        <format target="http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf" type="PDF"/>
+      </reference>
+
+      <reference anchor="SP800-56A">
+        <front>
+          <title>NIST Special Publication 800-56A: Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography</title>
+          <author initials="E." surname="Barker">
+            <organization>U.S. National Institute of Standards and Technology</organization>
+          </author>
+          <author initials="L." surname="Chen">
+            <organization>U.S. National Institute of Standards and Technology</organization>
+          </author>
+          <author initials="A." surname="Roginsky">
+            <organization>U.S. National Institute of Standards and Technology</organization>
+          </author>
+          <author initials="M." surname="Smid">
+            <organization>Orion Security Solutions, Inc.</organization>
+          </author>
+          <date year="2013" month="May"/>
+        </front>
+        <format target="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar2.pdf" type="PDF"/>
+      </reference>
+
+      <reference anchor="SEC1">
+        <front>
+          <title>SEC 1: Elliptic Curve Cryptography</title>
+          <author>
+            <organization>Standards for Efficient Cryptography Group</organization>
+          </author>
+          <date year="2009" month="May"/>
+        </front>
+        <format target="http://www.secg.org/sec1-v2.pdf" type="PDF"/>
+      </reference>
+
+      <reference anchor="MultiPrimeRSA">
+        <front>
+          <title>On the Security of Multi-prime RSA</title>
+          <author initials="M. J." surname="Hinek">
+            <organization>University of Waterloo</organization>
+          </author>
+          <author initials="D. R." surname="Cheriton">
+            <organization>University of Waterloo</organization>
+          </author>
+          <date year="2006" month="June"/>
+        </front>
+        <format target="http://cacr.uwaterloo.ca/techreports/2006/cacr2006-16.pdf" type="PDF"/>
+      </reference>
+
+      <reference anchor="PVSig">
+        <front>
+          <title>Formal Security Proofs for a Signature Scheme with Partial Message Recover</title>
+          <author initials="D." surname="Brown">
+          </author>
+          <author initials="D." surname="Johnson">
+          </author>
+          <date year="2000" month="February"/>
+        </front>
+        <format target="https://www.certicom.com/images/pdfs/CerticomWP-PVSigSec_login.pdf" type="PDF"/>
+      </reference>
+
+    </references>
+
+    <section title="Document Updates">
+      <section title="Version -00">
+        <t>
+          <list style="symbols">
+            <t>TBD</t>
+          </list>
+        </t>
+      </section>
+    </section>
+  </back>
+</rfc>
