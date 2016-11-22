@@ -1,22 +1,16 @@
-# CBOR Encoded Message Syntax (COSE): Headers for carrying and referencing X.509 certificates
+# CBOR Encoded Message Syntax (COSE): Headers for carrying and referencing X.509 certificates  [![Build Status](https://circleci.com/gh/cose-wg/X509.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/cose-wg/X509)
 
 This is the working area for the Individual internet-draft, "CBOR Encoded Message Syntax (COSE): Headers for carrying and referencing X.509 certificates".
 
 * [Editor's copy](https://cose-wg.github.io/X509/)
 * [Individual Draft] (https://tools.ietf.org/html/draft-schaad-cose-x509)
+* [Compare Individual Draft and Editor's copy] (https://tools.ietf.org/rfcdiff?url1=https://www.ietf.org/id/draft-schaad-cose-x509&url2=https://cose-wg.github.io/X509/draft-schaad-cose-x509.txt)
 
+## Document Status
 
-## Building the Draft
+This document is under active developement.
 
-Formatted text and HTML versions of the draft can be built using `make`.
-
-```sh
-$ make
-```
-
-This requires that you have the necessary software installed.  See [the
-instructions](https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md).
-
+Current list of open issues can be found at [cose-wg/cose-issues](https://github.com/cose-wg/cose-issues).
 
 ## Contributing
 
@@ -91,3 +85,16 @@ process, as documented in Best Current Practices RFCs and IESG Statements.
 
 A participant in any IETF activity acknowledges that written, audio and video
 records of meetings may be made and may be available to the public.
+
+## Building the Draft
+
+Formatted text and HTML versions of the draft can be built using `make`.
+
+```sh
+$ make
+```
+
+This requires that you have the necessary software installed.  See [the
+instructions](https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md).
+
+
