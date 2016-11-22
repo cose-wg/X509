@@ -1,24 +1,4 @@
-# CBOR Encoded Message Syntax (COSE): Headers for carrying and referencing X.509 certificates
-
-This is the working area for the Individual internet-draft, "CBOR Encoded Message Syntax (COSE): Headers for carrying and referencing X.509 certificates".
-
-* [Editor's copy](https://cose-wg.github.io/X509/)
-* [Individual Draft] (https://tools.ietf.org/html/draft-schaad-cose-x509)
-
-
-## Building the Draft
-
-Formatted text and HTML versions of the draft can be built using `make`.
-
-```sh
-$ make
-```
-
-This requires that you have the necessary software installed.  See [the
-instructions](https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md).
-
-
-## Contributing
+# Contributing
 
 Before submitting feedback, please familiarize yourself with our current issues
 list and review the [working group
