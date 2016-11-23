@@ -4,6 +4,8 @@
   <!ENTITY RFC2104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2104.xml" >
   <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml" >
 
+  <!ENTITY RFC2582 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2582.xml" >
+  <!ENTITY RFC2585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2585.xml" >
   <!ENTITY RFC2633 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2633.xml" >
   <!ENTITY RFC2898 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2898.xml" >
   <!ENTITY RFC3394 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3394.xml" >
@@ -11,6 +13,8 @@
   <!ENTITY RFC3610 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3610.xml" >
   <!ENTITY RFC4231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4231.xml" >
   <!ENTITY RFC4262 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4262.xml" >
+  <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml" >
+  <!ENTITY RFC5280 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5280.xml" >
   <!ENTITY RFC5480 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5480.xml" >
   <!ENTITY RFC5652 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5652.xml" >
   <!ENTITY RFC5751 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5751.xml" >
@@ -32,7 +36,7 @@
   <!ENTITY CDDL SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.greevenbosch-appsawg-cbor-cddl.xml" >
   <!ENTITY COSE SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-cose-msg.xml" >
   <!ENTITY CBCMAC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.mcgrew-aead-aes-cbc-hmac-sha2.xml" >
-  <!ENTITY CFRG-EC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.irtf-cfrg-curves.xml" >
+  <!ENTITY LAMPS SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-lamps-rfc5751-bis.xml" >
 
 ]>
 
@@ -43,7 +47,7 @@
 
 <rfc ipr="trust200902" docName="draft-schaad-cose-x509-latest" category="info">
   <front>
-    <title abbrev="COSE X.509">CBOR Encoded Message Syntax (COSE): Headers for carrying and referencing X.509 certificates</title>
+    <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Headers for carrying and referencing X.509 certificates</title>
 
     <author initials="J." surname="Schaad" fullname="Jim Schaad">
       <organization>August Cellars</organization>
@@ -76,7 +80,7 @@
 
     <section anchor="introduction" title="Introduction">
       <t>
-        In the process of writing RFCXXXX <xref target="I-D.ietf-cose-msg"/> discussions where held on the question of X.509 certificates and if there were needed.
+        In the process of writing RFCXXXX <xref target="I-D.ietf-cose-msg"/> discussions where held on the question of X.509 certificates  <xref target="RFC5280"/>  and if there were needed.
         At the time there were no use cases presented that appeared to hve a sufficient set of support to include these headers.
         Since that time a number of cases where X.509 certificate support is necessary have been defined.
         This document provides a set of headers that will allow applications to transport and refer to X.509 certificates in a consistent manner.
@@ -104,6 +108,107 @@
       </section>
 
     </section>
+
+    <section title="X.509 COSE Headers">
+      <t>
+        The use of X.509 certificates allows for an existing trust infrastructure to be used with COSE.
+      </t>
+
+      <t>
+        When the header parameters defined in this section are placed in a COSE_Signature or COSE_Sign0 object, they identify the key that was used for generating signature.
+      </t>
+
+      <t>
+        When the header parameters defined in this section are placed in a COSE_recipient structure, they identify the key that was used by the sender when used with static-static key agreement algorithms.
+      </t>
+
+      <t>
+        Certificates obtained from any of these methods MUST still be validated according to the PKIX rules in <xref target="RFC5280"/>.
+        This includes matching against the trust anchors configured for the application.
+        This applies to certificates of a chain length of one as well as longer chains.
+      </t>
+
+      <t>
+        The header parameters defined in this document are:
+
+        <list style="hanging">
+          <t hangText="x5c:">
+            This header parameter allows for a single or a bag of X.509 certificates to be carried in the message.
+            <list style="symbols">
+              <t>
+                If a single certificate is conveyed, it is placed in a CBOR bstr.
+              </t>
+              <t>
+                If multiple certificates are conveyed, a CBOR array is used where:
+                <list style="symbols">
+                  <t>
+                    The first element is a boolean value set to true if the certificates are arranged such that a each certificate is issued by the next certficate.
+                    In otherwords a chain of certificates is presented.
+                    The chain of certificates does not need to be complete and normally SHOULD omit the trust anchor certificate.
+                    If the first element is set to false, then the certificates are not ordered and can include certificates that are not needed to create a certificate chain from the end-entity certificate.
+                    This allows for a certificate with a key exchange algorithm to be carried in a signed message.
+                  </t>
+                  <t>
+                    The second element is the end-entity certificate.
+                    This is true regardless of wheither the certificates are ordered or not.
+                    This permits the application to identify which certificate is the end-entity certificate without a second header attribute.
+                  </t>
+                  <t>
+                    Elements three through the last are certificates.
+                  </t>
+                </list>
+              </t>
+            </list>
+          </t>
+
+          <t hangText="x5t:">
+            This header parameter provides the ability to identify an X.509 certificate by a hash value.
+            The parameter is an array of two elements.
+            The first element is an algorithm identifier which is a signed integer or a string containing the hash algorithm identifier.
+            The second element is a binary string containing the hash value.
+            <vspace/>
+            For interoperability, applications which use this header parameter MUST support the hash algorithm 'sha256', but can use other hash algorithms.
+          </t>
+
+          <t hangText="x5u:">
+            This header parameter provides the ability to identify an X.509 certificate by a URL.
+            The referenced resource can be any of the following media types:
+            <list style="symbols">
+              <t>application/pkix-cert <xref target="RFC2585"/></t>
+              <t>application/pkcs7-mime; smime-type="certs-only" <xref target="I-D.ietf-lamps-rfc5751-bis"/></t>
+              <t>Should we support a PEM type? I cannot find a registered media type for one</t>
+            </list>
+            <vspace/>
+            The URL provided MUST provide integrity protection.
+            For example, an HTTP GET request to retrieve a certificate MUST use TLS <xref target="RFC5246"/>.
+            If the certificate does not chain to an existing trust anchor, the identity of the server MUST be configured as trusted to provide new trust anchors.
+            This will normally be the situation when self-signed certificates are used.
+          </t>
+        </list>
+      </t>
+
+      <texttable anchor="Tags" title="X.509 COSE Headers">
+        <ttcol>name</ttcol><ttcol>label</ttcol><ttcol>value type</ttcol><ttcol>description</ttcol>
+
+        <c>x5t</c><c>TBD1</c><c>COSE_CertHash</c><c>Hash of an X.509 certificate</c>
+        <c>x5u</c><c>TBD2</c><c>uri</c><c>URL pointing to an X.509 certificate</c>
+        <c>x5c</c><c>TBD3</c><c>COSE_X509</c><c>Collection of X.509 certificates</c>
+      </texttable>
+
+      <figure><artwork type="CDDL">
+COSE_X509 = bstr / [ ordered: bool, endcert:bstr, *certs: bstr ]
+COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
+</artwork>
+      </figure>
+    </section>
+
+    <section title="Hash Algorithm Identifiers">
+      <section title="SHA-2 256-bit Hash">
+        <t>
+          Define an algorithm identifier for SHA-256.
+        </t>
+      </section>
+    </section>
     
     <section anchor="iana-considerations" title="IANA Considerations">
 
@@ -111,115 +216,18 @@
       <section anchor="cose-header-key-table" title="COSE Header Parameter Registry">
 
         <t>
-          There are currently no registration requests here
+          Put in the registrations.
         </t>
 
       </section>
 
       
-      <section anchor="IANA-Alg-Registry" title="COSE Header Algorithm Label Table">
-
-      <t>TBD</t>
-
-      </section>
       <section anchor="cose-algorithm-registry" title="COSE Algorithm Registry">
 
-        <t>TBD</t>
-      </section>
-      <section anchor="cose-key-map-registry" title="COSE Key Common Parameter Registry">
-
         <t>
-          There are currently no registration tasks inthis section.
+          Put in the registrations.
         </t>
-
-      </section>
-
-      
-      <section anchor="cose-key-parameter-registry" title="COSE Key Type Parameter Registry">
-
-        <t>
-          It is requested that IANA create a new registry “COSE Key Type Parameters”.
-        </t>
-
-        <t>
-          The columns of the table are:
-        </t>
-
-        <t>
-          <list style="hanging">
-            <t hangText='key type'>
-              This field contains a descriptive string of a key type. 
-              This should be a value that is in the COSE General Values table and is placed in the 'kty' field of a COSE Key structure.
-            </t>
-            <t hangText='name'>
-              This is a descriptive name that enables easier reference to the item.  It is not used in the encoding.
-            </t>
-            <t hangText='label'>
-              The label is to be unique for every value of key type. 
-              The range of values is from -256 to -1.
-              Labels are expected to be reused for different keys.
-            </t>
-            <t hangText='CBOR type'>
-              This field contains the CBOR type for the field
-            </t>
-            <t hangText='description'>
-              This field contains a brief description for the field
-            </t>
-            <t hangText='specification'>
-              This contains a pointer to the public specification for the field if one exists
-            </t>
-          </list>
-        </t>
-
-        <t>
-          This registry will be initially populated by the values in <xref target="table-ec1-keys"/>, and <xref target="table-rsa-keys"/>.
-          The specification column for all of these entries will be this document.
-        </t>
-
-      </section>
-
-      <section anchor="cose-curve-registry" title="COSE Elliptic Curve Registry">
-
-        <t>
-          It is requested that IANA create a new registry “COSE Elliptic Curve Parameters”.
-        </t>
-
-        <t>
-          The columns of the table are:
-        </t>
-
-        <t>
-          <list style="hanging">
-            <t hangText='name'>
-              This is a descriptive name that enables easier reference to the item.  
-              It is not used in the encoding.
-            </t>
-            <t hangText='value'>
-              This is the value used to identify the curve.
-              These values MUST be unique.
-              The integer values from -256 to 255 are designated as Standards Track Document Required.
-              The the integer values from 256 to 65535 and -65536 to -257 are designated as Specification Required.
-              Integer values over 65535 are designated as first come first serve.
-              Integer values less than -65536 are marked as private use.
-            </t>
-            <t hangText='key type'>
-              This designates the key type(s) that can be used with this curve.
-            </t>
-            <t hangText='description'>
-              This field contains a brief description of the curve.
-            </t>
-            <t hangText='specification'>
-              This contains a pointer to the public specification for the curve if one exists.
-            </t>
-          </list>
-        </t>
-
-        <t>
-          This registry will be initially populated by the values in <xref target="table_key_types"/>.
-          The specification column for all of these entries will be this document.
-        </t>
-
-
+        
       </section>
 
     </section>
@@ -230,34 +238,8 @@
         There are security considerations:
       </t>
 
-      <t>
-        <list style="numbers">
-          <t>
-            Protect private keys
-          </t>
-          <t>
-            MAC messages with more than one recipient means one cannot figure out who sent the message
-          </t>
-          <t>
-            Use of direct key with other recipient structures hands the key to other recipients.
-          </t>
-          <t>
-            Use of direct ECDH direct encryption is easy for people to leak information on if there are other recipients in the message.
-          </t>
-          <t>
-            Considerations about protected vs unprotected header fields.
-          </t>
-          <t>
-            Need to verify that:
-            1) the kty field of the key matches the key and algorithm being used. 
-            2) that the kty field needs to be included in the trust decision as well as the other key fields.
-            3) that the algorithm be included in the trust decision.
-          </t>
-        </list>
-      </t>
 
     </section>
-
 
   </middle>
 
@@ -265,138 +247,18 @@
 
     <references title='Normative References'>
       &RFC2119;
+      &RFC5280;
       &RFC7049;
+      &COSE;
     </references>
 
     <references title='Informative References'>
       &CDDL;
-      <!-- &CBCMAC; -->
-      &RFC2104;
-      &RFC2633;
-      &RFC2898;
-      &RFC3394;
-      &RFC3447;
-      &RFC3610;
-      &RFC4231;
-      &RFC4262;
-      &RFC5480;
-      &RFC5652;
-      &RFC5751;
-      &RFC5752;
-      &RFC5869;
-      &RFC5990;
-      &RFC6090;
-      &RFC6151;
-      &RFC6979;
-      &RFC7159;
-      &RFC7252;
-      &RFC7515;
-      &RFC7516;
-      &RFC7517;
-      &RFC7518;
-      &RFC7539;
-      
-      &CFRG-EC;
-      &COSE;
-
-      <reference anchor="AES-GCM" >
-        <front>
-          <title>NIST Special Publication 800-38D: Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode (GCM) and GMAC.</title>
-          <author initials="M." surname="Dworkin">
-            <organization>U.S. National Institute of Standards and Technology</organization>
-          </author>
-          <date year="2007" month="Nov"/>
-        </front>
-        <format target="https://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf" type="PDF"/>
-      </reference>
-
-      <reference anchor="MAC">
-        <front>
-          <title>FIPS PUB 113: Computer Data Authentication</title>
-          <author initials="N" surname="NiST"/>
-          <date year="1985" month="May"/>
-        </front>
-        <format target="http://csrc.nist.gov/publications/fips/fips113/fips113.html" type="HTML"/>
-      </reference>
-      
-      <reference anchor="DSS">
-        <front>
-          <title>Digital Signature Standard (DSS)</title>
-          <author>
-            <organization>U.S. National Institute of Standards and Technology</organization>
-          </author>
-          <date year="2013" month="July"/>
-        </front>
-        <format target="http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf" type="PDF"/>
-      </reference>
-
-      <reference anchor="SP800-56A">
-        <front>
-          <title>NIST Special Publication 800-56A: Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography</title>
-          <author initials="E." surname="Barker">
-            <organization>U.S. National Institute of Standards and Technology</organization>
-          </author>
-          <author initials="L." surname="Chen">
-            <organization>U.S. National Institute of Standards and Technology</organization>
-          </author>
-          <author initials="A." surname="Roginsky">
-            <organization>U.S. National Institute of Standards and Technology</organization>
-          </author>
-          <author initials="M." surname="Smid">
-            <organization>Orion Security Solutions, Inc.</organization>
-          </author>
-          <date year="2013" month="May"/>
-        </front>
-        <format target="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar2.pdf" type="PDF"/>
-      </reference>
-
-      <reference anchor="SEC1">
-        <front>
-          <title>SEC 1: Elliptic Curve Cryptography</title>
-          <author>
-            <organization>Standards for Efficient Cryptography Group</organization>
-          </author>
-          <date year="2009" month="May"/>
-        </front>
-        <format target="http://www.secg.org/sec1-v2.pdf" type="PDF"/>
-      </reference>
-
-      <reference anchor="MultiPrimeRSA">
-        <front>
-          <title>On the Security of Multi-prime RSA</title>
-          <author initials="M. J." surname="Hinek">
-            <organization>University of Waterloo</organization>
-          </author>
-          <author initials="D. R." surname="Cheriton">
-            <organization>University of Waterloo</organization>
-          </author>
-          <date year="2006" month="June"/>
-        </front>
-        <format target="http://cacr.uwaterloo.ca/techreports/2006/cacr2006-16.pdf" type="PDF"/>
-      </reference>
-
-      <reference anchor="PVSig">
-        <front>
-          <title>Formal Security Proofs for a Signature Scheme with Partial Message Recover</title>
-          <author initials="D." surname="Brown">
-          </author>
-          <author initials="D." surname="Johnson">
-          </author>
-          <date year="2000" month="February"/>
-        </front>
-        <format target="https://www.certicom.com/images/pdfs/CerticomWP-PVSigSec_login.pdf" type="PDF"/>
-      </reference>
+      &RFC5246;
+      &LAMPS;
+      &RFC2585;
 
     </references>
 
-    <section title="Document Updates">
-      <section title="Version -00">
-        <t>
-          <list style="symbols">
-            <t>TBD</t>
-          </list>
-        </t>
-      </section>
-    </section>
   </back>
 </rfc>
