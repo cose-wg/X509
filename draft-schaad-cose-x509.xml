@@ -47,7 +47,7 @@
 
 <rfc ipr="trust200902" docName="draft-schaad-cose-x509-latest" category="info">
   <front>
-    <title abbrev="COSE X.509">CBOR Encoded Message Syntax (COSE): Headers for carrying and referencing X.509 certificates</title>
+    <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Headers for carrying and referencing X.509 certificates</title>
 
     <author initials="J." surname="Schaad" fullname="Jim Schaad">
       <organization>August Cellars</organization>
@@ -125,7 +125,7 @@
       <t>
         Certificates obtained from any of these methods MUST still be validated according to the PKIX rules in <xref target="RFC5280"/>.
         This includes matching against the trust anchors configured for the application.
-        This applies certificates of a chain length of one as well as longer chains.
+        This applies to certificates of a chain length of one as well as longer chains.
       </t>
 
       <t>
@@ -164,7 +164,7 @@
           <t hangText="x5t:">
             This header parameter provides the ability to identify an X.509 certificate by a hash value.
             The parameter is an array of two elements.
-            The first element is an algorithm identifier which is a signed integer, an unsigned integer or a string containing the hash algorithm identifier.
+            The first element is an algorithm identifier which is a signed integer or a string containing the hash algorithm identifier.
             The second element is a binary string containing the hash value.
             <vspace/>
             For interoperability, applications which use this header parameter MUST support the hash algorithm 'sha256', but can use other hash algorithms.
@@ -196,7 +196,7 @@
       </texttable>
 
       <figure><artwork type="CDDL">
-COSE_X509 = bstr / [ ordered: bool, certs: +bstr ]
+COSE_X509 = bstr / [ ordered: bool, endcert:bstr, *certs: bstr ]
 COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 </artwork>
       </figure>
