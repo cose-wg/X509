@@ -3,8 +3,8 @@
 This is the working area for the Individual internet-draft, "CBOR Encoded Message Syntax (COSE): Headers for carrying and referencing X.509 certificates".
 
 * [Editor's copy](https://cose-wg.github.io/X509/)
-* [Individual Draft] (https://tools.ietf.org/html/draft-schaad-cose-x509)
-* [Compare Individual Draft and Editor's copy] (https://tools.ietf.org/rfcdiff?url1=https://www.ietf.org/id/draft-schaad-cose-x509&url2=https://cose-wg.github.io/X509/draft-schaad-cose-x509.txt)
+* [Individual Draft](https://tools.ietf.org/html/draft-schaad-cose-x509)
+* [Compare Individual Draft and Editor's copy](https://tools.ietf.org/rfcdiff?url1=https://www.ietf.org/id/draft-schaad-cose-x509&url2=https://cose-wg.github.io/X509/draft-schaad-cose-x509.txt)
 
 ## Document Status
 
