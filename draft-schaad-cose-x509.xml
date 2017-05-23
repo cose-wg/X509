@@ -37,7 +37,8 @@
   <!ENTITY COSE SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-cose-msg.xml" >
   <!ENTITY CBCMAC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.mcgrew-aead-aes-cbc-hmac-sha2.xml" >
   <!ENTITY LAMPS SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-lamps-rfc5751-bis.xml" >
-
+  <!ENTITY CWT SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-ace-cbor-web-token.xml">
+  <!ENTITY EDHOC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.selander-ace-cose-ecdhe.xml">
 ]>
 
 <?rfc toc="yes"?>
@@ -81,11 +82,18 @@
     <section anchor="introduction" title="Introduction">
       <t>
         In the process of writing RFCXXXX <xref target="I-D.ietf-cose-msg"/> discussions where held on the question of X.509 certificates  <xref target="RFC5280"/>  and if there were needed.
-        At the time there were no use cases presented that appeared to hve a sufficient set of support to include these headers.
+        At the time there were no use cases presented that appeared to have a sufficient set of support to include these headers.
         Since that time a number of cases where X.509 certificate support is necessary have been defined.
         This document provides a set of headers that will allow applications to transport and refer to X.509 certificates in a consistent manner.
       </t>
 
+      <t>
+	Some of the constrainted device situations are being used where an X.509 PKI is already installed.
+	One of these situations is the 6tish environment for enrollment of devices where the certificates are installed at the factory.
+	The <xref target="I-D.selander-ace-cose-ecdhe"/> draft was also written with the idea that long term certificates could be used to provide for authentication of devices and uses them to establish session keys.
+	A final scenario is the use of COSE as a messaging application where long term existence of keys can be used along with a central authentication authority.
+	The use of certificates in this scenario allows for key managment to be used which is well understood.
+      </t>
       
       <section anchor="requirements-terminology" title="Requirements Terminology">
         <!--  NOTE FOR AUTHORS:
@@ -112,51 +120,63 @@
     <section title="X.509 COSE Headers">
       <t>
         The use of X.509 certificates allows for an existing trust infrastructure to be used with COSE.
+	This includes the full suite of enrollment protocols, trust anchors, trust chaining and revocation checking that have been defined over time by the IETF and other organizations.
+	The key structures that have been defined in COSE currently do not support all of these properties although some may be found in COSE Web Tokens (CWT) <xref target="I-D.ietf-ace-cbor-web-token"/>.
       </t>
 
       <t>
-        When the header parameters defined in this section are placed in a COSE_Signature or COSE_Sign0 object, they identify the key that was used for generating signature.
+	It is not necessarily expected that constrainted devices will fully support the evalaluation and processing of X.509 certificates, it is perfectly reasonable for a certificate to be assigned to a device which it can then provide to a relying party along with a signature or encrypted message, the relying party not being a constrained device.
       </t>
 
       <t>
-        When the header parameters defined in this section are placed in a COSE_recipient structure, they identify the key that was used by the sender when used with static-static key agreement algorithms.
-      </t>
-
-      <t>
-        Certificates obtained from any of these methods MUST still be validated according to the PKIX rules in <xref target="RFC5280"/>.
-        This includes matching against the trust anchors configured for the application.
-        This applies to certificates of a chain length of one as well as longer chains.
+        Certificates obtained from any of these methods MUST still be validated.
+        This validation can be done via the PKIX rules in <xref target="RFC5280"/> or by using a different trust structure, such as a trusted certificate distributer for self-signed certificates.
+        The PKIX validation includes matching against the trust anchors configured for the application.
+        These rules apply to certificates of a chain length of one as well as longer chains.
+        If the application cannot establish a trust in the certificate, then it cannot be used.
       </t>
 
       <t>
         The header parameters defined in this document are:
 
         <list style="hanging">
-          <t hangText="x5c:">
+	  <t hangText="x5bag:">
+	    This header parameters contains a bag of X.509 certificates.
+	    The set of certificates in this header are unordered and may contain self-signed certificates.
+            The certificate bag can contain certificates which are completely extraneous to the message.
+	    (An example of this would be to carry a certificate with a key agreement key usage in a signed message.)
+	    As the certificates are unordered, the party evaluating the signature will need to do the necessary path building.
+	    Certificates needed for any particular chain to be built may be absent from the bag.
+	    <vspace blankLines="1"/>
+	    As this header element does not provide any trust, the header parameter can be in either a protected or unprotected header bag.
+	    <vspace blankLines="1"/>
             This header parameter allows for a single or a bag of X.509 certificates to be carried in the message.
             <list style="symbols">
               <t>
                 If a single certificate is conveyed, it is placed in a CBOR bstr.
               </t>
               <t>
-                If multiple certificates are conveyed, a CBOR array is used where:
-                <list style="symbols">
-                  <t>
-                    The first element is a boolean value set to true if the certificates are arranged such that a each certificate is issued by the next certficate.
-                    In otherwords a chain of certificates is presented.
-                    The chain of certificates does not need to be complete and normally SHOULD omit the trust anchor certificate.
-                    If the first element is set to false, then the certificates are not ordered and can include certificates that are not needed to create a certificate chain from the end-entity certificate.
-                    This allows for a certificate with a key exchange algorithm to be carried in a signed message.
-                  </t>
-                  <t>
-                    The second element is the end-entity certificate.
-                    This is true regardless of wheither the certificates are ordered or not.
-                    This permits the application to identify which certificate is the end-entity certificate without a second header attribute.
-                  </t>
-                  <t>
-                    Elements three through the last are certificates.
-                  </t>
-                </list>
+                If multiple certificates are conveyed, a CBOR array of bstrs is used.
+		Each certificate being in it's own slot.
+              </t>
+            </list>
+	  </t>
+	  
+          <t hangText="x5chain:">
+	    This header parameter contains an ordered array of X.509 certificates.
+	    The certificates are to be ordered starting with the certificate containing the end-entity key followed by the certificate which signed it and so on.
+	    There is no requirement for the entire chain to be present in the element if there is reason to believe that the relying party will already have it.
+	    <vspace blankLines="1"/>
+	    As this header element does not provide any trust, the header parameter can be in either a protected or unprotected header bag.
+	    <vspace blankLines="1"/>
+            This header parameter allows for a single or a bag of X.509 certificates to be carried in the message.
+            <list style="symbols">
+              <t>
+                If a single certificate is conveyed, it is placed in a CBOR bstr.
+              </t>
+              <t>
+                If multiple certificates are conveyed, a CBOR array of bstrs is used.
+		Each certificate being in it's own slot.
               </t>
             </list>
           </t>
@@ -166,6 +186,8 @@
             The parameter is an array of two elements.
             The first element is an algorithm identifier which is a signed integer or a string containing the hash algorithm identifier.
             The second element is a binary string containing the hash value.
+	    <vspace blankLines="1"/>
+	    As this header element does not provide any trust, the header parameter can be in either a protected or unprotected header bag.
             <vspace/>
             For interoperability, applications which use this header parameter MUST support the hash algorithm 'sha256', but can use other hash algorithms.
           </t>
@@ -176,37 +198,79 @@
             <list style="symbols">
               <t>application/pkix-cert <xref target="RFC2585"/></t>
               <t>application/pkcs7-mime; smime-type="certs-only" <xref target="I-D.ietf-lamps-rfc5751-bis"/></t>
-              <t>Should we support a PEM type? I cannot find a registered media type for one</t>
+              <t>Should we support a PEM type? I cannot find a registered media type for one</t> <!-- application/x-pem-file -->
             </list>
+	    <vspace blankLines="1"/>
+	    As this header element implies a trust relationship, the header parameter MUST be in the protected header bag.
             <vspace/>
             The URL provided MUST provide integrity protection.
-            For example, an HTTP GET request to retrieve a certificate MUST use TLS <xref target="RFC5246"/>.
+            For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC5246"/> or DTLS.
             If the certificate does not chain to an existing trust anchor, the identity of the server MUST be configured as trusted to provide new trust anchors.
             This will normally be the situation when self-signed certificates are used.
           </t>
         </list>
       </t>
 
+      <t>
+	The header paramters used in the following locations:
+	<list style="symbols">
+	  <t>
+	    COSE_Signature and COSE_Sign0 objects, in these objects they identify the key that was used for generating signature.
+	  </t>
+
+	  <t>
+            COSE_recipient object, in this object they identify the key  used by the sender for static-static key agreement algorithms.
+	    They would be used in place either XXXX or YYYY.
+	  </t>
+	</list>
+      </t>
+
       <texttable anchor="Tags" title="X.509 COSE Headers">
         <ttcol>name</ttcol><ttcol>label</ttcol><ttcol>value type</ttcol><ttcol>description</ttcol>
 
+        <c>x5bag</c><c>TBD4</c><c>COSE_X509</c><c>An unordered bag of X.509 certificates</c>
+        <c>x5chain</c><c>TBD3</c><c>COSE_X509</c><c>An ordered chain of X.509 certificates</c>
         <c>x5t</c><c>TBD1</c><c>COSE_CertHash</c><c>Hash of an X.509 certificate</c>
         <c>x5u</c><c>TBD2</c><c>uri</c><c>URL pointing to an X.509 certificate</c>
-        <c>x5c</c><c>TBD3</c><c>COSE_X509</c><c>Collection of X.509 certificates</c>
       </texttable>
 
       <figure><artwork type="CDDL">
-COSE_X509 = bstr / [ ordered: bool, endcert:bstr, *certs: bstr ]
+COSE_X509 = bstr / [ *certs: bstr ]
 COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 </artwork>
       </figure>
     </section>
 
     <section title="Hash Algorithm Identifiers">
+      <t>
+	The core COSE document did have a need for a standalone hash algorithm, and thus did not define any.
+	In this document, two hash algorithms are defined for use with the 'x5t' header parameter.
+      </t>
+      
       <section title="SHA-2 256-bit Hash">
         <t>
+          
           Define an algorithm identifier for SHA-256.
         </t>
+      </section>
+
+      <section title="SHA-2 256-bit Hash trucated to 64 bits">
+	<t>
+	  This hash function uses the SHA-2 256-bit hash function as in the previous section, however it truncates the result to 64-bits for transmission.
+	  The fact that it is a trucated hash means that there is now a high likelyhood that colisions will occur, thus this hash function cannot be used in situations where a unique items is required to be identified.
+	  Luckly for the case of identifying a certificate that is not a requirement, the only requirement is that the number of potential certificates (and thus keys) to be tried is reduced to a small number.
+	  (Hopefully that number is one, but it can not be assumed to be.)
+	  After the set of certificates has been filtered down, the public key in each certificate will need to be tried for the operation in question.
+	  The certificate can be validated either before or after it has been checked as working.
+	  The trade-offs involved are:
+	  <list style="symbols">
+	    <t>Certificate validation before using the key will imply that more network traffic may be required in order to fetch certificates and do revocation checking.</t>
+	    <t>
+	      Certificate validation after using the key means that bad keys can be used and, if not carefully checked, the result may be used prior to completing the certificate validation.
+	      Using unvalidated keys can expose the device to more timing and oracle attacks as the attacker would be able to see if the key operation succeeded or failed as no network traffic to validate the certificate would ensue.
+	    </t>
+	  </list>
+	</t>
       </section>
     </section>
     
@@ -238,9 +302,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         There are security considerations:
       </t>
 
-
     </section>
-
   </middle>
 
   <back>
@@ -248,15 +310,15 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
     <references title='Normative References'>
       &RFC2119;
       &RFC5280;
-      &RFC7049;
       &COSE;
     </references>
 
     <references title='Informative References'>
-      &CDDL;
       &RFC5246;
       &LAMPS;
       &RFC2585;
+      &CWT;
+      &EDHOC;
 
     </references>
 
