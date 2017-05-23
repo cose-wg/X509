@@ -37,7 +37,8 @@
   <!ENTITY COSE SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-cose-msg.xml" >
   <!ENTITY CBCMAC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.mcgrew-aead-aes-cbc-hmac-sha2.xml" >
   <!ENTITY LAMPS SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-lamps-rfc5751-bis.xml" >
-
+  <!ENTITY CWT SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-ace-cbor-web-token.xml">
+  <!ENTITY EDHOC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.selander-ace-cose-ecdhe.xml">
 ]>
 
 <?rfc toc="yes"?>
@@ -89,8 +90,8 @@
       <t>
 	Some of the constrainted device situations are being used where an X.509 PKI is already installed.
 	One of these situations is the 6tish environment for enrollment of devices where the certificates are installed at the factory.
-	The <xref target="EDHOC"/> draft was also written with the idea that long term certificates would be used to provide for authentication of devices and uses them to establish session keys.
-	A final scenario is the use of COSE as a messaging application w/ longer term live spans.
+	The <xref target="I-D.selander-ace-cose-ecdhe"/> draft was also written with the idea that long term certificates could be used to provide for authentication of devices and uses them to establish session keys.
+	A final scenario is the use of COSE as a messaging application where long term existence of keys can be used along with a central authentication authority.
 	The use of certificates in this scenario allows for key managment to be used which is well understood.
       </t>
       
@@ -120,7 +121,7 @@
       <t>
         The use of X.509 certificates allows for an existing trust infrastructure to be used with COSE.
 	This includes the full suite of enrollment protocols, trust anchors, trust chaining and revocation checking that have been defined over time by the IETF and other organizations.
-	The key structures that have been defined in COSE currently do not support all of these properties although some may be found in COSE Web Tokens (CWT) <xref target="CWT"/>.
+	The key structures that have been defined in COSE currently do not support all of these properties although some may be found in COSE Web Tokens (CWT) <xref target="I-D.ietf-ace-cbor-web-token"/>.
       </t>
 
       <t>
@@ -128,24 +129,27 @@
       </t>
 
       <t>
-        Certificates obtained from any of these methods MUST still be validated according to the PKIX rules in <xref target="RFC5280"/>.
-        This includes matching against the trust anchors configured for the application.
+        Certificates obtained from any of these methods MUST still be validated.
+        This validation can be done via the PKIX rules in <xref target="RFC5280"/> or by using a different trust structure, such as a trusted certificate distributer for self-signed certificates.
+        The PKIX validation includes matching against the trust anchors configured for the application.
         These rules apply to certificates of a chain length of one as well as longer chains.
+        If the application cannot establish a trust in the certificate, then it cannot be used.
       </t>
 
       <t>
         The header parameters defined in this document are:
 
         <list style="hanging">
-	  <t hangText="x5b:">
+	  <t hangText="x5bag:">
 	    This header parameters contains a bag of X.509 certificates.
-	    The set of certificates in this header are unordered, may contain self-signed certificates,  can contain certificates which are completely extranious to the message.
+	    The set of certificates in this header are unordered and may contain self-signed certificates.
+            The certificate bag can contain certificates which are completely extraneous to the message.
 	    (An example of this would be to carry a certificate with a key agreement key usage in a signed message.)
 	    As the certificates are unordered, the party evaluating the signature will need to do the necessary path building.
 	    Certificates needed for any particular chain to be built may be absent from the bag.
-	    <vspace lines="1"/>
+	    <vspace blankLines="1"/>
 	    As this header element does not provide any trust, the header parameter can be in either a protected or unprotected header bag.
-	    <vspace lines="1"/>
+	    <vspace blankLines="1"/>
             This header parameter allows for a single or a bag of X.509 certificates to be carried in the message.
             <list style="symbols">
               <t>
@@ -158,13 +162,13 @@
             </list>
 	  </t>
 	  
-          <t hangText="x5c:">
+          <t hangText="x5chain:">
 	    This header parameter contains an ordered array of X.509 certificates.
-	    The certificates are to be ordered starting with the certificate contianing the end-entity key followed by the certificate which signed it and so on.
+	    The certificates are to be ordered starting with the certificate containing the end-entity key followed by the certificate which signed it and so on.
 	    There is no requirement for the entire chain to be present in the element if there is reason to believe that the relying party will already have it.
-	    <vspace lines="1"/>
+	    <vspace blankLines="1"/>
 	    As this header element does not provide any trust, the header parameter can be in either a protected or unprotected header bag.
-	    <vspace lines="1"/>
+	    <vspace blankLines="1"/>
             This header parameter allows for a single or a bag of X.509 certificates to be carried in the message.
             <list style="symbols">
               <t>
@@ -182,7 +186,7 @@
             The parameter is an array of two elements.
             The first element is an algorithm identifier which is a signed integer or a string containing the hash algorithm identifier.
             The second element is a binary string containing the hash value.
-	    <vspace lines="1"/>
+	    <vspace blankLines="1"/>
 	    As this header element does not provide any trust, the header parameter can be in either a protected or unprotected header bag.
             <vspace/>
             For interoperability, applications which use this header parameter MUST support the hash algorithm 'sha256', but can use other hash algorithms.
@@ -194,9 +198,9 @@
             <list style="symbols">
               <t>application/pkix-cert <xref target="RFC2585"/></t>
               <t>application/pkcs7-mime; smime-type="certs-only" <xref target="I-D.ietf-lamps-rfc5751-bis"/></t>
-              <t>Should we support a PEM type? I cannot find a registered media type for one</t>
+              <t>Should we support a PEM type? I cannot find a registered media type for one</t> <!-- application/x-pem-file -->
             </list>
-	    <vspace lines="1"/>
+	    <vspace blankLines="1"/>
 	    As this header element implies a trust relationship, the header parameter MUST be in the protected header bag.
             <vspace/>
             The URL provided MUST provide integrity protection.
@@ -224,8 +228,8 @@
       <texttable anchor="Tags" title="X.509 COSE Headers">
         <ttcol>name</ttcol><ttcol>label</ttcol><ttcol>value type</ttcol><ttcol>description</ttcol>
 
-        <c>x5b</c><c>TBD4</c><c>COSE_X509</c><c>Collection of X.509 certificates</c>
-        <c>x5c</c><c>TBD3</c><c>COSE_X509</c><c>Collection of X.509 certificates</c>
+        <c>x5bag</c><c>TBD4</c><c>COSE_X509</c><c>An unordered bag of X.509 certificates</c>
+        <c>x5chain</c><c>TBD3</c><c>COSE_X509</c><c>An ordered chain of X.509 certificates</c>
         <c>x5t</c><c>TBD1</c><c>COSE_CertHash</c><c>Hash of an X.509 certificate</c>
         <c>x5u</c><c>TBD2</c><c>uri</c><c>URL pointing to an X.509 certificate</c>
       </texttable>
@@ -245,6 +249,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       
       <section title="SHA-2 256-bit Hash">
         <t>
+          
           Define an algorithm identifier for SHA-256.
         </t>
       </section>
@@ -266,6 +271,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 	    </t>
 	  </list>
 	</t>
+      </section>
     </section>
     
     <section anchor="iana-considerations" title="IANA Considerations">
@@ -296,9 +302,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         There are security considerations:
       </t>
 
-
     </section>
-
   </middle>
 
   <back>
@@ -306,15 +310,15 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
     <references title='Normative References'>
       &RFC2119;
       &RFC5280;
-      &RFC7049;
       &COSE;
     </references>
 
     <references title='Informative References'>
-      &CDDL;
       &RFC5246;
       &LAMPS;
       &RFC2585;
+      &CWT;
+      &EDHOC;
 
     </references>
 
