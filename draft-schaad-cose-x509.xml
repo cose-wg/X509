@@ -2,7 +2,6 @@
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
   <!ENTITY RFC2104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2104.xml" >
-  <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml" >
 
   <!ENTITY RFC2582 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2582.xml" >
   <!ENTITY RFC2585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2585.xml" >
@@ -34,10 +33,7 @@
   <!ENTITY RFC7539 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7539.xml" >
 
   <!ENTITY CDDL SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.greevenbosch-appsawg-cbor-cddl.xml" >
-  <!ENTITY COSE SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-cose-msg.xml" >
   <!ENTITY CBCMAC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.mcgrew-aead-aes-cbc-hmac-sha2.xml" >
-  <!ENTITY LAMPS SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-lamps-rfc5751-bis.xml" >
-  <!ENTITY CWT SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-ace-cbor-web-token.xml">
   <!ENTITY EDHOC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.selander-ace-cose-ecdhe.xml">
 ]>
 
@@ -62,7 +58,13 @@
     <area>Security</area>
     <abstract>
       <t>
-        This document defines the headers and usage for  referring to and transporting X.509 certificates  in the CBOR Encoded Message (COSE) Syntax.
+        The CBOR Encoded Message (COSE) structure syntax uses the COSE Key structure for placing keys in a message.
+        This document extends the way that keys can be identified and transported by providing parameters that refer to or contain X.509 certificates in messages and in the COSE Key structure.
+      </t>
+
+      <t>
+        This document defines a set of hash algorithms for COSE.
+        These algorithms are needed in order to have X.509 certificates referred to by a thumbprint.
       </t>
     </abstract>
 
@@ -81,18 +83,25 @@
 
     <section anchor="introduction" title="Introduction">
       <t>
-        In the process of writing RFCXXXX <xref target="I-D.ietf-cose-msg"/> discussions where held on the question of X.509 certificates  <xref target="RFC5280"/>  and if there were needed.
+        In the process of writing <xref target="RFC8152"/> discussions where held on the question of X.509 certificates  <xref target="RFC5280"/>  and if there was a needed to provide for them.
         At the time there were no use cases presented that appeared to have a sufficient set of support to include these headers.
         Since that time a number of cases where X.509 certificate support is necessary have been defined.
         This document provides a set of headers that will allow applications to transport and refer to X.509 certificates in a consistent manner.
       </t>
 
       <t>
-	Some of the constrainted device situations are being used where an X.509 PKI is already installed.
+	Some of the constrained device situations are being used where an X.509 PKI is already installed.
 	One of these situations is the 6tish environment for enrollment of devices where the certificates are installed at the factory.
 	The <xref target="I-D.selander-ace-cose-ecdhe"/> draft was also written with the idea that long term certificates could be used to provide for authentication of devices and uses them to establish session keys.
 	A final scenario is the use of COSE as a messaging application where long term existence of keys can be used along with a central authentication authority.
-	The use of certificates in this scenario allows for key managment to be used which is well understood.
+	The use of certificates in this scenario allows for key management to be used which is well understood.
+      </t>
+
+      <t>
+        When <xref target="RFC8152"/> was written, there were no requirements for hash algorithms to be included in the algorithm registry.
+        The use of thumbprints to refer to X.509 certificates is defined in this document which requires the use of hash algorithms.
+        There have also been other working groups in the IETF that have expressed a requirement for hash algorithms to do have sections of content be provided by reference rather than including it in the main message.
+        This document defines a set of hash algorithms for both of these purposes.
       </t>
       
       <section anchor="requirements-terminology" title="Requirements Terminology">
@@ -106,11 +115,7 @@
         -->
 
         <t>
-          The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in <xref target="RFC2119"/>.
-        </t>
-
-        <t>
-          When the words appear in lower case, their natural language meaning is used.
+          The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they appear in all capitals, as shown here.
         </t>
 
       </section>
@@ -121,11 +126,11 @@
       <t>
         The use of X.509 certificates allows for an existing trust infrastructure to be used with COSE.
 	This includes the full suite of enrollment protocols, trust anchors, trust chaining and revocation checking that have been defined over time by the IETF and other organizations.
-	The key structures that have been defined in COSE currently do not support all of these properties although some may be found in COSE Web Tokens (CWT) <xref target="I-D.ietf-ace-cbor-web-token"/>.
+	The key structures that have been defined in COSE currently do not support all of these properties although some may be found in COSE Web Tokens (CWT) <xref target="RFC8392"/>.
       </t>
 
       <t>
-	It is not necessarily expected that constrainted devices will fully support the evalaluation and processing of X.509 certificates, it is perfectly reasonable for a certificate to be assigned to a device which it can then provide to a relying party along with a signature or encrypted message, the relying party not being a constrained device.
+	It is not necessarily expected that constrained devices will fully support the evaluation and processing of X.509 certificates, it is perfectly reasonable for a certificate to be assigned to a device which it can then provide to a relying party along with a signature or encrypted message, the relying party not being a constrained device.
       </t>
 
       <t>
@@ -203,25 +208,24 @@
 	    <vspace blankLines="1"/>
 	    As this header element implies a trust relationship, the header parameter MUST be in the protected header bag.
             <vspace/>
-            The URL provided MUST provide integrity protection.
+            The URL provided MUST provide integrity protection and server authentication.
             For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC5246"/> or DTLS.
-            If the certificate does not chain to an existing trust anchor, the identity of the server MUST be configured as trusted to provide new trust anchors.
+            If the certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors.
             This will normally be the situation when self-signed certificates are used.
           </t>
         </list>
       </t>
 
       <t>
-	The header paramters used in the following locations:
+	The header parameters used in the following locations:
 	<list style="symbols">
 	  <t>
 	    COSE_Signature and COSE_Sign0 objects, in these objects they identify the key that was used for generating signature.
 	  </t>
 
-	  <t>
-            COSE_recipient object, in this object they identify the key  used by the sender for static-static key agreement algorithms.
-	    They would be used in place either XXXX or YYYY.
-	  </t>
+          <t>
+            COSE_recipient objects, in this location they may be used to identify the certificate for the recipient of the message.
+          </t>
 	</list>
       </t>
 
@@ -241,6 +245,29 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </figure>
     </section>
 
+    <section title="X.509 certificates and static-static ECDH">
+      <t>
+        The header parameters defined in the previous section are used to identify the recipient certificates for the ECDH key agreement algorithms.
+        In this section we define the algorithm specific parameters that are used for identifying or transporting the senders key for static-static key agreement algorithms.
+      </t>
+      
+      <texttable anchor="Tags2" title="Static ECDH Algorithm Values">
+        <ttcol>Name</ttcol><ttcol>Label</ttcol><ttcol>Type</ttcol><ttcol>Algorithm</ttcol><ttcol>Description></ttcol>
+        <c>static key X.509 thumbprint</c><c>TBD</c><c>COSE_CertHash</c>
+        <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
+        <c>Thumbprint for the senders X.509 certificate</c>
+
+        <c>static key X.509 URL</c><c>TBD</c><c>uri</c>
+        <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
+        <c>URL for the senders X.509 certificate</c>
+
+        <c>static key X.509 cert chain</c><c>TBD</c><c>COSE_X509</c>
+        <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
+        <c>static key X.509 certificate chain</c>
+        
+      </texttable>
+    </section>
+
     <section title="Hash Algorithm Identifiers">
       <t>
 	The core COSE document did have a need for a standalone hash algorithm, and thus did not define any.
@@ -257,8 +284,8 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       <section title="SHA-2 256-bit Hash trucated to 64 bits">
 	<t>
 	  This hash function uses the SHA-2 256-bit hash function as in the previous section, however it truncates the result to 64-bits for transmission.
-	  The fact that it is a trucated hash means that there is now a high likelyhood that colisions will occur, thus this hash function cannot be used in situations where a unique items is required to be identified.
-	  Luckly for the case of identifying a certificate that is not a requirement, the only requirement is that the number of potential certificates (and thus keys) to be tried is reduced to a small number.
+	  The fact that it is a truncated hash means that there is now a high likelihood that collisions will occur, thus this hash function cannot be used in situations where a unique items is required to be identified.
+	  Luckily for the case of identifying a certificate that is not a requirement, the only requirement is that the number of potential certificates (and thus keys) to be tried is reduced to a small number.
 	  (Hopefully that number is one, but it can not be assumed to be.)
 	  After the set of certificates has been filtered down, the public key in each certificate will need to be tried for the operation in question.
 	  The certificate can be validated either before or after it has been checked as working.
@@ -298,6 +325,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
     
     <section anchor="security-considerations" title="Security Considerations">
 
+      
       <t>
         There are security considerations:
       </t>
@@ -308,18 +336,20 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
   <back>
 
     <references title='Normative References'>
-      &RFC2119;
+      <?rfc include="reference.RFC.2119.xml" ?>
       &RFC5280;
-      &COSE;
+      <?rfc include="reference.RFC.8174.xml" ?>
+      <?rfc include="reference.I-D.schaad-cose-rfc8152bis-struct.xml" ?>
+      
     </references>
 
     <references title='Informative References'>
       &RFC5246;
-      &LAMPS;
+      <?rfc include="reference.I-D.ietf-lamps-rfc5751-bis.xml" ?>
       &RFC2585;
-      &CWT;
       &EDHOC;
-
+      <?rfc include="reference.RFC.8392.xml" ?>
+      <?rfc include="reference.RFC.8152.xml" ?>
     </references>
 
   </back>
