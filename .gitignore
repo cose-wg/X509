@@ -11,6 +11,5 @@
 .targets
 venv/
 issues.json
-lib
 draft-schaad-cose-x509.xml
 a.bat
