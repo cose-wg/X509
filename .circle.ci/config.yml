@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: martinthomson/i-d-template:latest
+    working_directory: ~/draft
+
+    steps:
+      - checkout
+
+      # Build txt and html versions of drafts
+      - run:
+          name: "Build Drafts"
+          command: "make"
+
+      # Update editor's copy on gh-pages
+      - run:
+          name: "Update GitHub Pages"
+          command: |
+            if [ "${CIRCLE_TAG#draft-}" == "${CIRCLE_TAG}" ]; then
+              make gh-pages
+            fi
+
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*?/
