@@ -120,6 +120,24 @@
 
       </section>
 
+      <section title="Open Questions">
+        <t>
+        <list>
+          <t>
+            Should we define an extended key usage?
+          </t>
+          <t>
+            Are there any special certificate valiation text to be added?
+          </t>
+          <t>
+            List of other hash algorithms to be added.
+          </t>
+          <t>
+            Specific security considerations issues.
+          </t>
+        </list>
+        </t>
+      </section>
     </section>
 
     <section title="X.509 COSE Headers">
@@ -203,7 +221,7 @@
             <list style="symbols">
               <t>application/pkix-cert <xref target="RFC2585"/></t>
               <t>application/pkcs7-mime; smime-type="certs-only" <xref target="I-D.ietf-lamps-rfc5751-bis"/></t>
-              <t>Should we support a PEM type? I cannot find a registered media type for one</t> <!-- application/x-pem-file -->
+              <t>application/x-pem-file <xref target="RFC7468"/> Should we support a PEM type? I cannot find a registered media type for one</t> <!-- application/x-pem-file -->
             </list>
 	    <vspace blankLines="1"/>
 	    As this header element implies a trust relationship, the header parameter MUST be in the protected header bag.
@@ -230,7 +248,7 @@
       </t>
 
       <texttable anchor="Tags" title="X.509 COSE Headers">
-        <ttcol>name</ttcol><ttcol>label</ttcol><ttcol>value type</ttcol><ttcol>description</ttcol>
+        <ttcol>Name</ttcol><ttcol>Value</ttcol><ttcol>value type</ttcol><ttcol>description</ttcol>
 
         <c>x5bag</c><c>TBD4</c><c>COSE_X509</c><c>An unordered bag of X.509 certificates</c>
         <c>x5chain</c><c>TBD3</c><c>COSE_X509</c><c>An ordered chain of X.509 certificates</c>
@@ -252,7 +270,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </t>
       
       <texttable anchor="Tags2" title="Static ECDH Algorithm Values">
-        <ttcol>Name</ttcol><ttcol>Label</ttcol><ttcol>Type</ttcol><ttcol>Algorithm</ttcol><ttcol>Description></ttcol>
+        <ttcol>Name</ttcol><ttcol>Value</ttcol><ttcol>Type</ttcol><ttcol>Algorithm</ttcol><ttcol>Description></ttcol>
         <c>static key X.509 thumbprint</c><c>TBD</c><c>COSE_CertHash</c>
         <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
         <c>Thumbprint for the senders X.509 certificate</c>
@@ -307,29 +325,53 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       <section anchor="cose-header-key-table" title="COSE Header Parameter Registry">
 
         <t>
-          Put in the registrations.
+          IANA is requested to register the new COSE Header items in <xref target="Tags"/> in the "COSE Header Parameters" registry.
+
         </t>
 
       </section>
 
+      <section title="COSE Header Algorithm Parameter Registry">
+
+        <t>
+          IANA is requested to register the new COSE Header items in <xref target="Tags2"/> in the "COSE Header Algorithm Parameters" registry.
+
+        </t>
+
+      </section>
       
       <section anchor="cose-algorithm-registry" title="COSE Algorithm Registry">
 
         <t>
-          Put in the registrations.
+          IANA is requested to register the following algorithms in the "COSE Algorithms" registry.
         </t>
+
+        <texttable>
+          <ttcol>Name</ttcol>
+          <ttcol>Value</ttcol>
+          <ttcol>Description</ttcol>
+          <ttcol>Reference</ttcol>
+          <ttcol>Recommended</ttcol>
+          <c>SHA-256</c><c>TBD</c><c>SHA-2 256-bit Hash</c><c>[This Document]</c><c>Yes</c>
+          <c>SHA-256/64</c><c>TBD</c><c>SHA-2 256-bit Hash trucated to 64-bits</c><c>[This Document]</c><c>No</c>
+        </texttable>
         
       </section>
 
     </section>
     
     <section anchor="security-considerations" title="Security Considerations">
-
       
       <t>
         There are security considerations:
       </t>
-
+      <t>
+      <list>
+        <t>
+          Self-signed certificates and Trust Anchors
+        </t>
+      </list>
+      </t>
     </section>
   </middle>
 
@@ -348,6 +390,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       <?rfc include="reference.I-D.ietf-lamps-rfc5751-bis.xml" ?>
       &RFC2585;
       &EDHOC;
+      <?rfc include="reference.RFC.7468.xml" ?>
       <?rfc include="reference.RFC.8392.xml" ?>
       <?rfc include="reference.RFC.8152.xml" ?>
     </references>
