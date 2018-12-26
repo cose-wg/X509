@@ -397,6 +397,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       <?rfc include="reference.RFC.7468.xml" ?>
       <?rfc include="reference.RFC.8392.xml" ?>
       <?rfc include="reference.RFC.8152.xml" ?>
+      <?rfc include="reference.I-D.ietf-cbor-cddl.xml" ?>
     </references>
 
   </back>
