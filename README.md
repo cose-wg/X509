@@ -2,9 +2,9 @@
 
 This is the working area for the individual Internet-Draft, "CBOR Object Signing and Encryption (COSE): Headers for carrying and referencing X.509 certificates".
 
-* [Editor's Copy](https://cose-wg.github.io/x509/#go.draft-schaad-cose-x509.html)
+* [Editor's Copy](https://cose-wg.github.io/X509/#go.draft-schaad-cose-x509.html)
 * [Individual Draft](https://tools.ietf.org/html/draft-schaad-cose-x509)
-* [Compare Editor's Copy to Individual Draft](https://cose-wg.github.io/x509/#go.draft-schaad-cose-x509.diff)
+* [Compare Editor's Copy to Individual Draft](https://cose-wg.github.io/X509/#go.draft-schaad-cose-x509.diff)
 
 ## Building the Draft
 
