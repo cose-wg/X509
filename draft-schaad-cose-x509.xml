@@ -256,6 +256,10 @@
         <c>x5u</c><c>TBD2</c><c>uri</c><c>URL pointing to an X.509 certificate</c>
       </texttable>
 
+      <t>
+        Below is an equivalent CDDL <xref target="I-D.ietf-cbor-cddl"/> description of the text above.
+      </t>
+
       <figure><artwork type="CDDL">
 COSE_X509 = bstr / [ 2*certs: bstr ]
 COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
