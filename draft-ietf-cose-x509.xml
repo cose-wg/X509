@@ -42,7 +42,7 @@
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
 
-<rfc ipr="trust200902" docName="draft-schaad-cose-x509-latest" category="info">
+<rfc ipr="trust200902" docName="draft-ietf-cose-x509-latest" category="info">
   <front>
     <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Headers for carrying and referencing X.509 certificates</title>
 
