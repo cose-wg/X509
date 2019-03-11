@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<rfc ipr="trust200902" docName="draft-schaad-cose-hash-algs-01" category="info" version="3" submissionType="IETF">
+  <front>
+    <title abbrev="COSE Hashes">CBOR Object Signing and Encryption (COSE): Hash Algorithms</title>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-cose-x509-latest"/>
+    <author initials="J." surname="Schaad" fullname="Jim Schaad">
+      <organization>August Cellars</organization>
+      <address>
+        <email>ietf@augustcellars.com</email>
+      </address>
+    </author>
+    <date/>
+    <area>Security</area>
+    <abstract>
+      <t>
+        The CBOR Object Signing and Encryption (COSE) syntax <xref target="I-D.ietf-cose-rfc8152bis-struct"/> does not define any direct methods for using hash algorithms.
+        There are however circumstances where hash algorithms are used:
+        Indirect signatures where the hash of one or more contents are signed.
+        X.509 certificate or other object identification by the use of a thumbprint.
+        This document defines a set of hash algorithms that are identified by COSE Algorithm Identifiers.
+      </t>
+    </abstract>
+    <note>
+      <name>Contributing to this document</name>
+      <!-- RFC EDITOR - Please remove this note before publishing -->
+      <t>
+        The source for this draft is being maintained in GitHub.
+        Suggested changes should be submitted as pull requests at TBD. <!-- <eref target="https://github.com/cose-wg/X509"/> -->
+        Editorial changes can be managed in GitHub, but any substantial issues need to be discussed on the COSE mailing list.
+      </t>
+    </note>
+  </front>
+  <middle>
+    <section anchor="introduction">
+      <name>Introduction</name>
+      <t>
+        The CBOR Object Signing and Encryption (COSE) syntax does not define any direct methods for the use of hash algorithms.
+        It also does not define a structure syntax that is used to encode a digested object structure along the lines of the DigestedData ASN.1 structure in <xref target="RFC5652"/>.
+        This omission was intentional as a structure consisting of jut a digest identifier, the content, and a digest value does not by itself provide any strong security service.
+        Additional, an application is going to be better off defining this type of structure so that it can add any additional data that needs to be hashed as well as methods of obtaining the data.
+      </t>
+      <t>
+        While the above is true, there are some cases where having some standard hash algorithms defined for COSE with a common identifier makes a great deal of sense.
+        Two of the cases where these are going to be used are:
+      </t>
+      <ul spacing="normal">
+        <li>
+            Indirect signing of content, and
+          </li>
+        <li>
+            Object identification.
+          </li>
+      </ul>
+      <t>
+        Indirect signing of content is a paradigm where the content is not directly signed, but instead a hash of the content is computed and that hash value, along with the hash algorithm, is included in the content that will be signed.
+        Doing indirect signing allows for the a signature to be validated without first downloading all of the content associated with the signature.
+        This capability can be of even grater importance in a constrained environment as not all of the content signed may be needed by the device.
+      </t>
+      <t>
+        The use of hashes to identify objects is something that has been very common.
+        One of the primary things that has been identified by a hash function for secure message is a certificate.
+        Two examples of this can be found in <xref target="RFC2634"/> and the newly defined COSE equivalents in <xref target="I-D.ietf-cose-x509"/>.
+      </t>
+      <section anchor="requirements-terminology">
+        <name>Requirements Terminology</name>
+        <t>
+          The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they appear in all capitals, as shown here.
+        </t>
+      </section>
+
+      <section>
+        <name>Open Issues</name>
+        <ul>
+          <li>
+            Are there additional SHA-2 formulations that need to be added or should some of the ones in this document be removed?
+          </li>
+          <li>
+            Should additional hash algorithms be added to the document?
+          </li>
+          <li>
+            Review the Recommended column in all of the tables to make sure that the values are correct.
+          </li>
+          <li>
+            Are there recommendations that should be provided on what range of identifiers should be used for these algorithms?
+            Inputs would include the expected frequency of use for each algorithm.
+          </li>
+        </ul>
+      </section>
+    </section>
+    <section>
+        <name>Hash Algorithm Identifiers</name>
+
+        <section>
+          <name>SHA-1 Hash Algorithm</name>
+          <t>
+            The SHA-1 hash algorithm <xref target="RFC3174"/> wsa designed by the United States National Security Agenciy and published in 1995.
+            Since that time a large amount of cryptographic analysis has been applied to this algorithm and a successful collision attack has been created (<xref target="SHA-1-collision"/>).
+            The IETF formally started discouraging the use of SHA-1 with the publishing of <xref target="RFC6194"/>.
+          </t>
+
+          <t>
+            Dispite the above, there are still times where SHA-1 needs to be used and therefore it makes sense to assign a point for the use of this hash algorithm.
+            Some of these situations are with historic HSMs where only SHA-1 is implemented or where the SHA-1 value is used for the purpose of filtering and thus the collision resistance property is not needed.
+          </t>
+
+          <t>
+            Because of the known issues for SHA-1 and the fact that is should no longer be used, the algorithm will be registered with the recommendation of "Depreciated".
+          </t>
+
+          <table align="center" anchor="SHA1-Algs">
+          <name>SHA-1 Hash Algorithm</name>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Description</th>
+                <th>Reference</th>
+                <th>Recommended</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SHA-1</td>
+                <td>TBD6</td>
+                <td>SHA-1 Hash</td>
+                <td>[This Document]</td>
+                <td>Depreciated</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </section>
+
+      <section>
+        <name>SHA-2 Hash Algorithms</name>
+        <t>
+          The family of SHA-2 hash algorithms <xref target="FIPS-180-4"/> was designed by the United States National Security Agency and published in 2001.
+          Since that time some additional algorithms have been added to the original set to deal with length extension attacks and some performance issues.
+          While the SHA-3 hash algorithms has been published since that time, the SHA-2 algorithms are still broadly used.
+        </t>
+
+        <t>
+          There are a number of different parameters for the SHA-2 hash functions.
+          The set of hash functions which have been chosen for inclusion in this document are based on those different parameters and some of the trade-offs involved.
+        </t>
+          <ul>
+            <li>
+              <t>
+              <strong>SHA-256/64</strong> provides a truncated hash.
+              The length of the truncation is designed to allow for smaller transmission size.
+              The trade-off is that the odds that a collision will occur increase proportionally.
+              Locations that use this hash function need either to analysis the potential problems with having a collision occur, or where the only function of the hash is to narrow the possible choices.
+              </t>
+              <t>
+                The latter is the case for <xref target="I-D.ietf-cose-x509"/>, the hash value is used to select possible certificates and, if there are multiple choices then, each choice can be tested by using the public key.
+              </t>
+            </li>
+            <li>
+              <strong>SHA-256</strong> is probably the most common hash function used currently.
+              SHA-256 is the most efficient hash algorithm for 32-bit hardware.
+            </li>
+            <li>
+              <strong>SHA-384</strong> and <strong>SHA-512</strong> hash functions are more efficient when run on 64-bit hardware.
+            </li>
+            <li>
+              <strong>SHA-512/256</strong> provides a hash function that runs more efficiently on 64-bit hardware, but offers the same security levels as SHA-256.
+            </li>
+          </ul>
+
+        <table align="center" anchor="SHA2-Algs">
+          <name>SHA-2 Hash Algorithms</name>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+              <th>Description</th>
+              <th>Reference</th>
+              <th>Recommended</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SHA-256/64</td>
+              <td>TBD1</td>
+              <td>SHA-2 256-bit Hash truncated to 64-bits</td>
+              <td>[This Document]</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>SHA-256</td>
+              <td>TBD2</td>
+              <td>SHA-2 256-bit Hash</td>
+              <td>[This Document]</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>SHA-384</td>
+              <td>TBD3</td>
+              <td>SHA-2 384-bit Hash</td>
+              <td>[This Document]</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>SHA-512</td>
+              <td>TBD4</td>
+              <td>SHA-2 512-bit Hash</td>
+              <td>[This Document]</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>SHA-512/256</td>
+              <td>TBD5</td>
+              <td>SHA-2 512-bit Hash truncated to 256-bits</td>
+              <td>[This Document]</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <name>SHAKE Algorithms</name>
+
+        <t>
+          The family SHA-3 hash algorithms <xref target="FIPS-180-4"/> was the result of a competition run by NIST.
+          The pair of algorithms known as SHAKE-128 and SHAKE-256 are the instances of SHA-3 that are currently being standardized in the IETF.
+        </t>
+
+        <t>
+          The SHA-3 hash algorithms have a significantly different structure than the SHA-3 hash algorithms.
+          One of the benefits of this differences is that when computing a truncated SHAKE hash value, the value is not a prefix of a longer version of the same value.
+        </t>
+
+        <t>
+          MAYBE TEXT:
+          Might not need to define truncated versions of this hash algorithm because the length of the resulting value is always going to generate a unique value since you cannot just truncate it like you can with SHA-1 and SHA-2.
+        </t>
+        
+        <table align="center" anchor="SHAKE-Algs">
+          <name>SHAKE Hash Functions</name>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+              <th>Description</th>
+              <th>Reference</th>
+              <th>Recommended</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SHAKE128</td>
+              <td>TBD10</td>
+              <td>128-bit SHAKE</td>
+              <td>[This Document]</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>SHAKE256</td>
+              <td>TBD11</td>
+              <td>256-bit SHAKE</td>
+              <td>[This Document]</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </section>
+    
+    <section anchor="iana-considerations">
+      <name>IANA Considerations</name>
+      <section anchor="cose-algorithm-registry">
+        <name>COSE Algorithm Registry</name>
+        <t>
+          IANA is requested to register the following algorithms in the "COSE Algorithms" registry.
+        </t>
+        <ul>
+          <li>
+            The SHA-1 hash function found in <xref target="SHA1-Algs"/>.
+          </li>
+          <li>
+            The set of SHA-2 hash functions found in <xref target="SHA2-Algs"/>.
+          </li>
+          <li>
+            The set of SHAKE hash functions found in <xref target="SHAKE-Algs"/>.
+          </li>
+        </ul>
+
+        <t>
+          Many of the hash values produced are relatively long and as such the use of a two byte algorithm identifier seems reasonable.
+          SHA-1 is tagged as deprecated and thus a longer algorithm identifier is appropriate even though it is a shorter hash value.
+        </t>
+      </section>
+    </section>
+    
+    <section anchor="security-considerations">
+      <name>Security Considerations</name>
+      <t>
+        There are security considerations:
+      </t>
+    </section>
+  </middle>
+  
+  <back xmlns:xi="http://www.w3.org/2001/XInclude">
+    <displayreference target="RFC2634" to="ESS"/>
+    <displayreference target="RFC5652" to="CMS"/>
+    
+    <references title='Normative References'>
+      <?rfc include="reference.RFC.2119.xml" ?>
+      <?rfc include="reference.RFC.8174.xml" ?>
+      <?rfc include="reference.I-D.ietf-cose-rfc8152bis-struct.xml" ?>
+
+      <reference anchor="FIPS-180-4">
+        <front>
+          <title>Secure Hash Standard</title>
+          <author>
+            <organization>National Institute of Standards and Technology</organization>
+          </author>
+          <date month="August" year="2015"/>
+        </front>
+        <seriesInfo name="FIPS" value="PUB 180-4"/>
+      </reference>
+
+      <!--
+      <?rfc include="reference.RFC.5280.xml" ?>
+      -->
+      
+    </references>
+
+    <references title='Informative References'>
+      <?rfc include="reference.RFC.5652.xml" ?>
+      <?rfc include="reference.RFC.2634.xml" ?>
+      <xi:include href="reference.I-D.ietf-cose-x509.xml"/>
+      <?rfc include="reference.RFC.3174.xml" ?>
+      <?rfc include="reference.RFC.6194.xml" ?>
+
+      <!--
+      <?rfc include="reference.RFC.2585.xml" ?>
+      <?rfc include="reference.RFC.5246.xml" ?>
+      <?rfc include="reference.RFC.7468.xml" ?>
+      <?rfc include="reference.RFC.8152.xml" ?>
+      <?rfc include="reference.RFC.8392.xml" ?>
+      <?rfc include="reference.I-D.ietf-lamps-rfc5751-bis.xml" ?>
+      <?rfc include="reference.I-D.ietf-cbor-cddl.xml" ?>
+      <?rfc include="reference.I-D.selander-ace-cose-ecdhe.xml" ?>
+      -->
+
+      <reference anchor="SHA-1-collision" target="https://shattered.io/static/shattered.pdf">
+        <front>
+          <title>The first collision for full SHA-1</title>
+          <author initials="M." surname="Stevens"/>
+          <author initials="E." surname="Bursztein"/>
+          <author initials="P." surname="Karpman"/>
+          <author initials="A." surname="Albertini"/>
+          <author initials="Y." surname="Markov"/>
+          <date month="Feb" year="2017"/>
+        </front>
+      </reference>
+    </references>
+  </back>
+</rfc>

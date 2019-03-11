@@ -1,40 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-  <!ENTITY RFC2104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2104.xml" >
-
-  <!ENTITY RFC2582 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2582.xml" >
-  <!ENTITY RFC2585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2585.xml" >
-  <!ENTITY RFC2633 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2633.xml" >
-  <!ENTITY RFC2898 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2898.xml" >
-  <!ENTITY RFC3394 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3394.xml" >
-  <!ENTITY RFC3447 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3447.xml" >
-  <!ENTITY RFC3610 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3610.xml" >
-  <!ENTITY RFC4231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4231.xml" >
-  <!ENTITY RFC4262 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4262.xml" >
-  <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml" >
-  <!ENTITY RFC5280 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5280.xml" >
-  <!ENTITY RFC5480 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5480.xml" >
-  <!ENTITY RFC5652 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5652.xml" >
-  <!ENTITY RFC5751 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5751.xml" >
-  <!ENTITY RFC5752 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5752.xml" >
-  <!ENTITY RFC5869 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5869.xml" >
-  <!ENTITY RFC5990 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5990.xml" >
-  <!ENTITY RFC6090 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6090.xml" >
-  <!ENTITY RFC6151 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6151.xml" >
-  <!ENTITY RFC6979 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6979.xml" >
-  <!ENTITY RFC7049 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7049.xml" >
-  <!ENTITY RFC7159 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml" >
-  <!ENTITY RFC7252 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7252.xml" >
-  <!ENTITY RFC7515 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7515.xml" >
-  <!ENTITY RFC7516 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7516.xml" >
-  <!ENTITY RFC7517 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7517.xml" >
-  <!ENTITY RFC7518 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7518.xml" >
-  <!ENTITY RFC7539 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7539.xml" >
-
-  <!ENTITY CDDL SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.greevenbosch-appsawg-cbor-cddl.xml" >
-  <!ENTITY CBCMAC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.mcgrew-aead-aes-cbc-hmac-sha2.xml" >
-  <!ENTITY EDHOC SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.selander-ace-cose-ecdhe.xml">
 ]>
 
 <?rfc toc="yes"?>
@@ -58,14 +24,10 @@
     <area>Security</area>
     <abstract>
       <t>
-        The CBOR Encoded Message (COSE) structure syntax uses the COSE Key structure for placing keys in a message.
-        This document extends the way that keys can be identified and transported by providing parameters that refer to or contain X.509 certificates in messages and in the COSE Key structure.
+        The CBOR Signing And Encrypted Message (COSE) structure syntax uses the COSE Key structure for placing keys in a message.
+        This document extends the way that keys can be identified and transported by providing attributes that refer to or contain X.509 certificates.
       </t>
 
-      <t>
-        This document defines a set of hash algorithms for COSE.
-        These algorithms are needed in order to have X.509 certificates referred to by a thumbprint.
-      </t>
     </abstract>
 
     <note title="Contributing to this document">
@@ -84,9 +46,9 @@
     <section anchor="introduction" title="Introduction">
       <t>
         In the process of writing <xref target="RFC8152"/> discussions where held on the question of X.509 certificates  <xref target="RFC5280"/>  and if there was a needed to provide for them.
-        At the time there were no use cases presented that appeared to have a sufficient set of support to include these headers.
+        At the time there were no use cases presented that appeared to have a sufficient need for these attributes.
         Since that time a number of cases where X.509 certificate support is necessary have been defined.
-        This document provides a set of headers that will allow applications to transport and refer to X.509 certificates in a consistent manner.
+        This document provides a set of attributes that will allow applications to transport and refer to X.509 certificates in a consistent manner.
       </t>
 
       <t>
@@ -98,10 +60,8 @@
       </t>
 
       <t>
-        When <xref target="RFC8152"/> was written, there were no requirements for hash algorithms to be included in the algorithm registry.
-        The use of thumbprints to refer to X.509 certificates is defined in this document which requires the use of hash algorithms.
-        There have also been other working groups in the IETF that have expressed a requirement for hash algorithms to do have sections of content be provided by reference rather than including it in the main message.
-        This document defines a set of hash algorithms for both of these purposes.
+        Example COSE messages for the various headers defined below can be found at https://github.com/cose-wg/Examples.
+        THIS IS NOT YET DONE BUT SHOULD BE COMING NOT LONG AFTER THE F2F MEETING.
       </t>
       
       <section anchor="requirements-terminology" title="Requirements Terminology">
@@ -130,10 +90,13 @@
             Are there any special certificate valiation text to be added?
           </t>
           <t>
-            List of other hash algorithms to be added.
+            Specific security considerations issues.
           </t>
           <t>
-            Specific security considerations issues.
+            Revocation info?
+          </t>
+          <t>
+            Ties to a COSE_Key?
           </t>
         </list>
         </t>
@@ -160,20 +123,20 @@
       </t>
 
       <t>
-        The header parameters defined in this document are:
+        The header attributes defined in this document are:
 
         <list style="hanging">
 	  <t hangText="x5bag:">
-	    This header parameters contains a bag of X.509 certificates.
+	    This header attributes contains a bag of X.509 certificates.
 	    The set of certificates in this header are unordered and may contain self-signed certificates.
             The certificate bag can contain certificates which are completely extraneous to the message.
 	    (An example of this would be to carry a certificate with a key agreement key usage in a signed message.)
 	    As the certificates are unordered, the party evaluating the signature will need to do the necessary path building.
 	    Certificates needed for any particular chain to be built may be absent from the bag.
 	    <vspace blankLines="1"/>
-	    As this header element does not provide any trust, the header parameter can be in either a protected or unprotected header bag.
+	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
 	    <vspace blankLines="1"/>
-            This header parameter allows for a single or a bag of X.509 certificates to be carried in the message.
+            This header attribute allows for a single or a bag of X.509 certificates to be carried in the message.
             <list style="symbols">
               <t>
                 If a single certificate is conveyed, it is placed in a CBOR bstr.
@@ -186,13 +149,14 @@
 	  </t>
 	  
           <t hangText="x5chain:">
-	    This header parameter contains an ordered array of X.509 certificates.
+	    This header attribute contains an ordered array of X.509 certificates.
 	    The certificates are to be ordered starting with the certificate containing the end-entity key followed by the certificate which signed it and so on.
 	    There is no requirement for the entire chain to be present in the element if there is reason to believe that the relying party will already have it.
+            This means that the relying party is still required to do path building, but that a candidate path is proposed in this attribute.
 	    <vspace blankLines="1"/>
-	    As this header element does not provide any trust, the header parameter can be in either a protected or unprotected header bag.
+	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
 	    <vspace blankLines="1"/>
-            This header parameter allows for a single or a bag of X.509 certificates to be carried in the message.
+            This header attribute allows for a single or a chain of X.509 certificates to be carried in the message.
             <list style="symbols">
               <t>
                 If a single certificate is conveyed, it is placed in a CBOR bstr.
@@ -205,29 +169,29 @@
           </t>
 
           <t hangText="x5t:">
-            This header parameter provides the ability to identify an X.509 certificate by a hash value.
-            The parameter is an array of two elements.
-            The first element is an algorithm identifier which is a signed integer or a string containing the hash algorithm identifier.
+            This header attribute provides the ability to identify an X.509 certificate by a hash value.
+            The attribute is an array of two elements.
+            The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier.
             The second element is a binary string containing the hash value.
 	    <vspace blankLines="1"/>
-	    As this header element does not provide any trust, the header parameter can be in either a protected or unprotected header bag.
+	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
             <vspace/>
-            For interoperability, applications which use this header parameter MUST support the hash algorithm 'sha256', but can use other hash algorithms.
+            For interoperability, applications which use this header attribute MUST support the hash algorithm 'sha256', but can use other hash algorithms.
           </t>
 
           <t hangText="x5u:">
-            This header parameter provides the ability to identify an X.509 certificate by a URL.
+            This header attribute provides the ability to identify an X.509 certificate by a URL.
             The referenced resource can be any of the following media types:
             <list style="symbols">
               <t>application/pkix-cert <xref target="RFC2585"/></t>
               <t>application/pkcs7-mime; smime-type="certs-only" <xref target="I-D.ietf-lamps-rfc5751-bis"/></t>
-              <t>application/x-pem-file <xref target="RFC7468"/> Should we support a PEM type? I cannot find a registered media type for one</t> <!-- application/x-pem-file -->
+              <t>application/pem-certificate-chain <xref target="I-D.ietf-acme-acme"/></t>
             </list>
 	    <vspace blankLines="1"/>
-	    As this header element implies a trust relationship, the header parameter MUST be in the protected header bag.
+	    As this header attribute implies a trust relationship, the attribute MUST be in the protected attributes.
             <vspace/>
             The URL provided MUST provide integrity protection and server authentication.
-            For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC5246"/> or DTLS.
+            For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC8446"/> or DTLS <xref target="I-D.ietf-tls-dtls13"/>.
             If the certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors.
             This will normally be the situation when self-signed certificates are used.
           </t>
@@ -235,7 +199,7 @@
       </t>
 
       <t>
-	The header parameters used in the following locations:
+	The header attributes are used in the following locations:
 	<list style="symbols">
 	  <t>
 	    COSE_Signature and COSE_Sign0 objects, in these objects they identify the key that was used for generating signature.
@@ -269,60 +233,47 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 
     <section title="X.509 certificates and static-static ECDH">
       <t>
-        The header parameters defined in the previous section are used to identify the recipient certificates for the ECDH key agreement algorithms.
+        The header attributes defined in the previous section are used to identify the recipient certificates for the ECDH key agreement algorithms.
         In this section we define the algorithm specific parameters that are used for identifying or transporting the senders key for static-static key agreement algorithms.
+      </t>
+
+      <t>
+        These attributes are defined analogously to those in the previous section.
+        There is no definition for the certificate bag as the same attribute would be used for both the sender and recipient certificates.
+
+        <list style="hanging">
+          <t hangText="x5chain-sender:">
+            This header attribute contains the chain of certificates starting with the sender's key exchange certificate.
+            The structure is the same as 'x5bag'.
+          </t>
+          <t hangText="x5t-sender:">
+            This header attribute contains the hash value for the sender's key exchange certificate.
+            The structure is the same as 'x5t'.
+          </t>
+          <t hangText="x5u-sender:">
+            This header attribute contains a URL for the sender's key exchange certificate.
+            The structure and processing are the same as 'x5u'.
+          </t>
+        </list>
       </t>
       
       <texttable anchor="Tags2" title="Static ECDH Algorithm Values">
-        <ttcol>Name</ttcol><ttcol>Value</ttcol><ttcol>Type</ttcol><ttcol>Algorithm</ttcol><ttcol>Description></ttcol>
-        <c>static key X.509 thumbprint</c><c>TBD</c><c>COSE_CertHash</c>
+        <ttcol>Name</ttcol><ttcol>Value</ttcol><ttcol>Type</ttcol><ttcol>Algorithm</ttcol><ttcol>Description</ttcol>
+        <c>x5t-sender</c><c>TBD</c><c>COSE_CertHash</c>
         <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
         <c>Thumbprint for the senders X.509 certificate</c>
 
-        <c>static key X.509 URL</c><c>TBD</c><c>uri</c>
+        <c>x5u-sender</c><c>TBD</c><c>uri</c>
         <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
         <c>URL for the senders X.509 certificate</c>
 
-        <c>static key X.509 cert chain</c><c>TBD</c><c>COSE_X509</c>
+        <c>x5chain-sender</c><c>TBD</c><c>COSE_X509</c>
         <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
         <c>static key X.509 certificate chain</c>
         
       </texttable>
     </section>
 
-    <section title="Hash Algorithm Identifiers">
-      <t>
-	The core COSE document did have a need for a standalone hash algorithm, and thus did not define any.
-	In this document, two hash algorithms are defined for use with the 'x5t' header parameter.
-      </t>
-      
-      <section title="SHA-2 256-bit Hash">
-        <t>
-          
-          Define an algorithm identifier for SHA-256.
-        </t>
-      </section>
-
-      <section title="SHA-2 256-bit Hash trucated to 64 bits">
-	<t>
-	  This hash function uses the SHA-2 256-bit hash function as in the previous section, however it truncates the result to 64-bits for transmission.
-	  The fact that it is a truncated hash means that there is now a high likelihood that collisions will occur, thus this hash function cannot be used in situations where a unique items is required to be identified.
-	  Luckily for the case of identifying a certificate that is not a requirement, the only requirement is that the number of potential certificates (and thus keys) to be tried is reduced to a small number.
-	  (Hopefully that number is one, but it can not be assumed to be.)
-	  After the set of certificates has been filtered down, the public key in each certificate will need to be tried for the operation in question.
-	  The certificate can be validated either before or after it has been checked as working.
-	  The trade-offs involved are:
-	  <list style="symbols">
-	    <t>Certificate validation before using the key will imply that more network traffic may be required in order to fetch certificates and do revocation checking.</t>
-	    <t>
-	      Certificate validation after using the key means that bad keys can be used and, if not carefully checked, the result may be used prior to completing the certificate validation.
-	      Using unvalidated keys can expose the device to more timing and oracle attacks as the attacker would be able to see if the key operation succeeded or failed as no network traffic to validate the certificate would ensue.
-	    </t>
-	  </list>
-	</t>
-      </section>
-    </section>
-    
     <section anchor="iana-considerations" title="IANA Considerations">
 
       
@@ -330,7 +281,6 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 
         <t>
           IANA is requested to register the new COSE Header items in <xref target="Tags"/> in the "COSE Header Parameters" registry.
-
         </t>
 
       </section>
@@ -339,27 +289,8 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 
         <t>
           IANA is requested to register the new COSE Header items in <xref target="Tags2"/> in the "COSE Header Algorithm Parameters" registry.
-
         </t>
 
-      </section>
-      
-      <section anchor="cose-algorithm-registry" title="COSE Algorithm Registry">
-
-        <t>
-          IANA is requested to register the following algorithms in the "COSE Algorithms" registry.
-        </t>
-
-        <texttable>
-          <ttcol>Name</ttcol>
-          <ttcol>Value</ttcol>
-          <ttcol>Description</ttcol>
-          <ttcol>Reference</ttcol>
-          <ttcol>Recommended</ttcol>
-          <c>SHA-256</c><c>TBD</c><c>SHA-2 256-bit Hash</c><c>[This Document]</c><c>Yes</c>
-          <c>SHA-256/64</c><c>TBD</c><c>SHA-2 256-bit Hash trucated to 64-bits</c><c>[This Document]</c><c>No</c>
-        </texttable>
-        
       </section>
 
     </section>
@@ -383,21 +314,23 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 
     <references title='Normative References'>
       <?rfc include="reference.RFC.2119.xml" ?>
-      &RFC5280;
+      <?rfc include="reference.RFC.5280.xml" ?>
       <?rfc include="reference.RFC.8174.xml" ?>
       <?rfc include="reference.I-D.schaad-cose-rfc8152bis-struct.xml" ?>
       
     </references>
 
     <references title='Informative References'>
-      &RFC5246;
+      <?rfc include="reference.RFC.8446.xml" ?>
+      <?rfc include="reference.I-D.ietf-tls-dtls13.xml" ?>
       <?rfc include="reference.I-D.ietf-lamps-rfc5751-bis.xml" ?>
-      &RFC2585;
-      &EDHOC;
-      <?rfc include="reference.RFC.7468.xml" ?>
+      <?rfc include="reference.RFC.2585.xml" ?>
+      <?rfc include="reference.I-D.selander-ace-cose-ecdhe.xml" ?>
+      <!-- <?rfc include="reference.RFC.7468.xml" ?> PEM -->
       <?rfc include="reference.RFC.8392.xml" ?>
       <?rfc include="reference.RFC.8152.xml" ?>
       <?rfc include="reference.I-D.ietf-cbor-cddl.xml" ?>
+      <?rfc include="reference.I-D.ietf-acme-acme.xml" ?>
     </references>
 
   </back>
