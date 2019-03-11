@@ -4,10 +4,10 @@
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
-<rfc ipr="trust200902" docName="draft-schaad-cose-hash-algs-01" category="info" version="3" submissionType="IETF">
+<rfc ipr="trust200902" docName="draft-ietf-cose-hash-algs-latest" category="info" version="3" submissionType="IETF">
   <front>
     <title abbrev="COSE Hashes">CBOR Object Signing and Encryption (COSE): Hash Algorithms</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-cose-x509-latest"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-cose-hash-algs-latest"/>
     <author initials="J." surname="Schaad" fullname="Jim Schaad">
       <organization>August Cellars</organization>
       <address>
