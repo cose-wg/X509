@@ -4,7 +4,7 @@
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
-<rfc ipr="trust200902" docName="draft-ietf-cose-hash-algs-01" category="info" version="3" submissionType="IETF" updates="RFC8152">
+<rfc ipr="trust200902" docName="draft-ietf-cose-hash-algs-latest" category="info" version="3" submissionType="IETF">
   <front>
     <title abbrev="COSE Hashes">CBOR Object Signing and Encryption (COSE): Hash Algorithms</title>
     <seriesInfo name="Internet-Draft" value="draft-ietf-cose-hash-algs-latest"/>
@@ -18,10 +18,10 @@
     <area>Security</area>
     <abstract>
       <t>
-        The CBOR Object Signing and Encryption (COSE) syntax RFC 8152 does not define any direct methods for using hash algorithms.
+        The CBOR Object Signing and Encryption (COSE) syntax <xref target="I-D.ietf-cose-rfc8152bis-struct"/> does not define any direct methods for using hash algorithms.
         There are however circumstances where hash algorithms are used:
-        Indirect signatures, where the hash of one or more external contents are signed,
-        or thumbprints, for identification of X.509 certificates or other objects.
+        Indirect signatures where the hash of one or more contents are signed.
+        X.509 certificate or other object identification by the use of a thumbprint.
         This document defines a set of hash algorithms that are identified by COSE Algorithm Identifiers.
       </t>
     </abstract>
