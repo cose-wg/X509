@@ -1,26 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-]>
-
+<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
-
-<rfc ipr="trust200902" docName="draft-ietf-cose-x509-02" category="info">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-02" category="info" submissionType="IETF" version="3">
+  <!-- xml2rfc v2v3 conversion 2.24.0 -->
   <front>
     <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Headers for carrying and referencing X.509 certificates</title>
-
+    <seriesInfo name="Internet-Draft" value="draft-ietf-cose-x509-02"/>
     <author initials="J." surname="Schaad" fullname="Jim Schaad">
       <organization>August Cellars</organization>
       <address>
         <email>ietf@augustcellars.com</email>
       </address>
     </author>
-
     <date/>
-
     <area>Security</area>
     <abstract>
       <t>
@@ -29,10 +25,9 @@
         The COSE Key structure is used for transporting keys outside of COSE messages.
         This document extends the way that keys can be identified and transported by providing attributes that refer to or contain X.509 certificates.
       </t>
-
     </abstract>
-
-    <note title="Contributing to this document">
+    <note>
+      <name>Contributing to this document</name>
       <!-- RFC EDITOR - Please remove this note before publishing -->
       <t>
         The source for this draft is being maintained in GitHub.
@@ -42,17 +37,15 @@
       </t>
     </note>
   </front>
-
   <middle>
-
-    <section anchor="introduction" title="Introduction">
+    <section anchor="introduction">
+      <name>Introduction</name>
       <t>
         In the process of writing <xref target="RFC8152"/> discussions where held on the question of X.509 certificates  <xref target="RFC5280"/>  and if there was a needed to provide for them.
         At the time there were no use cases presented that appeared to have a sufficient need for these attributes.
         Since that time a number of cases where X.509 certificate support is necessary have been defined.
         This document provides a set of attributes that will allow applications to transport and refer to X.509 certificates in a consistent manner.
       </t>
-
       <t>
 	Some of the constrained device situations are being used where an X.509 PKI is already installed.
 	One of these situations is the 6tish environment for enrollment of devices where the certificates are installed at the factory.
@@ -60,13 +53,12 @@
 	A final scenario is the use of COSE as a messaging application where long term existence of keys can be used along with a central authentication authority.
 	The use of certificates in this scenario allows for key management to be used which is well understood.
       </t>
-
       <t>
         Example COSE messages for the various headers defined below can be found at https://github.com/cose-wg/Examples.
         THIS IS NOT YET DONE BUT SHOULD BE COMING NOT LONG AFTER THE F2F MEETING.
       </t>
-      
-      <section anchor="requirements-terminology" title="Requirements Terminology">
+      <section anchor="requirements-terminology">
+        <name>Requirements Terminology</name>
         <!--  NOTE FOR AUTHORS:
              We use the following terms in the document
              
@@ -75,38 +67,32 @@
              label - the key of an element in a CBOR map.   Unless otherwise separated from text, enclose with single quote marks
              value - the value of an element in a CBOR map
         -->
-
         <t>
           The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they appear in all capitals, as shown here.
         </t>
-
       </section>
-
-      <section title="Open Questions">
-        <t>
-        <list>
-          <t>
+      <section>
+        <name>Open Questions</name>
+        <ul empty="true" spacing="normal">
+          <li>
             Should we define an extended key usage?
-          </t>
-          <t>
+          </li>
+          <li>
             Revocation info?
-          </t>
-        </list>
-        </t>
+          </li>
+        </ul>
       </section>
     </section>
-
-    <section title="X.509 COSE Headers">
+    <section>
+      <name>X.509 COSE Headers</name>
       <t>
         The use of X.509 certificates allows for an existing trust infrastructure to be used with COSE.
 	This includes the full suite of enrollment protocols, trust anchors, trust chaining and revocation checking that have been defined over time by the IETF and other organizations.
 	The key structures that have been defined in COSE currently do not support all of these properties although some may be found in COSE Web Tokens (CWT) <xref target="RFC8392"/>.
       </t>
-
       <t>
 	It is not necessarily expected that constrained devices will fully support the evaluation and processing of X.509 certificates, it is perfectly reasonable for a certificate to be assigned to a device which it can then provide to a relying party along with a signature or encrypted message, the relying party not being a constrained device.
       </t>
-
       <t>
         Certificates obtained from any of these methods MUST still be validated.
         This validation can be done via the PKIX rules in <xref target="RFC5280"/> or by using a different trust structure, such as a trusted certificate distributer for self-signed certificates.
@@ -114,188 +100,241 @@
         These rules apply to certificates of a chain length of one as well as longer chains.
         If the application cannot establish a trust in the certificate, then it cannot be used.
       </t>
-
       <t>
         The header attributes defined in this document are:
 
-        <list style="hanging">
-	  <t hangText="x5bag:">
+      </t>
+      <dl newline="false" spacing="normal">
+        <dt>x5bag:</dt>
+        <dd>
+          <t>
 	    This header attributes contains a bag of X.509 certificates.
 	    The set of certificates in this header are unordered and may contain self-signed certificates.
             The certificate bag can contain certificates which are completely extraneous to the message.
 	    (An example of this would be to carry a certificate with a key agreement key usage in a signed message.)
 	    As the certificates are unordered, the party evaluating the signature will need to do the necessary path building.
 	    Certificates needed for any particular chain to be built may be absent from the bag.
-	    <vspace blankLines="1"/>
+          </t>
+          <t>
 	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
-	    <vspace blankLines="1"/>
+          </t>
+          <t>
             This header attribute allows for a single or a bag of X.509 certificates to be carried in the message.
-            <list style="symbols">
-              <t>
+          </t>
+          <ul spacing="normal">
+            <li>
                 If a single certificate is conveyed, it is placed in a CBOR bstr.
-              </t>
-              <t>
+              </li>
+            <li>
                 If multiple certificates are conveyed, a CBOR array of bstrs is used.
-		Each certificate being in it's own slot.
-              </t>
-            </list>
-	  </t>
-	  
-          <t hangText="x5chain:">
+		Each certificate being in its own bstr.
+              </li>
+          </ul>
+        </dd>
+        <dt>x5chain:</dt>
+        <dd>
+          <t>
 	    This header attribute contains an ordered array of X.509 certificates.
 	    The certificates are to be ordered starting with the certificate containing the end-entity key followed by the certificate which signed it and so on.
 	    There is no requirement for the entire chain to be present in the element if there is reason to believe that the relying party will already have it.
             This means that the relying party is still required to do path building, but that a candidate path is proposed in this attribute.
-	    <vspace blankLines="1"/>
+          </t>
+          <t>
 	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
-	    <vspace blankLines="1"/>
+          </t>
+          <t>
             This header attribute allows for a single or a chain of X.509 certificates to be carried in the message.
-            <list style="symbols">
-              <t>
+          </t>
+          <ul spacing="normal">
+            <li>
                 If a single certificate is conveyed, it is placed in a CBOR bstr.
-              </t>
-              <t>
+              </li>
+            <li>
                 If multiple certificates are conveyed, a CBOR array of bstrs is used.
 		Each certificate being in it's own slot.
-              </t>
-            </list>
-          </t>
-
-          <t hangText="x5t:">
+              </li>
+          </ul>
+        </dd>
+        <dt>x5t:</dt>
+        <dd>
+          <t>
             This header attribute provides the ability to identify an X.509 certificate by a hash value.
             The attribute is an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier.
             The second element is a binary string containing the hash value.
-	    <vspace blankLines="1"/>
+          </t>
+          <t>
 	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
-            <vspace/>
+          </t>
+          <t>
             For interoperability, applications which use this header attribute MUST support the hash algorithm 'sha256', but can use other hash algorithms.
           </t>
-
-          <t hangText="x5u:">
-            This header attribute provides the ability to identify an X.509 certificate by a URL.
+        </dd>
+        <dt>x5u:</dt>
+        <dd>
+          <t>
+            This header attribute provides the ability to identify an X.509 certificate by a URI.
             The referenced resource can be any of the following media types:
-            <list style="symbols">
-              <t>application/pkix-cert <xref target="RFC2585"/></t>
-              <t>application/pkcs7-mime; smime-type="certs-only" <xref target="I-D.ietf-lamps-rfc5751-bis"/></t>
-              <t>application/pem-certificate-chain <xref target="I-D.ietf-acme-acme"/></t>
-            </list>
-	    <vspace blankLines="1"/>
+          </t>
+          <ul spacing="normal">
+            <li>application/pkix-cert <xref target="RFC2585"/></li>
+            <li>application/pkcs7-mime; smime-type="certs-only" <xref target="RFC8551"/></li>
+            <!--              <t>application/pem-certificate-chain <xref target="I-D.ietf-acme-acme"/></t> -->
+          </ul>
+          <t>
 	    As this header attribute implies a trust relationship, the attribute MUST be in the protected attributes.
-            <vspace/>
-            The URL provided MUST provide integrity protection and server authentication.
+          </t>
+          <t>
+            The URI provided MUST provide integrity protection and server authentication.
             For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC8446"/> or DTLS <xref target="I-D.ietf-tls-dtls13"/>.
             If the certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors.
             This will normally be the situation when self-signed certificates are used.
           </t>
-        </list>
-      </t>
-
+        </dd>
+      </dl>
       <t>
 	The header attributes are used in the following locations:
-	<list style="symbols">
-	  <t>
+      </t>
+      <ul spacing="normal">
+        <li>
 	    COSE_Signature and COSE_Sign0 objects, in these objects they identify the key that was used for generating signature.
-	  </t>
-
-          <t>
+	  </li>
+        <li>
             COSE_recipient objects, in this location they may be used to identify the certificate for the recipient of the message.
-          </t>
-	</list>
-      </t>
-
-      <texttable anchor="Tags" title="X.509 COSE Headers">
-        <ttcol>Name</ttcol><ttcol>Value</ttcol><ttcol>value type</ttcol><ttcol>description</ttcol>
-
-        <c>x5bag</c><c>TBD4</c><c>COSE_X509</c><c>An unordered bag of X.509 certificates</c>
-        <c>x5chain</c><c>TBD3</c><c>COSE_X509</c><c>An ordered chain of X.509 certificates</c>
-        <c>x5t</c><c>TBD1</c><c>COSE_CertHash</c><c>Hash of an X.509 certificate</c>
-        <c>x5u</c><c>TBD2</c><c>uri</c><c>URL pointing to an X.509 certificate</c>
-      </texttable>
-
+          </li>
+      </ul>
+      <table anchor="Tags" align="center">
+        <name>X.509 COSE Headers</name>
+        <thead>
+          <tr>
+            <th align="left">Name</th>
+            <th align="left">Value</th>
+            <th align="left">value type</th>
+            <th align="left">description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="left">x5bag</td>
+            <td align="left">TBD4</td>
+            <td align="left">COSE_X509</td>
+            <td align="left">An unordered bag of X.509 certificates</td>
+          </tr>
+          <tr>
+            <td align="left">x5chain</td>
+            <td align="left">TBD3</td>
+            <td align="left">COSE_X509</td>
+            <td align="left">An ordered chain of X.509 certificates</td>
+          </tr>
+          <tr>
+            <td align="left">x5t</td>
+            <td align="left">TBD1</td>
+            <td align="left">COSE_CertHash</td>
+            <td align="left">Hash of an X.509 certificate</td>
+          </tr>
+          <tr>
+            <td align="left">x5u</td>
+            <td align="left">TBD2</td>
+            <td align="left">uri</td>
+            <td align="left">URI pointing to an X.509 certificate</td>
+          </tr>
+        </tbody>
+      </table>
       <t>
-        Below is an equivalent CDDL <xref target="I-D.ietf-cbor-cddl"/> description of the text above.
+        Below is an equivalent CDDL <xref target="RFC8610"/> description of the text above.
       </t>
-
-      <figure><artwork type="CDDL">
+      <artwork type="CDDL" name="" align="left" alt=""><![CDATA[
 COSE_X509 = bstr / [ 2*certs: bstr ]
 COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
-</artwork>
-      </figure>
+]]></artwork>
     </section>
-
-    <section title="X.509 certificates and static-static ECDH">
+    <section>
+      <name>X.509 certificates and static-static ECDH</name>
       <t>
         The header attributes defined in the previous section are used to identify the recipient certificates for the ECDH key agreement algorithms.
         In this section we define the algorithm specific parameters that are used for identifying or transporting the senders key for static-static key agreement algorithms.
       </t>
-
       <t>
         These attributes are defined analogously to those in the previous section.
         There is no definition for the certificate bag as the same attribute would be used for both the sender and recipient certificates.
 
-        <list style="hanging">
-          <t hangText="x5chain-sender:">
+      </t>
+      <dl newline="false" spacing="normal">
+        <dt>x5chain-sender:</dt>
+        <dd>
             This header attribute contains the chain of certificates starting with the sender's key exchange certificate.
             The structure is the same as 'x5bag'.
-          </t>
-          <t hangText="x5t-sender:">
+          </dd>
+        <dt>x5t-sender:</dt>
+        <dd>
             This header attribute contains the hash value for the sender's key exchange certificate.
             The structure is the same as 'x5t'.
-          </t>
-          <t hangText="x5u-sender:">
-            This header attribute contains a URL for the sender's key exchange certificate.
+          </dd>
+        <dt>x5u-sender:</dt>
+        <dd>
+            This header attribute contains a URI for the sender's key exchange certificate.
             The structure and processing are the same as 'x5u'.
-          </t>
-        </list>
-      </t>
-      
-      <texttable anchor="Tags2" title="Static ECDH Algorithm Values">
-        <ttcol>Name</ttcol><ttcol>Value</ttcol><ttcol>Type</ttcol><ttcol>Algorithm</ttcol><ttcol>Description</ttcol>
-        <c>x5t-sender</c><c>TBD</c><c>COSE_CertHash</c>
-        <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
-        <c>Thumbprint for the senders X.509 certificate</c>
-
-        <c>x5u-sender</c><c>TBD</c><c>uri</c>
-        <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
-        <c>URL for the senders X.509 certificate</c>
-
-        <c>x5chain-sender</c><c>TBD</c><c>COSE_X509</c>
-        <c>ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</c>
-        <c>static key X.509 certificate chain</c>
-        
-      </texttable>
+          </dd>
+      </dl>
+      <table anchor="Tags2" align="center">
+        <name>Static ECDH Algorithm Values</name>
+        <thead>
+          <tr>
+            <th align="left">Name</th>
+            <th align="left">Value</th>
+            <th align="left">Type</th>
+            <th align="left">Algorithm</th>
+            <th align="left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="left">x5t-sender</td>
+            <td align="left">TBD</td>
+            <td align="left">COSE_CertHash</td>
+            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</td>
+            <td align="left">Thumbprint for the senders X.509 certificate</td>
+          </tr>
+          <tr>
+            <td align="left">x5u-sender</td>
+            <td align="left">TBD</td>
+            <td align="left">uri</td>
+            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</td>
+            <td align="left">URI for the senders X.509 certificate</td>
+          </tr>
+          <tr>
+            <td align="left">x5chain-sender</td>
+            <td align="left">TBD</td>
+            <td align="left">COSE_X509</td>
+            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</td>
+            <td align="left">static key X.509 certificate chain</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
-
-    <section anchor="iana-considerations" title="IANA Considerations">
-
-      
-      <section anchor="cose-header-key-table" title="COSE Header Parameter Registry">
-
+    <section anchor="iana-considerations">
+      <name>IANA Considerations</name>
+      <section anchor="cose-header-key-table">
+        <name>COSE Header Parameter Registry</name>
         <t>
           IANA is requested to register the new COSE Header items in <xref target="Tags"/> in the "COSE Header Parameters" registry.
         </t>
-
       </section>
-
-      <section title="COSE Header Algorithm Parameter Registry">
-
+      <section>
+        <name>COSE Header Algorithm Parameter Registry</name>
         <t>
           IANA is requested to register the new COSE Header items in <xref target="Tags2"/> in the "COSE Header Algorithm Parameters" registry.
         </t>
-
       </section>
-
     </section>
-    
-    <section anchor="security-considerations" title="Security Considerations">
-
+    <section anchor="security-considerations">
+      <name>Security Considerations</name>
       <t>
         Establishing trust in a certificate is a vital part of processing.
         Trust cannot be assumed whenever a new self-signed certificate appears on the client, instead a well defined process is required.
         One common way for a new trust anchor to be added (or removed) from a device is by doing a new firmware upgrade.
       </t>
-      
+
       <t>
         In constrained systems, there is a trade-off between the order of checking the signature and checking the certificate for validity.
         Validating certificates can require that network resources be accessed in order to get revocation information or retrieve certificates during path building.
@@ -303,7 +342,6 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         On the other hand, an oracle can potentially be built based on if the network resources are only accessed if the signature validation passes.
         In any event, both the signature and certificate validation MUST be checked before acting on any requests.
       </t>
-
       <t>
         As called out in the COSE algorithms document <xref target="I-D.ietf-cose-rfc8152bis-algs"/> basic checking on the keys in a certificate needs to be performed prior to using them.
         These can include validating that points are on curves for elliptical curve algorithms and that sizes of keys are acceptable for RSA.
@@ -312,30 +350,30 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       
     </section>
   </middle>
-
   <back>
-
-    <references title='Normative References'>
-      <?rfc include="reference.RFC.2119.xml" ?>
-      <?rfc include="reference.RFC.5280.xml" ?>
-      <?rfc include="reference.RFC.8174.xml" ?>
-      <?rfc include="reference.I-D.ietf-cose-rfc8152bis-struct.xml" ?>
-      
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <xi:include href="reference.RFC.2119.xml"/>
+        <xi:include href="reference.RFC.5280.xml"/>
+        <xi:include href="reference.RFC.8174.xml"/>
+        <!-- <xi:include href="reference.I-D.ietf-cose-rfc8152bis-struct.xml"/>-->
+      </references>
+      <references>
+        <name>Informative References</name>
+        <xi:include href="reference.RFC.8446.xml"/>
+        <xi:include href="reference.I-D.ietf-tls-dtls13.xml"/>
+        <xi:include href="reference.RFC.8551.xml"/>
+        <xi:include href="reference.RFC.2585.xml"/>
+        <xi:include href="reference.I-D.selander-ace-cose-ecdhe.xml"/>
+        <!-- <?rfc include="reference.RFC.7468.xml" ?> PEM -->
+        <xi:include href="reference.RFC.8392.xml"/>
+        <xi:include href="reference.RFC.8152.xml"/>
+        <xi:include href="reference.RFC.8610.xml"/>
+        <!-- <xi:include href="reference.I-D.ietf-acme-acme.xml"/> -->
+        <xi:include href="reference.I-D.ietf-cose-rfc8152bis-algs.xml"/>
+      </references>
     </references>
-
-    <references title='Informative References'>
-      <?rfc include="reference.RFC.8446.xml" ?>
-      <?rfc include="reference.I-D.ietf-tls-dtls13.xml" ?>
-      <?rfc include="reference.I-D.ietf-lamps-rfc5751-bis.xml" ?>
-      <?rfc include="reference.RFC.2585.xml" ?>
-      <?rfc include="reference.I-D.selander-ace-cose-ecdhe.xml" ?>
-      <!-- <?rfc include="reference.RFC.7468.xml" ?> PEM -->
-      <?rfc include="reference.RFC.8392.xml" ?>
-      <?rfc include="reference.RFC.8152.xml" ?>
-      <?rfc include="reference.I-D.ietf-cbor-cddl.xml" ?>
-      <?rfc include="reference.I-D.ietf-acme-acme.xml" ?>
-      <?rfc include="reference.I-D.ietf-cose-rfc8152bis-algs.xml" ?>
-    </references>
-
   </back>
 </rfc>
