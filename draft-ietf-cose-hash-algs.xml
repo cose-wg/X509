@@ -30,7 +30,7 @@
       <!-- RFC EDITOR - Please remove this note before publishing -->
       <t>
         The source for this draft is being maintained in GitHub.
-        Suggested changes should be submitted as pull requests at TBD. <!-- <eref target="https://github.com/cose-wg/X509"/> -->
+        Suggested changes should be submitted as pull requests at <eref target="https://github.com/cose-wg/X509"/>
         Editorial changes can be managed in GitHub, but any substantial issues need to be discussed on the COSE mailing list.
       </t>
     </note>
@@ -41,20 +41,20 @@
       <t>
         The CBOR Object Signing and Encryption (COSE) syntax does not define any direct methods for the use of hash algorithms.
         It also does not define a structure syntax that is used to encode a digested object structure along the lines of the DigestedData ASN.1 structure in <xref target="RFC5652"/>.
-        This omission was intentional as a structure consisting of jut a digest identifier, the content, and a digest value does not by itself provide any strong security service.
-        Additional, an application is going to be better off defining this type of structure so that it can add any additional data that needs to be hashed as well as methods of obtaining the data.
+        This omission was intentional as a structure consisting of just a digest identifier, the content, and a digest value does not by itself provide any strong security service.
+        Additionally, an application is going to be better off defining this type of structure so that it can include add any additional data that needs to be hashed, as well as methods of obtaining the data.
       </t>
       <t>
         While the above is true, there are some cases where having some standard hash algorithms defined for COSE with a common identifier makes a great deal of sense.
         Two of the cases where these are going to be used are:
       </t>
-      <ul spacing="normal">
+      <ul>
         <li>
-            Indirect signing of content, and
-          </li>
+          Indirect signing of content, and
+        </li>
         <li>
-            Object identification.
-          </li>
+          Object identification.
+        </li>
       </ul>
       <t>
         Indirect signing of content is a paradigm where the content is not directly signed, but instead a hash of the content is computed and that hash value, along with the hash algorithm, is included in the content that will be signed.
@@ -75,41 +75,128 @@
 
       <section>
         <name>Open Issues</name>
+        <t>
+          RFC Editor: Please remove this section before publishing.
+        </t>
         <ul>
           <li>
-            Are there additional SHA-2 formulations that need to be added or should some of the ones in this document be removed?
-          </li>
-          <li>
-            Should additional hash algorithms be added to the document?
-          </li>
-          <li>
-            Review the Recommended column in all of the tables to make sure that the values are correct.
-          </li>
-          <li>
-            Are there recommendations that should be provided on what range of identifiers should be used for these algorithms?
-            Inputs would include the expected frequency of use for each algorithm.
+            No Open Issues
           </li>
         </ul>
       </section>
     </section>
+
+    <section>
+      <name>Hash Algorithm Usage</name>
+
+      <t>
+        As noted in the previous section, hash functions can be used for a variety of purposes.
+        Some of these purposes require that a hash function be cryptographically strong, these include direct and indirect signatures.
+        That is, using the hash as part of the signature or using the hash as part of the body to be signed.
+        Other uses of hash functions do not require the same level of strength.
+      </t>
+      
+      <t>
+        This document contains some hash functions that are not designed to be used for cryptographic operations.
+        An application that is using a hash function needs to carefully evaluate exactly what hash properties are needed and which hash functions are going to provide them.
+        Applications should also make sure that the ability to change hash functions is part of the base design as cryptographic advances are sure to reduce strength of a hash function.
+      </t>
+
+      <t>
+        A hash function is a map from a large bit string to a smaller bit string.
+        There are going to be collisions by a hash function, the trick is to make sure that it is difficult to find two values that are going to map to the same output value.
+        The standard "Collision Attack" is one where an attacker can find two different messages that have the same hash value.
+        If a collision attack exists, then the function SHOULD NOT be used for a cryptographic purpose.
+        The only reason why such a hash function is used is when there is absolutely no other choice (e.g. a HSM that cannot be replaced), and only after looking at the possible security issues.
+        Cryptographic purposes would include creation of signatures or the use of hashes for indirect signatures.
+        These functions may still be usable for non-cryptographic purposes.
+      </t>
+
+      <t>
+        An example of a non-cryptographic use of a hash is for filtering from a collection of values to find possible candidates that can later be checked to see if they are the correct one.
+        A simple example of this is the classic thumbprint of a certificate.
+        If the thumbprint is used to verify that it is the correct certificate, then that usage is subject to a collision attack as above.
+        If however, the thumbprint is used to sort through a collection of certificates to find those that might be used for the purpose of verifying a signature, a simple filter capability is sufficient.
+        In this case, one still needs to validate that the public key validates the signature (and the certificate is trusted), and all certificates that don't contain a key that validates the signature can be discarded as false positives.
+      </t>
+
+      <t>
+        To distinguish between these two cases, a new value in the recommended column of the COSE Algorithms registry is to be added.
+        "Filter Only" indicates that the only purpose of a hash function should be to filter results and not those which require collision resistance.
+      </t>
+
+      <section>
+        <name>
+          Example CBOR hash structure
+        </name>
+
+        <t>
+          <xref target="RFC8152"/> did not provide a default structure for holding a hash value not only because no separate hash algorithms were defined, but because how the structure is setup is frequently application specific.
+          There are four fields that are often included as part of a hash structure:
+        </t>
+
+        <ul>
+          <li>
+            The hash algorithm identifier.
+          </li>
+          <li>
+            The hash value.
+          </li>
+          <li>
+            A pointer to the value that was hashed, this could be a pointer to a file, an object that can be obtained from the network, or a pointer to someplace in the message, or something very application specific.
+          </li>
+          <li>
+            Additional data, this can be something as simple as a random value to make finding hash collisions slightly harder as the value handed to the application cannot have been selected to have a collision, or as complicated as a set of processing instructions that are to be used with the object that is pointed to.
+          </li>
+        </ul>
+
+        <t>
+          An example of a structure which permits all of the above fields to exist would look like the following.
+          There is no definition here of what goes into the 'any' value and how it would be included in the computed hash value.
+        </t>
+          
+        <sourcecode type="CDDL">
+COSE_Hash_V = (
+    1 : int / tstr, # Algorithm identifier
+    2 : bstr, # Hash value
+    3 : tstr ?, # Location of object hashed
+    4 : any ?   # object containing other details and things - prefixed to the object to be hashed
+    )
+        </sourcecode>
+
+        <t>
+          An alternate structure that could be used for situations where one is searching a group of objects for a match.
+          In this case, the location would not be needed and adding extra data to the hash would be counterproductive.
+          This results in a structure that looks like this:
+        </t>
+
+        <sourcecode type="CDDL">
+COSE_Hash_Find = [
+    hashAlg : int / tstr,
+    hashValue : bstr
+]
+        </sourcecode>
+      </section>
+    </section>
+    
     <section>
         <name>Hash Algorithm Identifiers</name>
 
         <section>
           <name>SHA-1 Hash Algorithm</name>
           <t>
-            The SHA-1 hash algorithm <xref target="RFC3174"/> wsa designed by the United States National Security Agenciy and published in 1995.
+            The SHA-1 hash algorithm <xref target="RFC3174"/> was designed by the United States National Security Agency and published in 1995.
             Since that time a large amount of cryptographic analysis has been applied to this algorithm and a successful collision attack has been created (<xref target="SHA-1-collision"/>).
             The IETF formally started discouraging the use of SHA-1 with the publishing of <xref target="RFC6194"/>.
           </t>
 
           <t>
-            Dispite the above, there are still times where SHA-1 needs to be used and therefore it makes sense to assign a point for the use of this hash algorithm.
+            Despite the above, there are still times where SHA-1 needs to be used and therefore it makes sense to assign a point for the use of this hash algorithm.
             Some of these situations are with historic HSMs where only SHA-1 is implemented or where the SHA-1 value is used for the purpose of filtering and thus the collision resistance property is not needed.
           </t>
 
           <t>
-            Because of the known issues for SHA-1 and the fact that is should no longer be used, the algorithm will be registered with the recommendation of "Depreciated".
+            Because of the known issues for SHA-1 and the fact that is should no longer be used, the algorithm will be registered with the recommendation of "Filter Only".
           </t>
 
           <table align="center" anchor="SHA1-Algs">
@@ -129,7 +216,7 @@
                 <td>TBD6</td>
                 <td>SHA-1 Hash</td>
                 <td>[This Document]</td>
-                <td>Depreciated</td>
+                <td>Filter Only</td>
               </tr>
             </tbody>
           </table>
@@ -162,10 +249,10 @@
             </li>
             <li>
               <strong>SHA-256</strong> is probably the most common hash function used currently.
-              SHA-256 is the most efficient hash algorithm for 32-bit hardware.
+              SHA-256 is an efficient hash algorithm for 32-bit hardware.
             </li>
             <li>
-              <strong>SHA-384</strong> and <strong>SHA-512</strong> hash functions are more efficient when run on 64-bit hardware.
+              <strong>SHA-384</strong> and <strong>SHA-512</strong> hash functions are efficient for 64-bit hardware.
             </li>
             <li>
               <strong>SHA-512/256</strong> provides a hash function that runs more efficiently on 64-bit hardware, but offers the same security levels as SHA-256.
@@ -189,7 +276,7 @@
               <td>TBD1</td>
               <td>SHA-2 256-bit Hash truncated to 64-bits</td>
               <td>[This Document]</td>
-              <td>No</td>
+              <td>Filter Only</td>
             </tr>
             <tr>
               <td>SHA-256</td>
@@ -232,13 +319,14 @@
         </t>
 
         <t>
-          The SHA-3 hash algorithms have a significantly different structure than the SHA-3 hash algorithms.
-          One of the benefits of this differences is that when computing a truncated SHAKE hash value, the value is not a prefix of a longer version of the same value.
+          The SHA-3 hash algorithms have a significantly different structure than the SHA-2 hash algorithms.
+          One of the benefits of this differences is that when computing a shorter SHAKE hash value, the value is not a prefix of the result of computing the longer hash.
         </t>
 
         <t>
-          MAYBE TEXT:
-          Might not need to define truncated versions of this hash algorithm because the length of the resulting value is always going to generate a unique value since you cannot just truncate it like you can with SHA-1 and SHA-2.
+          Unlike the SHA-2 hash functions, no algorithm identifier is created for shorter lengths.
+          Applications can specify what the minimum length for a hash function for the protocol.
+          A validator can infer the actual length from the hash value in these cases.
         </t>
         
         <table align="center" anchor="SHAKE-Algs">
@@ -295,20 +383,41 @@
           Many of the hash values produced are relatively long and as such the use of a two byte algorithm identifier seems reasonable.
           SHA-1 is tagged as deprecated and thus a longer algorithm identifier is appropriate even though it is a shorter hash value.
         </t>
+
+        <t>
+          In addition, IANA is to add the value of 'Filter Only' to the set of legal values for the 'Recommended' column.
+          This value is only to be used for hash functions and indicates that it is not to be used for purposes which require collision resistance.
+        </t>
       </section>
     </section>
     
     <section anchor="security-considerations">
       <name>Security Considerations</name>
       <t>
-        There are security considerations:
+        The security considerations have already been called out as part of the previous text.
+        The following issues need to be dealt with:
       </t>
+      <ul>
+        <li>
+          Protocols need to perform a careful analysis of the properties of a hash function that are needed and how they map onto the possible attacks.
+          In particular, one needs to distinguish between those uses that need the cryptographic properties, i.e. collision resistance, and properties that correspond to possible object identification.
+          The different attacks correspond to who or what is being protected, is it the originator that is the attacker or a third party?
+          This is the difference between collision resistance and second pre-image resistance.
+          As a general rule, longer hash values are "better" than short ones, but trade-offs of transmission size, timeliness, and security all need to be included as part of this analysis.
+          In many cases the value being hashed is a public value, as such pre-image resistance is not part of this analysis.
+        </li>
+        <li>
+          Algorithm agility needs to be considered a requirement for any use of hash functions.
+          As with any cryptographic function, hash functions are under constant attack and the strength of hash algorithms will be reduced over time.
+        </li>
+      </ul>
     </section>
   </middle>
   
   <back xmlns:xi="http://www.w3.org/2001/XInclude">
     <displayreference target="RFC2634" to="ESS"/>
     <displayreference target="RFC5652" to="CMS"/>
+    <displayreference target="RFC8152" to="COSE"/>
     
     <references title='Normative References'>
       <?rfc include="reference.RFC.2119.xml" ?>
@@ -329,6 +438,7 @@
       <!--
       <?rfc include="reference.RFC.5280.xml" ?>
       -->
+      <?rfc include="reference.RFC.8152.xml" ?>
       
     </references>
 
