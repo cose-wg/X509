@@ -334,6 +334,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         Trust cannot be assumed whenever a new self-signed certificate appears on the client, instead a well defined process is required.
         One common way for a new trust anchor to be added (or removed) from a device is by doing a new firmware upgrade.
       </t>
+
       <t>
         In constrained systems, there is a trade-off between the order of checking the signature and checking the certificate for validity.
         Validating certificates can require that network resources be accessed in order to get revocation information or retrieve certificates during path building.
@@ -346,6 +347,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         These can include validating that points are on curves for elliptical curve algorithms and that sizes of keys are acceptable for RSA.
         The use of unvalidated keys can lead either to loss of security or excessive consumption of resources.
       </t>
+      
     </section>
   </middle>
   <back>
