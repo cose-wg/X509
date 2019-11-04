@@ -25,7 +25,7 @@
         This document defines a set of hash algorithms that are identified by COSE Algorithm Identifiers.
       </t>
     </abstract>
-    <note>
+    <note removeInRFC="true">
       <name>Contributing to this document</name>
       <!-- RFC EDITOR - Please remove this note before publishing -->
       <t>
@@ -42,7 +42,7 @@
         The CBOR Object Signing and Encryption (COSE) syntax does not define any direct methods for the use of hash algorithms.
         It also does not define a structure syntax that is used to encode a digested object structure along the lines of the DigestedData ASN.1 structure in <xref target="RFC5652"/>.
         This omission was intentional as a structure consisting of just a digest identifier, the content, and a digest value does not by itself provide any strong security service.
-        Additionally, an application is going to be better off defining this type of structure so that it can include add any additional data that needs to be hashed, as well as methods of obtaining the data.
+        Additionally, an application is going to be better off defining this type of structure so that it can include any additional data that needs to be hashed, as well as methods of obtaining the data.
       </t>
       <t>
         While the above is true, there are some cases where having some standard hash algorithms defined for COSE with a common identifier makes a great deal of sense.
@@ -58,8 +58,8 @@
       </ul>
       <t>
         Indirect signing of content is a paradigm where the content is not directly signed, but instead a hash of the content is computed and that hash value, along with the hash algorithm, is included in the content that will be signed.
-        Doing indirect signing allows for the a signature to be validated without first downloading all of the content associated with the signature.
-        This capability can be of even grater importance in a constrained environment as not all of the content signed may be needed by the device.
+        Doing indirect signing allows for a signature to be validated without first downloading all of the content associated with the signature.
+        This capability can be of even greater importance in a constrained environment as not all of the content signed may be needed by the device.
       </t>
       <t>
         The use of hashes to identify objects is something that has been very common.
@@ -73,11 +73,8 @@
         </t>
       </section>
 
-      <section>
+      <section removeInRFC="true">
         <name>Open Issues</name>
-        <t>
-          RFC Editor: Please remove this section before publishing.
-        </t>
         <ul>
           <li>
             No Open Issues
@@ -99,16 +96,16 @@
       <t>
         This document contains some hash functions that are not designed to be used for cryptographic operations.
         An application that is using a hash function needs to carefully evaluate exactly what hash properties are needed and which hash functions are going to provide them.
-        Applications should also make sure that the ability to change hash functions is part of the base design as cryptographic advances are sure to reduce strength of a hash function.
+        Applications should also make sure that the ability to change hash functions is part of the base design as cryptographic advances are sure to reduce the strength of a hash function.
       </t>
 
       <t>
-        A hash function is a map from a large bit string to a smaller bit string.
+        A hash function is a map from one, normally large, bit string to a second, usually smaller, bit string.
         There are going to be collisions by a hash function, the trick is to make sure that it is difficult to find two values that are going to map to the same output value.
         The standard "Collision Attack" is one where an attacker can find two different messages that have the same hash value.
         If a collision attack exists, then the function SHOULD NOT be used for a cryptographic purpose.
-        The only reason why such a hash function is used is when there is absolutely no other choice (e.g. a HSM that cannot be replaced), and only after looking at the possible security issues.
-        Cryptographic purposes would include creation of signatures or the use of hashes for indirect signatures.
+        The only reason why such a hash function is used is when there is absolutely no other choice (e.g. a Hardware Security Module (HSM) that cannot be replaced), and only after looking at the possible security issues.
+        Cryptographic purposes would include the creation of signatures or the use of hashes for indirect signatures.
         These functions may still be usable for non-cryptographic purposes.
       </t>
 
@@ -146,13 +143,14 @@
             A pointer to the value that was hashed, this could be a pointer to a file, an object that can be obtained from the network, or a pointer to someplace in the message, or something very application specific.
           </li>
           <li>
-            Additional data, this can be something as simple as a random value to make finding hash collisions slightly harder as the value handed to the application cannot have been selected to have a collision, or as complicated as a set of processing instructions that are to be used with the object that is pointed to.
+            Additional data, this can be something as simple as a random value to make finding hash collisions slightly harder as the value handed to the application cannot have been selected to have a collision, or as complicated as a set of processing instructions that are used with the object that is pointed to.
+            The additional data can be dealt with in a number of ways, prepending or appending to the content, but it is strongly suggested to it either be a fixed known size, or the lengths of the pieces being hashed be included.
+            (Encoding as a CBOR array accomplished this requirement.)
           </li>
         </ul>
 
         <t>
           An example of a structure which permits all of the above fields to exist would look like the following.
-          There is no definition here of what goes into the 'any' value and how it would be included in the computed hash value.
         </t>
           
         <sourcecode type="CDDL">
@@ -160,7 +158,7 @@ COSE_Hash_V = (
     1 : int / tstr, # Algorithm identifier
     2 : bstr, # Hash value
     3 : tstr ?, # Location of object hashed
-    4 : any ?   # object containing other details and things - prefixed to the object to be hashed
+    4 : any ?   # object containing other details and things
     )
         </sourcecode>
 
@@ -228,7 +226,7 @@ COSE_Hash_Find = [
         <t>
           The family of SHA-2 hash algorithms <xref target="FIPS-180-4"/> was designed by the United States National Security Agency and published in 2001.
           Since that time some additional algorithms have been added to the original set to deal with length extension attacks and some performance issues.
-          While the SHA-3 hash algorithms has been published since that time, the SHA-2 algorithms are still broadly used.
+          While the SHA-3 hash algorithms have been published since that time, the SHA-2 algorithms are still broadly used.
         </t>
 
         <t>
@@ -314,7 +312,7 @@ COSE_Hash_Find = [
         <name>SHAKE Algorithms</name>
 
         <t>
-          The family SHA-3 hash algorithms <xref target="FIPS-180-4"/> was the result of a competition run by NIST.
+          The family SHA-3 hash algorithms <xref target="FIPS-202"/> was the result of a competition run by NIST.
           The pair of algorithms known as SHAKE-128 and SHAKE-256 are the instances of SHA-3 that are currently being standardized in the IETF.
         </t>
 
@@ -325,7 +323,7 @@ COSE_Hash_Find = [
 
         <t>
           Unlike the SHA-2 hash functions, no algorithm identifier is created for shorter lengths.
-          Applications can specify what the minimum length for a hash function for the protocol.
+          Applications can specify a minimum length for any hash function.
           A validator can infer the actual length from the hash value in these cases.
         </t>
         
@@ -434,6 +432,18 @@ COSE_Hash_Find = [
         </front>
         <seriesInfo name="FIPS" value="PUB 180-4"/>
       </reference>
+
+      <reference anchor="FIPS-202">
+        <front>
+          <title>SHA-3 Standard: Permutation-Based Hash and Extendable-Output Functions</title>
+          <author>
+            <organization>National Institute of Standards and Technology</organization>
+          </author>
+          <date month="August" year="2015"/>
+        </front>
+        <seriesInfo name="FIPS" value="PUB 202"/>
+      </reference>
+
 
       <!--
       <?rfc include="reference.RFC.5280.xml" ?>

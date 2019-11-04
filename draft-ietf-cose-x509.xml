@@ -5,11 +5,11 @@
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-02" category="info" submissionType="IETF" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-04" category="info" submissionType="IETF" version="3">
   <!-- xml2rfc v2v3 conversion 2.24.0 -->
   <front>
     <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Headers for carrying and referencing X.509 certificates</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-cose-x509-02"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-cose-x509-04"/>
     <author initials="J." surname="Schaad" fullname="Jim Schaad">
       <organization>August Cellars</organization>
       <address>
@@ -26,7 +26,7 @@
         This document extends the way that keys can be identified and transported by providing attributes that refer to or contain X.509 certificates.
       </t>
     </abstract>
-    <note>
+    <note removeInRFC="true">
       <name>Contributing to this document</name>
       <!-- RFC EDITOR - Please remove this note before publishing -->
       <t>
@@ -48,15 +48,15 @@
       </t>
       <t>
 	Some of the constrained device situations are being used where an X.509 PKI is already installed.
-	One of these situations is the 6tish environment for enrollment of devices where the certificates are installed at the factory.
+	One of these situations is the 6TiSCH environment for enrollment of devices where the certificates are installed at the factory.
 	The <xref target="I-D.selander-ace-cose-ecdhe"/> draft was also written with the idea that long term certificates could be used to provide for authentication of devices and uses them to establish session keys.
 	A final scenario is the use of COSE as a messaging application where long term existence of keys can be used along with a central authentication authority.
 	The use of certificates in this scenario allows for key management to be used which is well understood.
       </t>
       <t>
         Example COSE messages for the various headers defined below can be found at https://github.com/cose-wg/Examples.
-        THIS IS NOT YET DONE BUT SHOULD BE COMING NOT LONG AFTER THE F2F MEETING.
       </t>
+      
       <section anchor="requirements-terminology">
         <name>Requirements Terminology</name>
         <!--  NOTE FOR AUTHORS:
@@ -71,6 +71,7 @@
           The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they appear in all capitals, as shown here.
         </t>
       </section>
+      <!--
       <section>
         <name>Open Questions</name>
         <ul empty="true" spacing="normal">
@@ -81,7 +82,8 @@
             Revocation info?
           </li>
         </ul>
-      </section>
+        </section>
+        -->
     </section>
     <section>
       <name>X.509 COSE Headers</name>
@@ -126,8 +128,7 @@
                 If a single certificate is conveyed, it is placed in a CBOR bstr.
               </li>
             <li>
-                If multiple certificates are conveyed, a CBOR array of bstrs is used.
-		Each certificate being in its own bstr.
+                If multiple certificates are conveyed, a CBOR array of bstrs is used, with each certificate being in its own bstr.
               </li>
           </ul>
         </dd>
@@ -150,8 +151,7 @@
                 If a single certificate is conveyed, it is placed in a CBOR bstr.
               </li>
             <li>
-                If multiple certificates are conveyed, a CBOR array of bstrs is used.
-		Each certificate being in it's own slot.
+                If multiple certificates are conveyed, a CBOR array of bstrs is used, with each certificate being in its own bstr.
               </li>
           </ul>
         </dd>
@@ -167,7 +167,7 @@
 	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
           </t>
           <t>
-            For interoperability, applications which use this header attribute MUST support the hash algorithm 'sha256', but can use other hash algorithms.
+            For interoperability, applications which use this header attribute MUST support the hash algorithm 'SHA-256', but can use other hash algorithms.
           </t>
         </dd>
         <dt>x5u:</dt>
@@ -197,10 +197,10 @@
       </t>
       <ul spacing="normal">
         <li>
-	    COSE_Signature and COSE_Sign0 objects, in these objects they identify the key that was used for generating signature.
+	    COSE_Signature and COSE_Sign0 objects, in these objects they identify the certificate to be used for validation the signature.
 	  </li>
         <li>
-            COSE_recipient objects, in this location they may be used to identify the certificate for the recipient of the message.
+            COSE_recipient objects, in this location they identify the certificate for the recipient of the message.
           </li>
       </ul>
       <table anchor="Tags" align="center">
@@ -208,9 +208,9 @@
         <thead>
           <tr>
             <th align="left">Name</th>
-            <th align="left">Value</th>
-            <th align="left">value type</th>
-            <th align="left">description</th>
+            <th align="left">Label</th>
+            <th align="left">Value Type</th>
+            <th align="left">Description</th>
           </tr>
         </thead>
         <tbody>
@@ -263,7 +263,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <dt>x5chain-sender:</dt>
         <dd>
             This header attribute contains the chain of certificates starting with the sender's key exchange certificate.
-            The structure is the same as 'x5bag'.
+            The structure is the same as 'x5chain'.
           </dd>
         <dt>x5t-sender:</dt>
         <dd>
@@ -281,7 +281,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <thead>
           <tr>
             <th align="left">Name</th>
-            <th align="left">Value</th>
+            <th align="left">Label</th>
             <th align="left">Type</th>
             <th align="left">Algorithm</th>
             <th align="left">Description</th>
@@ -318,12 +318,15 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <name>COSE Header Parameter Registry</name>
         <t>
           IANA is requested to register the new COSE Header items in <xref target="Tags"/> in the "COSE Header Parameters" registry.
+          The "Value Registry" field is empty for all of the items.
+          For each item, the 'Reference' field points to this document.
         </t>
       </section>
       <section>
         <name>COSE Header Algorithm Parameter Registry</name>
         <t>
           IANA is requested to register the new COSE Header items in <xref target="Tags2"/> in the "COSE Header Algorithm Parameters" registry.
+          For each item, the 'Reference' field points to this document.
         </t>
       </section>
     </section>
