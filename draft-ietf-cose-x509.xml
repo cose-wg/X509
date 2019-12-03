@@ -8,7 +8,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-04" category="info" submissionType="IETF" version="3">
   <!-- xml2rfc v2v3 conversion 2.24.0 -->
   <front>
-    <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Headers for carrying and referencing X.509 certificates</title>
+    <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Header parameters for carrying and referencing X.509 certificates</title>
     <seriesInfo name="Internet-Draft" value="draft-ietf-cose-x509-04"/>
     <author initials="J." surname="Schaad" fullname="Jim Schaad">
       <organization>August Cellars</organization>
@@ -54,7 +54,7 @@
 	The use of certificates in this scenario allows for key management to be used which is well understood.
       </t>
       <t>
-        Example COSE messages for the various headers defined below can be found at https://github.com/cose-wg/Examples.
+        Example COSE messages for the various header parameters defined below can be found at https://github.com/cose-wg/Examples.
       </t>
       
       <section anchor="requirements-terminology">
@@ -86,7 +86,7 @@
         -->
     </section>
     <section>
-      <name>X.509 COSE Headers</name>
+      <name>X.509 COSE Header Parameters</name>
       <t>
         The use of X.509 certificates allows for an existing trust infrastructure to be used with COSE.
 	This includes the full suite of enrollment protocols, trust anchors, trust chaining and revocation checking that have been defined over time by the IETF and other organizations.
@@ -103,25 +103,25 @@
         If the application cannot establish a trust in the certificate, then it cannot be used.
       </t>
       <t>
-        The header attributes defined in this document are:
+        The header parameters defined in this document are:
 
       </t>
       <dl newline="false" spacing="normal">
         <dt>x5bag:</dt>
         <dd>
           <t>
-	    This header attributes contains a bag of X.509 certificates.
-	    The set of certificates in this header are unordered and may contain self-signed certificates.
+	    This header parameter contains a bag of X.509 certificates.
+	    The set of certificates in this header parameter are unordered and may contain self-signed certificates.
             The certificate bag can contain certificates which are completely extraneous to the message.
 	    (An example of this would be to carry a certificate with a key agreement key usage in a signed message.)
 	    As the certificates are unordered, the party evaluating the signature will need to do the necessary path building.
 	    Certificates needed for any particular chain to be built may be absent from the bag.
           </t>
           <t>
-	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
+	    As this header parameter does not provide any trust, the header parameter  can be in either a protected or unprotected header bucket.
           </t>
           <t>
-            This header attribute allows for a single or a bag of X.509 certificates to be carried in the message.
+            This header parameter allows for a single or a bag of X.509 certificates to be carried in the message.
           </t>
           <ul spacing="normal">
             <li>
@@ -135,16 +135,16 @@
         <dt>x5chain:</dt>
         <dd>
           <t>
-	    This header attribute contains an ordered array of X.509 certificates.
+	    This header parameter contains an ordered array of X.509 certificates.
 	    The certificates are to be ordered starting with the certificate containing the end-entity key followed by the certificate which signed it and so on.
 	    There is no requirement for the entire chain to be present in the element if there is reason to believe that the relying party will already have it.
             This means that the relying party is still required to do path building, but that a candidate path is proposed in this attribute.
           </t>
           <t>
-	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
+	    As this header parameter does not provide any trust, the header parameter can be in either the protected or unprotected bucket.
           </t>
           <t>
-            This header attribute allows for a single or a chain of X.509 certificates to be carried in the message.
+            This header parameter allows for a single or a chain of X.509 certificates to be carried in the message.
           </t>
           <ul spacing="normal">
             <li>
@@ -158,22 +158,23 @@
         <dt>x5t:</dt>
         <dd>
           <t>
-            This header attribute provides the ability to identify an X.509 certificate by a hash value.
+            This header parameter provides the ability to identify an X.509 certificate by a hash value.
             The attribute is an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier.
+            The algorithm is registered in the "COSE Algorithms" registry
             The second element is a binary string containing the hash value.
           </t>
           <t>
-	    As this header element does not provide any trust, the header attribute can be in either a protected or unprotected header attribute.
+	    As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.
           </t>
           <t>
-            For interoperability, applications which use this header attribute MUST support the hash algorithm 'SHA-256', but can use other hash algorithms.
+            For interoperability, applications which use this header parameter MUST support the hash algorithm 'SHA-256', but can use other hash algorithms.
           </t>
         </dd>
         <dt>x5u:</dt>
         <dd>
           <t>
-            This header attribute provides the ability to identify an X.509 certificate by a URI.
+            This header parameter provides the ability to identify an X.509 certificate by a URI <xref target="RFC3986"/>.
             The referenced resource can be any of the following media types:
           </t>
           <ul spacing="normal">
@@ -182,7 +183,7 @@
             <!--              <t>application/pem-certificate-chain <xref target="I-D.ietf-acme-acme"/></t> -->
           </ul>
           <t>
-	    As this header attribute implies a trust relationship, the attribute MUST be in the protected attributes.
+	    As this header parameter implies a trust relationship, the attribute MUST be in the protected attributes.
           </t>
           <t>
             The URI provided MUST provide integrity protection and server authentication.
@@ -193,7 +194,7 @@
         </dd>
       </dl>
       <t>
-	The header attributes are used in the following locations:
+	The header parameters are used in the following locations:
       </t>
       <ul spacing="normal">
         <li>
@@ -204,7 +205,7 @@
           </li>
       </ul>
       <table anchor="Tags" align="center">
-        <name>X.509 COSE Headers</name>
+        <name>X.509 COSE Header Parameters</name>
         <thead>
           <tr>
             <th align="left">Name</th>
@@ -251,7 +252,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
     <section>
       <name>X.509 certificates and static-static ECDH</name>
       <t>
-        The header attributes defined in the previous section are used to identify the recipient certificates for the ECDH key agreement algorithms.
+        The header parameters defined in the previous section are used to identify the recipient certificates for the ECDH key agreement algorithms.
         In this section we define the algorithm specific parameters that are used for identifying or transporting the senders key for static-static key agreement algorithms.
       </t>
       <t>
@@ -262,17 +263,17 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       <dl newline="false" spacing="normal">
         <dt>x5chain-sender:</dt>
         <dd>
-            This header attribute contains the chain of certificates starting with the sender's key exchange certificate.
+            This header parameter contains the chain of certificates starting with the sender's key exchange certificate.
             The structure is the same as 'x5chain'.
           </dd>
         <dt>x5t-sender:</dt>
         <dd>
-            This header attribute contains the hash value for the sender's key exchange certificate.
+            This header parameter contains the hash value for the sender's key exchange certificate.
             The structure is the same as 'x5t'.
           </dd>
         <dt>x5u-sender:</dt>
         <dd>
-            This header attribute contains a URI for the sender's key exchange certificate.
+            This header parameter contains a URI for the sender's key exchange certificate.
             The structure and processing are the same as 'x5u'.
           </dd>
       </dl>
@@ -317,7 +318,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       <section anchor="cose-header-key-table">
         <name>COSE Header Parameter Registry</name>
         <t>
-          IANA is requested to register the new COSE Header items in <xref target="Tags"/> in the "COSE Header Parameters" registry.
+          IANA is requested to register the new COSE Header parameter in <xref target="Tags"/> in the "COSE Header Parameters" registry.
           The "Value Registry" field is empty for all of the items.
           For each item, the 'Reference' field points to this document.
         </t>
@@ -325,7 +326,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       <section>
         <name>COSE Header Algorithm Parameter Registry</name>
         <t>
-          IANA is requested to register the new COSE Header items in <xref target="Tags2"/> in the "COSE Header Algorithm Parameters" registry.
+          IANA is requested to register the new COSE Header Algorithm parameters in <xref target="Tags2"/> in the "COSE Header Algorithm Parameters" registry.
           For each item, the 'Reference' field points to this document.
         </t>
       </section>
@@ -376,6 +377,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <xi:include href="reference.RFC.8610.xml"/>
         <!-- <xi:include href="reference.I-D.ietf-acme-acme.xml"/> -->
         <xi:include href="reference.I-D.ietf-cose-rfc8152bis-algs.xml"/>
+        <xi:include href="reference.RFC.3986.xml"/>
       </references>
     </references>
   </back>
