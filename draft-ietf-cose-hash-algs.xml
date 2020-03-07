@@ -21,7 +21,7 @@
         The CBOR Object Signing and Encryption (COSE) syntax <xref target="I-D.ietf-cose-rfc8152bis-struct"/> does not define any direct methods for using hash algorithms.
         There are however circumstances where hash algorithms are used:
         Indirect signatures where the hash of one or more contents are signed.
-        X.509 certificate or other object identification by the use of a thumbprint.
+        X.509 certificate or other object identification by the use of a fingerprint.
         This document defines a set of hash algorithms that are identified by COSE Algorithm Identifiers.
       </t>
     </abstract>
@@ -113,9 +113,9 @@
 
       <t>
         An example of a non-cryptographic use of a hash is for filtering from a collection of values to find possible candidates that can later be checked to see if they are the correct one.
-        A simple example of this is the classic thumbprint of a certificate.
-        If the thumbprint is used to verify that it is the correct certificate, then that usage is subject to a collision attack as above.
-        If however, the thumbprint is used to sort through a collection of certificates to find those that might be used for the purpose of verifying a signature, a simple filter capability is sufficient.
+        A simple example of this is the classic fingerprint of a certificate.
+        If the fingerprint is used to verify that it is the correct certificate, then that usage is subject to a collision attack as above.
+        If however, the fingerprint is used to sort through a collection of certificates to find those that might be used for the purpose of verifying a signature, a simple filter capability is sufficient.
         In this case, one still needs to validate that the public key validates the signature (and the certificate is trusted), and all certificates that don't contain a key that validates the signature can be discarded as false positives.
       </t>
 
@@ -145,7 +145,7 @@
             A pointer to the value that was hashed, this could be a pointer to a file, an object that can be obtained from the network, or a pointer to someplace in the message, or something very application specific.
           </li>
           <li>
-            Additional data, this can be something as simple as a random value to make finding hash collisions slightly harder as the value handed to the application cannot have been selected to have a collision, or as complicated as a set of processing instructions that are used with the object that is pointed to.
+            Additional data, this can be something as simple as a random value to make finding hash collisions slightly harder (as the value handed to the application cannot have been selected to have a collision), or as complicated as a set of processing instructions that are used with the object that is pointed to.
             The additional data can be dealt with in a number of ways, prepending or appending to the content, but it is strongly suggested to it either be a fixed known size, or the lengths of the pieces being hashed be included.
             (Encoding as a CBOR array accomplished this requirement.)
           </li>
