@@ -19,9 +19,7 @@
     <abstract>
       <t>
         The CBOR Object Signing and Encryption (COSE) syntax <xref target="I-D.ietf-cose-rfc8152bis-struct"/> does not define any direct methods for using hash algorithms.
-        There are however circumstances where hash algorithms are used:
-        Indirect signatures where the hash of one or more contents are signed.
-        X.509 certificate or other object identification by the use of a fingerprint.
+        There are however circumstances where hash algorithms are used, such as indirect signatures where the hash of one or more contents are signed, and X.509 certificate or other object identification by the use of a fingerprint.
         This document defines a set of hash algorithms that are identified by COSE Algorithm Identifiers.
       </t>
     </abstract>
@@ -90,7 +88,8 @@
 
       <t>
         As noted in the previous section, hash functions can be used for a variety of purposes.
-        Some of these purposes require that a hash function be cryptographically strong, these include direct and indirect signatures.
+        Some of these purposes require that a hash function be cryptographically strong.
+        These include direct and indirect signatures.
         That is, using the hash as part of the signature or using the hash as part of the body to be signed.
         Other uses of hash functions do not require the same level of strength.
       </t>
@@ -103,9 +102,10 @@
 
       <t>
         A hash function is a map from one, normally large, bit string to a second, usually smaller, bit string.
-        There are going to be collisions by a hash function, the trick is to make sure that it is difficult to find two values that are going to map to the same output value.
+        There are going to be collisions by a hash function.
+        The trick is to make sure that it is difficult to find two values that are going to map to the same output value.
         The standard "Collision Attack" is one where an attacker can find two different messages that have the same hash value.
-        If a collision attack exists, then the function SHOULD NOT be used for a cryptographic purpose.
+        If a collision attack exists, then the function <bcp14>SHOULD NOT</bcp14> be used for a cryptographic purpose.
         The only reason why such a hash function is used is when there is absolutely no other choice (e.g. a Hardware Security Module (HSM) that cannot be replaced), and only after looking at the possible security issues.
         Cryptographic purposes would include the creation of signatures or the use of hashes for indirect signatures.
         These functions may still be usable for non-cryptographic purposes.
@@ -142,7 +142,8 @@
             The hash value.
           </li>
           <li>
-            A pointer to the value that was hashed, this could be a pointer to a file, an object that can be obtained from the network, or a pointer to someplace in the message, or something very application specific.
+            A pointer to the value that was hashed.
+            this could be a pointer to a file, an object that can be obtained from the network, or a pointer to someplace in the message, or something very application specific.
           </li>
           <li>
             Additional data, this can be something as simple as a random value to make finding hash collisions slightly harder (as the value handed to the application cannot have been selected to have a collision), or as complicated as a set of processing instructions that are used with the object that is pointed to.
@@ -165,7 +166,7 @@ COSE_Hash_V = (
         </sourcecode>
 
         <t>
-          An alternate structure that could be used for situations where one is searching a group of objects for a match.
+          An alternative structure that could be used for situations where one is searching a group of objects for a match.
           In this case, the location would not be needed and adding extra data to the hash would be counterproductive.
           This results in a structure that looks like this:
         </t>
@@ -250,7 +251,8 @@ COSE_Hash_Find = [
               Locations that use this hash function need either to analysis the potential problems with having a collision occur, or where the only function of the hash is to narrow the possible choices.
               </t>
               <t>
-                The latter is the case for <xref target="I-D.ietf-cose-x509"/>, the hash value is used to select possible certificates and, if there are multiple choices then, each choice can be tested by using the public key.
+                The latter is the case for <xref target="I-D.ietf-cose-x509"/>.
+                The hash value is used to select possible certificates and, if there are multiple choices then, each choice can be tested by using the public key.
               </t>
             </li>
             <li>
@@ -266,7 +268,7 @@ COSE_Hash_Find = [
           </ul>
 
           <t>
-            The COSE capabilities for these algorithms is an empty array.
+            The COSE capabilities array for these algorithms is empty.
           </t>
 
         <table align="center" anchor="SHA2-Algs">
@@ -330,7 +332,7 @@ COSE_Hash_Find = [
         <name>SHAKE Algorithms</name>
 
         <t>
-          The family SHA-3 hash algorithms <xref target="FIPS-202"/> was the result of a competition run by NIST.
+          The family of SHA-3 hash algorithms <xref target="FIPS-202"/> was the result of a competition run by NIST.
           The pair of algorithms known as SHAKE-128 and SHAKE-256 are the instances of SHA-3 that are currently being standardized in the IETF.
         </t>
 
@@ -346,7 +348,7 @@ COSE_Hash_Find = [
         </t>
         
           <t>
-            The COSE capabilities for these algorithms is an empty array.
+            The COSE capabilities array for these algorithms is empty.
           </t>
 
         <table align="center" anchor="SHAKE-Algs">
@@ -385,6 +387,10 @@ COSE_Hash_Find = [
     
     <section anchor="iana-considerations">
       <name>IANA Considerations</name>
+      <t>
+        The IANA actions in <xref target="I-D.ietf-cose-rfc8152bis-struct"/> and <xref target="I-D.ietf-cose-rfc8152bis-algs"/> need to be executed before the actions in this document.
+      </t>
+      
       <section anchor="cose-algorithm-registry">
         <name>COSE Algorithm Registry</name>
         <t>
@@ -411,29 +417,27 @@ COSE_Hash_Find = [
           In addition, IANA is to add the value of 'Filter Only' to the set of legal values for the 'Recommended' column.
           This value is only to be used for hash functions and indicates that it is not to be used for purposes which require collision resistance.
         </t>
+        <t>
+          Add this document to the reference section for this table.
+        </t>
+          
       </section>
     </section>
     
     <section anchor="security-considerations">
       <name>Security Considerations</name>
-      <t>
-        The security considerations have already been called out as part of the previous text.
-        The following issues need to be dealt with:
-      </t>
-      <ul>
-        <li>
+        <t>
           Protocols need to perform a careful analysis of the properties of a hash function that are needed and how they map onto the possible attacks.
           In particular, one needs to distinguish between those uses that need the cryptographic properties, i.e. collision resistance, and properties that correspond to possible object identification.
-          The different attacks correspond to who or what is being protected, is it the originator that is the attacker or a third party?
+          The different attacks correspond to who or what is being protected: is it the originator that is the attacker or a third party?
           This is the difference between collision resistance and second pre-image resistance.
           As a general rule, longer hash values are "better" than short ones, but trade-offs of transmission size, timeliness, and security all need to be included as part of this analysis.
           In many cases the value being hashed is a public value, as such pre-image resistance is not part of this analysis.
-        </li>
-        <li>
+        </t>
+        <t>
           Algorithm agility needs to be considered a requirement for any use of hash functions.
           As with any cryptographic function, hash functions are under constant attack and the strength of hash algorithms will be reduced over time.
-        </li>
-      </ul>
+        </t>
     </section>
   </middle>
   
@@ -483,6 +487,7 @@ COSE_Hash_Find = [
       <xi:include href="reference.I-D.ietf-cose-x509.xml"/>
       <?rfc include="reference.RFC.3174.xml" ?>
       <?rfc include="reference.RFC.6194.xml" ?>
+      <?rfc include="reference.I-D.ietf-cose-rfc8152bis-algs.xml" ?>
 
       <!--
       <?rfc include="reference.RFC.2585.xml" ?>
