@@ -389,6 +389,7 @@ COSE_Hash_Find = [
       <name>IANA Considerations</name>
       <t>
         The IANA actions in <xref target="I-D.ietf-cose-rfc8152bis-struct"/> and <xref target="I-D.ietf-cose-rfc8152bis-algs"/> need to be executed before the actions in this document.
+        Where early allocation of data points has been made, these should be preseved.
       </t>
       
       <section anchor="cose-algorithm-registry">
@@ -416,9 +417,7 @@ COSE_Hash_Find = [
         <t>
           In addition, IANA is to add the value of 'Filter Only' to the set of legal values for the 'Recommended' column.
           This value is only to be used for hash functions and indicates that it is not to be used for purposes which require collision resistance.
-        </t>
-        <t>
-          Add this document to the reference section for this table.
+          IANA is requested to add this document to the reference section for this table due to this addition.
         </t>
           
       </section>
