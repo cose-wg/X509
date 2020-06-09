@@ -106,6 +106,7 @@
         The trick is to make sure that it is difficult to find two values that are going to map to the same output value.
         A "Collision Attack" is one where an attacker can find two different messages that have the same hash value.
         A hash function that is susceptible to collision attacks, <bcp14>SHOULD NOT</bcp14> be used for a cryptographic purpose.
+        The discovery of theoretical collision attacks against a given hash function SHOULD trigger a review of the continued suitability of the algorithm if alternatives are available and migration is viable.
         The only reason why such a hash function is used is when there is absolutely no other choice (e.g. a Hardware Security Module (HSM) that cannot be replaced), and only after looking at the possible security issues.
         Cryptographic purposes would include the creation of signatures or the use of hashes for indirect signatures.
         These functions may still be usable for non-cryptographic purposes.
@@ -121,7 +122,7 @@
 
       <t>
         To distinguish between these two cases, a new value in the recommended column of the COSE Algorithms registry is to be added.
-        "Filter Only" indicates that the only purpose of a hash function should be to filter results and not those which require collision resistance.
+        "Filter Only" indicates that the only purpose of a hash function should be to filter results and it is not intended for applications which require a cryptographically strong alogirthm.
       </t>
 
       <section>
@@ -192,7 +193,7 @@ COSE_Hash_Find = [
           </t>
 
           <t>
-            Despite the above, there are still times where SHA-1 needs to be used and therefore it makes sense to assign a point for the use of this hash algorithm.
+            Despite the above, there are still times where SHA-1 needs to be used and therefore it makes sense to assign a code point for the use of this hash algorithm.
             Some of these situations are with historic HSMs where only SHA-1 is implemented or where the SHA-1 value is used for the purpose of filtering and thus the collision resistance property is not needed.
           </t>
 
@@ -334,6 +335,8 @@ COSE_Hash_Find = [
         <t>
           The family of SHA-3 hash algorithms <xref target="FIPS-202"/> was the result of a competition run by NIST.
           The pair of algorithms known as SHAKE-128 and SHAKE-256 are the instances of SHA-3 that are currently being standardized in the IETF.
+          <!-- Check with Roman - maybe delete -->
+          This is the reason for including these algorithms in this document.          
         </t>
 
         <t>
@@ -389,7 +392,7 @@ COSE_Hash_Find = [
       <name>IANA Considerations</name>
       <t>
         The IANA actions in <xref target="I-D.ietf-cose-rfc8152bis-struct"/> and <xref target="I-D.ietf-cose-rfc8152bis-algs"/> need to be executed before the actions in this document.
-        Where early allocation of data points has been made, these should be preseved.
+        Where early allocation of data points has been made, these should be preserved.
       </t>
       
       <section anchor="cose-algorithm-registry">
