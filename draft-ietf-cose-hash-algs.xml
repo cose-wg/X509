@@ -55,14 +55,14 @@
         </li>
       </ul>
       <t>
-        Indirect signing of content is a paradigm where the content is not directly signed, but instead a hash of the content is computed and that hash value, along with the hash algorithm, is included in the content that will be signed.
+        Indirect signing of content is a paradigm where the content is not directly signed, but instead a hash of the content is computed and that hash value, along with an identifier for the hash algorithm, is included in the content that will be signed.
         Doing indirect signing allows for a signature to be validated without first downloading all of the content associated with the signature.
         This capability can be of even greater importance in a constrained environment as not all of the content signed may be needed by the device.
       </t>
       <t>
         The use of hashes to identify objects is something that has been very common.
         One of the primary things that has been identified by a hash function for secure message is a certificate.
-        Two examples of this can be found in <xref target="RFC2634"/> and the newly defined COSE equivalents in <xref target="I-D.ietf-cose-x509"/>.
+        Two examples of this can be found in <xref target="RFC2634"/> and the COSE equivalents in <xref target="I-D.ietf-cose-x509"/>.
       </t>
       <section anchor="requirements-terminology">
         <name>Requirements Terminology</name>
