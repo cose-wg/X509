@@ -376,7 +376,7 @@ COSE_Hash_Find = [
             <tr>
               <td>SHAKE128</td>
               <td>TBD10</td>
-              <td>128-bit SHAKE-128</td>
+              <td>SHAKE-128 256-bit Hash Value</td>
               <td>[]</td>
               <td>[This Document]</td>
               <td>Yes</td>
@@ -384,7 +384,7 @@ COSE_Hash_Find = [
             <tr>
               <td>SHAKE256</td>
               <td>TBD11</td>
-              <td>256-bit SHAKE-256</td>
+              <td>SHAKE-256 512-bit Hash Value</td>
               <td>[]</td>
               <td>[This Document]</td>
               <td>Yes</td>
