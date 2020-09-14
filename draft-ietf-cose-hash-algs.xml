@@ -4,10 +4,9 @@
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
-<rfc ipr="trust200902" docName="draft-ietf-cose-hash-algs-latest" category="info" version="3" submissionType="IETF">
+<rfc ipr="trust200902" docName="draft-ietf-cose-hash-algs-09" category="info" version="3" submissionType="IETF">
   <front>
     <title abbrev="COSE Hashes">CBOR Object Signing and Encryption (COSE): Hash Algorithms</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-cose-hash-algs-latest"/>
     <author initials="J." surname="Schaad" fullname="Jim Schaad">
       <organization>August Cellars</organization>
       <address>
@@ -19,7 +18,7 @@
     <abstract>
       <t>
         The CBOR Object Signing and Encryption (COSE) syntax <xref target="I-D.ietf-cose-rfc8152bis-struct"/> does not define any direct methods for using hash algorithms.
-        There are however circumstances where hash algorithms are used, such as indirect signatures where the hash of one or more contents are signed, and X.509 certificate or other object identification by the use of a fingerprint.
+        There are, however, circumstances where hash algorithms are used, such as indirect signatures where the hash of one or more contents are signed, and X.509 certificate or other object identification by the use of a fingerprint.
         This document defines a set of hash algorithms that are identified by COSE Algorithm Identifiers.
       </t>
     </abstract>
@@ -39,7 +38,7 @@
       <t>
         The CBOR Object Signing and Encryption (COSE) syntax does not define any direct methods for the use of hash algorithms.
         It also does not define a structure syntax that is used to encode a digested object structure along the lines of the DigestedData ASN.1 structure in <xref target="RFC5652"/>.
-        This omission was intentional as a structure consisting of just a digest identifier, the content, and a digest value does not by itself provide any strong security service.
+        This omission was intentional, as a structure consisting of just a digest identifier, the content, and a digest value does not, by itself, provide any strong security service.
         Additionally, an application is going to be better off defining this type of structure so that it can include any additional data that needs to be hashed, as well as methods of obtaining the data.
       </t>
       <t>
@@ -55,14 +54,16 @@
         </li>
       </ul>
       <t>
-        Indirect signing of content is a paradigm where the content is not directly signed, but instead a hash of the content is computed and that hash value, along with the hash algorithm, is included in the content that will be signed.
+        Indirect signing of content is a paradigm where the content is not directly signed, but instead a hash of the content is computed and that hash value, along with an identifier for the hash algorithm, is included in the content that will be signed.
         Doing indirect signing allows for a signature to be validated without first downloading all of the content associated with the signature.
+        Rather the signature can be validated on all of the hash values and pointers to the associated contents, then those associated parts can be downloaded, the hash value of that part computed, and then compared to the hash value in the signed content.
         This capability can be of even greater importance in a constrained environment as not all of the content signed may be needed by the device.
+        An example of how this is used can be found in <xref target="I-D.ietf-suit-manifest"/>.
       </t>
       <t>
         The use of hashes to identify objects is something that has been very common.
-        One of the primary things that has been identified by a hash function for secure message is a certificate.
-        Two examples of this can be found in <xref target="RFC2634"/> and the newly defined COSE equivalents in <xref target="I-D.ietf-cose-x509"/>.
+        One of the primary things that has been identified by a hash function in a secure message is a certificate.
+        Two examples of this can be found in <xref target="RFC2634"/> and the COSE equivalents in <xref target="I-D.ietf-cose-x509"/>.
       </t>
       <section anchor="requirements-terminology">
         <name>Requirements Terminology</name>
@@ -91,37 +92,38 @@
         Some of these purposes require that a hash function be cryptographically strong.
         These include direct and indirect signatures.
         That is, using the hash as part of the signature or using the hash as part of the body to be signed.
-        Other uses of hash functions do not require the same level of strength.
+        Other uses of hash functions may not require the same level of strength.
       </t>
       
       <t>
         This document contains some hash functions that are not designed to be used for cryptographic operations.
         An application that is using a hash function needs to carefully evaluate exactly what hash properties are needed and which hash functions are going to provide them.
-        Applications should also make sure that the ability to change hash functions is part of the base design as cryptographic advances are sure to reduce the strength of a hash function.
+        Applications should also make sure that the ability to change hash functions is part of the base design, as cryptographic advances are sure to reduce the strength of a hash function <xref target="BCP201"/>.
       </t>
 
       <t>
         A hash function is a map from one, normally large, bit string to a second, usually smaller, bit string.
-        There are going to be collisions by a hash function.
+        As the number of possible input values is far greater than the number of possible output values, it is inevitable that there are going to be collisions.
         The trick is to make sure that it is difficult to find two values that are going to map to the same output value.
-        The standard "Collision Attack" is one where an attacker can find two different messages that have the same hash value.
-        If a collision attack exists, then the function <bcp14>SHOULD NOT</bcp14> be used for a cryptographic purpose.
+        A "Collision Attack" is one where an attacker can find two different messages that have the same hash value.
+        A hash function that is susceptible to practical collision attacks, <bcp14>SHOULD NOT</bcp14> be used for a cryptographic purpose.
+        The discovery of theoretical collision attacks against a given hash function <bcp14>SHOULD</bcp14> trigger protocol maintainers and users to do a review of the continued suitability of the algorithm if alternatives are available and migration is viable.
         The only reason why such a hash function is used is when there is absolutely no other choice (e.g. a Hardware Security Module (HSM) that cannot be replaced), and only after looking at the possible security issues.
         Cryptographic purposes would include the creation of signatures or the use of hashes for indirect signatures.
         These functions may still be usable for non-cryptographic purposes.
       </t>
 
       <t>
-        An example of a non-cryptographic use of a hash is for filtering from a collection of values to find possible candidates that can later be checked to see if they are the correct one.
+        An example of a non-cryptographic use of a hash is for filtering from a collection of values to find a set of possible candidates; the candidates can then be checked to see if they can successfully be used.
         A simple example of this is the classic fingerprint of a certificate.
-        If the fingerprint is used to verify that it is the correct certificate, then that usage is subject to a collision attack as above.
-        If however, the fingerprint is used to sort through a collection of certificates to find those that might be used for the purpose of verifying a signature, a simple filter capability is sufficient.
-        In this case, one still needs to validate that the public key validates the signature (and the certificate is trusted), and all certificates that don't contain a key that validates the signature can be discarded as false positives.
+        If the fingerprint is used to verify that it is the correct certificate, then that usage is a cryptographic one and is subject to the warning above about collision attack.
+        If, however, the fingerprint is used to sort through a collection of certificates to find those that might be used for the purpose of verifying a signature, a simple filter capability is sufficient.
+        In this case, one still needs to confirm that the public key validates the signature (and the certificate is trusted), and all certificates that don't contain a key that validates the signature can be discarded as false positives.
       </t>
 
       <t>
         To distinguish between these two cases, a new value in the recommended column of the COSE Algorithms registry is to be added.
-        "Filter Only" indicates that the only purpose of a hash function should be to filter results and not those which require collision resistance.
+        "Filter Only" indicates that the only purpose of a hash function should be to filter results and it is not intended for applications which require a cryptographically strong algorithm.
       </t>
 
       <section>
@@ -143,12 +145,12 @@
           </li>
           <li>
             A pointer to the value that was hashed.
-            this could be a pointer to a file, an object that can be obtained from the network, or a pointer to someplace in the message, or something very application specific.
+            This could be a pointer to a file, an object that can be obtained from the network, or a pointer to someplace in the message, or something very application specific.
           </li>
           <li>
-            Additional data, this can be something as simple as a random value to make finding hash collisions slightly harder (as the value handed to the application cannot have been selected to have a collision), or as complicated as a set of processing instructions that are used with the object that is pointed to.
-            The additional data can be dealt with in a number of ways, prepending or appending to the content, but it is strongly suggested to it either be a fixed known size, or the lengths of the pieces being hashed be included.
-            (Encoding as a CBOR array accomplished this requirement.)
+            Additional data; this can be something as simple as a random value (i.e. salt) to make finding hash collisions slightly harder (as the payload handed to the application could have been selected to have a collision), or as complicated as a set of processing instructions that are used with the object that is pointed to.
+            The additional data can be dealt with in a number of ways, prepending or appending to the content, but it is strongly suggested that it either be a fixed known size, or the lengths of the pieces being hashed be included.
+            (Encoding as a CBOR array accomplishes this requirement.)
           </li>
         </ul>
 
@@ -160,13 +162,13 @@
 COSE_Hash_V = (
     1 : int / tstr, # Algorithm identifier
     2 : bstr, # Hash value
-    3 : tstr ?, # Location of object hashed
-    4 : any ?   # object containing other details and things
+    ? 3 : tstr, # Location of object that was hashed
+    ? 4 : any   # object containing other details and things
     )
         </sourcecode>
 
         <t>
-          An alternative structure that could be used for situations where one is searching a group of objects for a match.
+          Below is an alternative structure that could be used in situations where one is searching a group of objects for a matching hash value.
           In this case, the location would not be needed and adding extra data to the hash would be counterproductive.
           This results in a structure that looks like this:
         </t>
@@ -191,13 +193,18 @@ COSE_Hash_Find = [
             The IETF formally started discouraging the use of SHA-1 with the publishing of <xref target="RFC6194"/>.
           </t>
 
+          <!-- RFC Editor -
+               I had an original comment that the grammar of the "or where" clause did not match with the start of the sentence.
+               I re-wrote the second sentence but it is possible that I still have the same problem.
+               -->
           <t>
-            Despite the above, there are still times where SHA-1 needs to be used and therefore it makes sense to assign a point for the use of this hash algorithm.
-            Some of these situations are with historic HSMs where only SHA-1 is implemented or where the SHA-1 value is used for the purpose of filtering and thus the collision resistance property is not needed.
+            Despite the above, there are still times where SHA-1 needs to be used and therefore it makes sense to assign a codepoint for the use of this hash algorithm.
+            Some of these situations are with historic HSMs where only SHA-1 is implemented; other situations are where the SHA-1 value is used for the purpose of filtering and thus the collision resistance property is not needed.
           </t>
 
           <t>
-            Because of the known issues for SHA-1 and the fact that is should no longer be used, the algorithm will be registered with the recommendation of "Filter Only".
+            Because of the known issues for SHA-1 and the fact that it should no longer be used, the algorithm will be registered with the recommendation of "Filter Only".
+            This provides guidance about when the algorithm is safe for use, while discouraging usage where it is not safe.
           </t>
 
           <t>
@@ -219,7 +226,7 @@ COSE_Hash_Find = [
             <tbody>
               <tr>
                 <td>SHA-1</td>
-                <td>TBD6</td>
+                <td>-14</td>
                 <td>SHA-1 Hash</td>
                 <td>[]</td>
                 <td>[This Document]</td>
@@ -248,11 +255,11 @@ COSE_Hash_Find = [
               <strong>SHA-256/64</strong> provides a truncated hash.
               The length of the truncation is designed to allow for smaller transmission size.
               The trade-off is that the odds that a collision will occur increase proportionally.
-              Locations that use this hash function need either to analysis the potential problems with having a collision occur, or where the only function of the hash is to narrow the possible choices.
+              Use of this hash function needs analysis of the potential problems with having a collision occur, or must be limited to where the function of the hash is non-cryptographic.
               </t>
               <t>
                 The latter is the case for <xref target="I-D.ietf-cose-x509"/>.
-                The hash value is used to select possible certificates and, if there are multiple choices then, each choice can be tested by using the public key.
+                The hash value is used to select possible certificates and, if there are multiple choices remaining then, each choice can be tested by using the public key.
               </t>
             </li>
             <li>
@@ -286,7 +293,7 @@ COSE_Hash_Find = [
           <tbody>
             <tr>
               <td>SHA-256/64</td>
-              <td>TBD1</td>
+              <td>-15</td>
               <td>SHA-2 256-bit Hash truncated to 64-bits</td>
               <td>[]</td>
               <td>[This Document]</td>
@@ -294,7 +301,7 @@ COSE_Hash_Find = [
             </tr>
             <tr>
               <td>SHA-256</td>
-              <td>TBD2</td>
+              <td>-16</td>
               <td>SHA-2 256-bit Hash</td>
               <td>[]</td>
               <td>[This Document]</td>
@@ -302,7 +309,7 @@ COSE_Hash_Find = [
             </tr>
             <tr>
               <td>SHA-384</td>
-              <td>TBD3</td>
+              <td>-43</td>
               <td>SHA-2 384-bit Hash</td>
               <td>[]</td>
               <td>[This Document]</td>
@@ -310,7 +317,7 @@ COSE_Hash_Find = [
             </tr>
             <tr>
               <td>SHA-512</td>
-              <td>TBD4</td>
+              <td>-44</td>
               <td>SHA-2 512-bit Hash</td>
               <td>[]</td>
               <td>[This Document]</td>
@@ -318,7 +325,7 @@ COSE_Hash_Find = [
             </tr>
             <tr>
               <td>SHA-512/256</td>
-              <td>TBD5</td>
+              <td>-17</td>
               <td>SHA-2 512-bit Hash truncated to 256-bits</td>
               <td>[]</td>
               <td>[This Document]</td>
@@ -334,17 +341,17 @@ COSE_Hash_Find = [
         <t>
           The family of SHA-3 hash algorithms <xref target="FIPS-202"/> was the result of a competition run by NIST.
           The pair of algorithms known as SHAKE-128 and SHAKE-256 are the instances of SHA-3 that are currently being standardized in the IETF.
+          <!-- Check with Roman - maybe delete -->
+          This is the reason for including these algorithms in this document.          
         </t>
 
         <t>
           The SHA-3 hash algorithms have a significantly different structure than the SHA-2 hash algorithms.
-          One of the benefits of this differences is that when computing a shorter SHAKE hash value, the value is not a prefix of the result of computing the longer hash.
         </t>
 
         <t>
           Unlike the SHA-2 hash functions, no algorithm identifier is created for shorter lengths.
-          Applications can specify a minimum length for any hash function.
-          A validator can infer the actual length from the hash value in these cases.
+          The length of the hash value stored is 256-bits for SHAKE-128 and 512-bits for SHAKE-256.
         </t>
         
           <t>
@@ -366,16 +373,16 @@ COSE_Hash_Find = [
           <tbody>
             <tr>
               <td>SHAKE128</td>
-              <td>TBD10</td>
-              <td>128-bit SHAKE</td>
+              <td>-18</td>
+              <td>SHAKE-128 256-bit Hash Value</td>
               <td>[]</td>
               <td>[This Document]</td>
               <td>Yes</td>
             </tr>
             <tr>
               <td>SHAKE256</td>
-              <td>TBD11</td>
-              <td>256-bit SHAKE</td>
+              <td>-45</td>
+              <td>SHAKE-256 512-bit Hash Value</td>
               <td>[]</td>
               <td>[This Document]</td>
               <td>Yes</td>
@@ -387,9 +394,12 @@ COSE_Hash_Find = [
     
     <section anchor="iana-considerations">
       <name>IANA Considerations</name>
+      <!-- RFC Editor
+           I think that this paragraph can be removed before publishing.
+           -->
       <t>
         The IANA actions in <xref target="I-D.ietf-cose-rfc8152bis-struct"/> and <xref target="I-D.ietf-cose-rfc8152bis-algs"/> need to be executed before the actions in this document.
-        Where early allocation of data points has been made, these should be preseved.
+        Where early allocation of codepoints has been made, these should be preserved.
       </t>
       
       <section anchor="cose-algorithm-registry">
@@ -397,6 +407,7 @@ COSE_Hash_Find = [
         <t>
           IANA is requested to register the following algorithms in the "COSE Algorithms" registry.
         </t>
+        
         <ul>
           <li>
             The SHA-1 hash function found in <xref target="SHA1-Algs"/>.
@@ -409,13 +420,17 @@ COSE_Hash_Find = [
           </li>
         </ul>
 
+        <!-- IANA
+             The following paragraph is retained for historic reasons only.
+        -->
+        
         <t>
           Many of the hash values produced are relatively long and as such the use of a two byte algorithm identifier seems reasonable.
-          SHA-1 is tagged as deprecated and thus a longer algorithm identifier is appropriate even though it is a shorter hash value.
+          SHA-1 is tagged as 'Filter Only' and thus a longer algorithm identifier is appropriate even though it is a shorter hash value.
         </t>
 
         <t>
-          In addition, IANA is to add the value of 'Filter Only' to the set of legal values for the 'Recommended' column.
+          IANA is requested to add the value of 'Filter Only' to the set of legal values for the 'Recommended' column.
           This value is only to be used for hash functions and indicates that it is not to be used for purposes which require collision resistance.
           IANA is requested to add this document to the reference section for this table due to this addition.
         </t>
@@ -427,28 +442,28 @@ COSE_Hash_Find = [
       <name>Security Considerations</name>
         <t>
           Protocols need to perform a careful analysis of the properties of a hash function that are needed and how they map onto the possible attacks.
-          In particular, one needs to distinguish between those uses that need the cryptographic properties, i.e. collision resistance, and properties that correspond to possible object identification.
+          In particular, one needs to distinguish between those uses that need the cryptographic properties, such as collision resistance, and properties that correspond to possible object identification.
           The different attacks correspond to who or what is being protected: is it the originator that is the attacker or a third party?
           This is the difference between collision resistance and second pre-image resistance.
           As a general rule, longer hash values are "better" than short ones, but trade-offs of transmission size, timeliness, and security all need to be included as part of this analysis.
-          In many cases the value being hashed is a public value, as such pre-image resistance is not part of this analysis.
+          In many cases the value being hashed is a public value and, as such, pre-image resistance is not part of this analysis.
         </t>
         <t>
-          Algorithm agility needs to be considered a requirement for any use of hash functions.
-          As with any cryptographic function, hash functions are under constant attack and the strength of hash algorithms will be reduced over time.
+          Algorithm agility needs to be considered a requirement for any use of hash functions <xref target="BCP201"/>.
+          As with any cryptographic function, hash functions are under constant attack and the cryptographic strength of hash algorithms will be reduced over time.
         </t>
     </section>
   </middle>
   
-  <back xmlns:xi="http://www.w3.org/2001/XInclude">
+  <back xmlns:xi="http://www.w3.org/2001/XInclude" xml:base="http://xml2rfc.ietf.org/public/rfc/">
     <displayreference target="RFC2634" to="ESS"/>
     <displayreference target="RFC5652" to="CMS"/>
     <displayreference target="RFC8152" to="COSE"/>
     
     <references title='Normative References'>
-      <?rfc include="reference.RFC.2119.xml" ?>
-      <?rfc include="reference.RFC.8174.xml" ?>
-      <?rfc include="reference.I-D.ietf-cose-rfc8152bis-struct.xml" ?>
+      <xi:include href="bibxml/reference.RFC.2119.xml" />
+      <xi:include href="bibxml/reference.RFC.8174.xml" />
+      <xi:include href="bibxml3/reference.I-D.ietf-cose-rfc8152bis-struct.xml" />
 
       <reference anchor="FIPS-180-4">
         <front>
@@ -474,32 +489,56 @@ COSE_Hash_Find = [
 
 
       <!--
-      <?rfc include="reference.RFC.5280.xml" ?>
+      <?rfc include="bibxml/reference.RFC.5280.xml" />
       -->
-      <?rfc include="reference.RFC.8152.xml" ?>
       
+      <xi:include href="bibxml/reference.RFC.3174.xml" />
     </references>
 
     <references title='Informative References'>
-      <?rfc include="reference.RFC.5652.xml" ?>
-      <?rfc include="reference.RFC.2634.xml" ?>
-      <xi:include href="reference.I-D.ietf-cose-x509.xml"/>
-      <?rfc include="reference.RFC.3174.xml" ?>
-      <?rfc include="reference.RFC.6194.xml" ?>
-      <?rfc include="reference.I-D.ietf-cose-rfc8152bis-algs.xml" ?>
+      <xi:include href="bibxml/reference.RFC.5652.xml"/>
+      <xi:include href="bibxml/reference.RFC.2634.xml"/>
+      <xi:include href="bibxml3/reference.I-D.ietf-cose-x509.xml"/>
+      <xi:include href="bibxml/reference.RFC.6194.xml"/>
+      <xi:include href="bibxml3/reference.I-D.ietf-cose-rfc8152bis-algs.xml"/>
+      <xi:include href="bibxml3/reference.I-D.ietf-suit-manifest.xml"/>
 
       <!--
-      <?rfc include="reference.RFC.2585.xml" ?>
-      <?rfc include="reference.RFC.5246.xml" ?>
-      <?rfc include="reference.RFC.7468.xml" ?>
-      <?rfc include="reference.RFC.8152.xml" ?>
-      <?rfc include="reference.RFC.8392.xml" ?>
-      <?rfc include="reference.I-D.ietf-lamps-rfc5751-bis.xml" ?>
-      <?rfc include="reference.I-D.ietf-cbor-cddl.xml" ?>
-      <?rfc include="reference.I-D.selander-ace-cose-ecdhe.xml" ?>
+      <xi:include href="bibxml/reference.RFC.2585.xml"/>
+      <xi:include href="bibxml/reference.RFC.5246.xml"/>
+      <xi:include href="bibxml/reference.RFC.7468.xml"/>
+      <xi:include href="bibxml/reference.RFC.8152.xml"/>
+      <xi:include href="bibxml/reference.RFC.8392.xml"/>
+      <xi:include href="bibxml/reference.I-D.ietf-lamps-rfc5751-bis.xml"/>
+      <xi:include href="bibxml/reference.I-D.ietf-cbor-cddl.xml"/>
+      <xi:include href="bibxml/reference.I-D.selander-ace-cose-ecdhe.xml"/>
       -->
 
-      <reference anchor="SHA-1-collision" target="https://shattered.io/static/shattered.pdf">
+                <!-- <xi:include href="bibxml/reference.BCP.0201.xml"/> -->
+<referencegroup anchor="BCP201" target="https://www.rfc-editor.org/info/bcp201">
+<!-- reference.RFC.7696.xml -->
+<reference anchor="RFC7696" target="https://www.rfc-editor.org/info/rfc7696">
+<front>
+<title>
+Guidelines for Cryptographic Algorithm Agility and Selecting Mandatory-to-Implement Algorithms
+</title>
+<author initials="R." surname="Housley" fullname="R. Housley">
+<organization/>
+</author>
+<date year="2015" month="November"/>
+<abstract>
+<t>
+Many IETF protocols use cryptographic algorithms to provide confidentiality, integrity, authentication, or digital signature. Communicating peers must support a common set of cryptographic algorithms for these mechanisms to work properly. This memo provides guidelines to ensure that protocols have the ability to migrate from one mandatory-to-implement algorithm suite to another over time.
+</t>
+</abstract>
+</front>
+<seriesInfo name="BCP" value="201"/>
+<seriesInfo name="RFC" value="7696"/>
+<seriesInfo name="DOI" value="10.17487/RFC7696"/>
+</reference>
+</referencegroup>
+
+<reference anchor="SHA-1-collision" target="https://shattered.io/static/shattered.pdf">
         <front>
           <title>The first collision for full SHA-1</title>
           <author initials="M." surname="Stevens"/>
@@ -510,6 +549,7 @@ COSE_Hash_Find = [
           <date month="Feb" year="2017"/>
         </front>
       </reference>
+      <xi:include href="bibxml/reference.RFC.8152.xml"/>
     </references>
   </back>
 </rfc>

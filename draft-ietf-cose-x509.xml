@@ -218,7 +218,7 @@
       </t>
       <ul spacing="normal">
         <li>
-	    COSE_Signature and COSE_Sign0 objects, in these objects they identify the certificate to be used for validation the signature.
+	    COSE_Signature and COSE_Sign1 objects, in these objects they identify the certificate to be used for validation the signature.
 	  </li>
         <li>
             COSE_recipient objects, in this location they identify the certificate for the recipient of the message.
@@ -408,30 +408,30 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
     </section>
   </middle>
   <back>
-    <references>
+    <references xml:base="http://xml2rfc.ietf.org/public/rfc/">
       <name>References</name>
       <references>
         <name>Normative References</name>
-        <xi:include href="reference.RFC.2119.xml"/>
-        <xi:include href="reference.RFC.5280.xml"/>
-        <xi:include href="reference.RFC.8174.xml"/>
-        <!-- <xi:include href="reference.I-D.ietf-cose-rfc8152bis-struct.xml"/>-->
+        <xi:include href="bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="bibxml/reference.RFC.5280.xml"/>
+        <xi:include href="bibxml/reference.RFC.8174.xml"/>
+        <!-- <xi:include href="bibxml/reference.I-D.ietf-cose-rfc8152bis-struct.xml"/>-->
       </references>
       <references>
         <name>Informative References</name>
-        <xi:include href="reference.RFC.8446.xml"/>
-        <xi:include href="reference.I-D.ietf-tls-dtls13.xml"/>
-        <xi:include href="reference.RFC.8551.xml"/>
-        <xi:include href="reference.RFC.2585.xml"/>
-        <xi:include href="reference.I-D.selander-ace-cose-ecdhe.xml"/>
-        <!-- <?rfc include="reference.RFC.7468.xml" ?> PEM -->
-        <xi:include href="reference.RFC.8392.xml"/>
-        <xi:include href="reference.RFC.8152.xml"/>
-        <xi:include href="reference.RFC.8610.xml"/>
-        <!-- <xi:include href="reference.I-D.ietf-acme-acme.xml"/> -->
-        <xi:include href="reference.I-D.ietf-cose-rfc8152bis-algs.xml"/>
-        <xi:include href="reference.RFC.3986.xml"/>
-        <xi:include href="reference.I-D.richardson-enrollment-roadmap.xml"/>
+        <xi:include href="bibxml/reference.RFC.8446.xml"/>
+        <xi:include href="bibxml3/reference.I-D.ietf-tls-dtls13.xml"/>
+        <xi:include href="bibxml/reference.RFC.8551.xml"/>
+        <xi:include href="bibxml/reference.RFC.2585.xml"/>
+        <xi:include href="bibxml3/reference.I-D.selander-ace-cose-ecdhe.xml"/>
+        <!-- <?rfc include="bibxml/reference.RFC.7468.xml" ?> PEM -->
+        <xi:include href="bibxml/reference.RFC.8392.xml"/>
+        <xi:include href="bibxml/reference.RFC.8152.xml"/>
+        <xi:include href="bibxml/reference.RFC.8610.xml"/>
+        <!-- <xi:include href="bibxml/reference.I-D.ietf-acme-acme.xml"/> -->
+        <xi:include href="bibxml3/reference.I-D.ietf-cose-rfc8152bis-algs.xml"/>
+        <xi:include href="bibxml/reference.RFC.3986.xml"/>
+        <xi:include href="bibxml3/reference.I-D.richardson-enrollment-roadmap.xml"/>
       </references>
     </references>
   </back>
