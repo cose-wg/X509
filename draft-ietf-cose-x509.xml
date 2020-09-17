@@ -5,7 +5,7 @@
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-latest" category="info" submissionType="IETF" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-07" category="info" submissionType="IETF" version="3">
   <!-- xml2rfc v2v3 conversion 2.24.0 -->
   <front>
     <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Header parameters for carrying and referencing X.509 certificates</title>
@@ -40,8 +40,7 @@
     <section anchor="introduction">
       <name>Introduction</name>
       <t>
-        In the process of writing <xref target="RFC8152"/> discussions were held on the question of X.509 certificates  <xref target="RFC5280"/>  and if there was a needed to provide for them.
-        At the time no use cases were presented that appeared to have a sufficient need for these attributes.
+        In the process of writing <xref target="RFC8152"/> the working group discussed X.509 certificates  <xref target="RFC5280"/> ad decided that no use cases wher prestented that showed a need to support certificates.
         Since that time a number of cases have been defined in which X.509 certificate support is necessary, and by implication, applications will need a documented and consistent way to handle such certificates.
         This document defines a set of attributes that will allow applications to transport and refer to X.509 certificates in a consistent manner.
       </t>
@@ -71,19 +70,6 @@
           The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they appear in all capitals, as shown here.
         </t>
       </section>
-      <!--
-      <section>
-        <name>Open Questions</name>
-        <ul empty="true" spacing="normal">
-          <li>
-            Should we define an extended key usage?
-          </li>
-          <li>
-            Revocation info?
-          </li>
-        </ul>
-        </section>
-        -->
     </section>
     <section>
       <name>X.509 COSE Header Parameters</name>
@@ -96,7 +82,9 @@
 	The key structures that have been defined in COSE currently do not support all of these properties although some may be found in COSE Web Tokens (CWT) <xref target="RFC8392"/>.
       </t>
       <t>
-	It is not necessarily expected that constrained devices themselves will evaluate and process of X.509 certificates: it is perfectly reasonable for a constrained device to be provisioned with a certificate which it can then provide to a relying party -  along with a signature or encrypted message - on the assumption that the relying party is not a constrained device, and is capable of performing the required certificate evaluation and processing.
+	It is not necessarily expected that constrained devices themselves will evaluate and process of X.509 certificates:
+        it is perfectly reasonable for a constrained device to be provisioned with a certificate which it can then provide to a relying party - along with a signature or encrypted message - on the assumption that the relying party is not a constrained device, and is capable of performing the required certificate evaluation and processing.
+        It is also reasonable that a constrained device would have the hash of a certificate associated with a public key and be configured use a public key for that thumbprint, but without performing the certificate evaluation or even having the entire certificate.        
       </t>
       <t>
         Certificates obtained from any of these methods MUST still be validated.
@@ -190,6 +178,16 @@
           <t>
             For interoperability, applications which use this header parameter MUST support the hash algorithm 'SHA-256', but can use other hash algorithms.
           </t>
+          <t>RFC Editor please remove the following paragraphs:</t>
+          <t>
+            During AD review, a question was raised about how effective the previous statement is in terms of dealing with a MTI algorithm.
+            There needs to be some type of arrangement between the parties to agree that a specific hash algorithm is going to be used in computing the thumbprint.
+              Making it a MUST use would make that true, but it then means that agility is going to be very difficult.
+          </t>
+          <t>
+            The worry is that while SHA-256 may be mandatory, if a sender supports SHA-256 but only sends SHA-512 then the recipient which only does SHA-256 would not be able to use the thumbprint.
+            In that case both applications would conform to the specification, but still not be able to inter-operate.
+          </t>
         </dd>
         <dt>x5u:</dt>
         <dd>
@@ -209,7 +207,7 @@
             The URI provided MUST provide integrity protection and server authentication.
             For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC8446"/> or DTLS <xref target="I-D.ietf-tls-dtls13"/>.
             If the certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors.
-            This will normally be the situation when self-signed certificates are used.
+            In particular, self-signed certificates MUST NOT be trusted without an out-of-band confirmation.
           </t>
         </dd>
       </dl>
@@ -218,10 +216,10 @@
       </t>
       <ul spacing="normal">
         <li>
-	    COSE_Signature and COSE_Sign1 objects, in these objects they identify the certificate to be used for validation the signature.
+	    COSE_Signature and COSE_Sign1 objects: in these objects they identify the certificate to be used for validating the signature.
 	  </li>
         <li>
-            COSE_recipient objects, in this location they identify the certificate for the recipient of the message.
+            COSE_recipient objects: in this location they identify the certificate for the recipient of the message.
           </li>
       </ul>
       <table anchor="Tags" align="center">
@@ -277,7 +275,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </t>
       <t>
         These attributes are defined analogously to those in the previous section.
-        There is no definition for the certificate bag as the same attribute would be used for both the sender and recipient certificates.
+        There is no definition for the certificate bag, as the same attribute would be used for both the sender and recipient certificates.
         <!-- Robin
         [I think this needs a little more explanation, for example (if correct):
         "For static-static ECDH key agreement, the message MUST use one of the following 3 header attributes;
@@ -352,7 +350,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       <section anchor="cose-header-key-table">
         <name>COSE Header Parameter Registry</name>
         <t>
-          IANA is requested to register the new COSE Header parameter in <xref target="Tags"/> in the "COSE Header Parameters" registry.
+          IANA is requested to register the new COSE Header parameters in <xref target="Tags"/> in the "COSE Header Parameters" registry.
           The "Value Registry" field is empty for all of the items.
           For each item, the 'Reference' field points to this document.
         </t>
@@ -370,7 +368,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       <t>
         Establishing trust in a certificate is a vital part of processing.
         A major component of establishing trust is determining what the set of trust anchors are for the process.
-        A new self-signed certificate appearing on the client cannot be a trigger to modify the set of trust anchors, instead a well defined trust-establishment process is required.
+        A new self-signed certificate appearing on the client cannot be a trigger to modify the set of trust anchors, because a well defined trust-establishment process is required.
         One common way for a new trust anchor to be added (or removed) from a device is by doing a new firmware upgrade.
         <!-- Robin
         [Is this true, and if so, does it follow from the preceding statements, or is it a discrete assertion?
@@ -390,10 +388,12 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         On the other hand, an oracle can potentially be built based on detecting the network resources which is only done if the signature validation passes.
         In any event, both the signature and certificate validation MUST be completed successfully before acting on any requests.
       </t>
+      
       <t>
-        Before using the keys in a certificate, they MUST be checked as described in the COSE algorithms document <xref target="I-D.ietf-cose-rfc8152bis-algs"/>.
+        Before using the key in a certificate, the key MUST be checked against the algorithm to be used and any algorithm specific checks need to be made.
         These checks can include validating that points are on curves for elliptical curve algorithms, and that sizes of RSA keys are of an acceptable size.
-        The use of unvalidated keys can lead either to loss of security or excessive consumption of resources.
+        The use of unvalidated keys can lead either to loss of security or excessive consumption of resources (for example using a 200K RSA key).
+        
         <!-- Robin
         Two questions:
         (1) are there any other important checks that should be noted here, or is the  COSE algs document the authoritative guide?
@@ -429,7 +429,6 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <xi:include href="bibxml/reference.RFC.8152.xml"/>
         <xi:include href="bibxml/reference.RFC.8610.xml"/>
         <!-- <xi:include href="bibxml/reference.I-D.ietf-acme-acme.xml"/> -->
-        <xi:include href="bibxml3/reference.I-D.ietf-cose-rfc8152bis-algs.xml"/>
         <xi:include href="bibxml/reference.RFC.3986.xml"/>
         <xi:include href="bibxml3/reference.I-D.richardson-enrollment-roadmap.xml"/>
       </references>
