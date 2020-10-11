@@ -40,7 +40,7 @@
     <section anchor="introduction">
       <name>Introduction</name>
       <t>
-        In the process of writing <xref target="RFC8152"/> the working group discussed X.509 certificates  <xref target="RFC5280"/> ad decided that no use cases wher prestented that showed a need to support certificates.
+        In the process of writing <xref target="RFC8152"/> the working group discussed X.509 certificates  <xref target="RFC5280"/> and decided that no use cases were prestented that showed a need to support certificates.
         Since that time a number of cases have been defined in which X.509 certificate support is necessary, and by implication, applications will need a documented and consistent way to handle such certificates.
         This document defines a set of attributes that will allow applications to transport and refer to X.509 certificates in a consistent manner.
       </t>
@@ -84,7 +84,7 @@
       <t>
 	It is not necessarily expected that constrained devices themselves will evaluate and process of X.509 certificates:
         it is perfectly reasonable for a constrained device to be provisioned with a certificate which it can then provide to a relying party - along with a signature or encrypted message - on the assumption that the relying party is not a constrained device, and is capable of performing the required certificate evaluation and processing.
-        It is also reasonable that a constrained device would have the hash of a certificate associated with a public key and be configured use a public key for that thumbprint, but without performing the certificate evaluation or even having the entire certificate.        
+        It is also reasonable that a constrained device would have the hash of a certificate associated with a public key and be configured to use a public key for that thumbprint, but without performing the certificate evaluation or even having the entire certificate.
       </t>
       <t>
         Certificates obtained from any of these methods MUST still be validated.
@@ -178,7 +178,7 @@
           <t>
             For interoperability, applications which use this header parameter MUST support the hash algorithm 'SHA-256', but can use other hash algorithms.
           </t>
-          <t>RFC Editor please remove the following paragraphs:</t>
+          <t>RFC Editor please remove the following two paragraphs:</t>
           <t>
             During AD review, a question was raised about how effective the previous statement is in terms of dealing with a MTI algorithm.
             There needs to be some type of arrangement between the parties to agree that a specific hash algorithm is going to be used in computing the thumbprint.
