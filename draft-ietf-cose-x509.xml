@@ -40,14 +40,14 @@
     <section anchor="introduction">
       <name>Introduction</name>
       <t>
-        In the process of writing <xref target="RFC8152"/> the working group discussed X.509 certificates  <xref target="RFC5280"/> and decided that no use cases were prestented that showed a need to support certificates.
+        In the process of writing <xref target="RFC8152"/> the working group discussed X.509 certificates  <xref target="RFC5280"/> and decided that no use cases were presented that showed a need to support certificates.
         Since that time a number of cases have been defined in which X.509 certificate support is necessary, and by implication, applications will need a documented and consistent way to handle such certificates.
         This document defines a set of attributes that will allow applications to transport and refer to X.509 certificates in a consistent manner.
       </t>
       <t>
         <!-- JLS - Robin did you really mean to just refer to version -00? -->
-	In some of these cases, a constrained device is being deployed in the context of an existing X.509 PKI: for example, in the 6TiSCH environment <xref target="I-D.richardson-enrollment-roadmap"/>, describes a device enrollment solution that relies on the presence in the device of a factory-installed certificate.
-	The <xref target="I-D.selander-ace-cose-ecdhe"/> draft was also written with the idea that long term certificates could be used to provide for authentication of devices, and uses them to establish session keys.
+	In some of these cases, a constrained device is being deployed in the context of an existing X.509 PKI: for example, in the 6TiSCH environment, <xref target="I-D.richardson-enrollment-roadmap"/> describes a device enrollment solution that relies on the presence in the device of a factory-installed certificate.
+	The <xref target="I-D.ietf-lake-edhoc"/> draft was also written with the idea that long term certificates could be used to provide for authentication of devices, and uses them to establish session keys.
 	A third scenario is the use of COSE as the basis for a secure messaging application.
         This scenario assumes the presence of long term keys and a central authentication authority.
 	Basing such an application on public key certificates allows it to make use of well established key management disciplines.
@@ -82,7 +82,7 @@
 	The key structures that have been defined in COSE currently do not support all of these properties although some may be found in COSE Web Tokens (CWT) <xref target="RFC8392"/>.
       </t>
       <t>
-	It is not necessarily expected that constrained devices themselves will evaluate and process of X.509 certificates:
+	It is not necessarily expected that constrained devices themselves will evaluate and process X.509 certificates:
         it is perfectly reasonable for a constrained device to be provisioned with a certificate which it can then provide to a relying party - along with a signature or encrypted message - on the assumption that the relying party is not a constrained device, and is capable of performing the required certificate evaluation and processing.
         It is also reasonable that a constrained device would have the hash of a certificate associated with a public key and be configured to use a public key for that thumbprint, but without performing the certificate evaluation or even having the entire certificate.
       </t>
@@ -126,10 +126,10 @@
           </t>
           <ul spacing="normal">
             <li>
-                If a single certificate is conveyed, it is placed in a CBOR bstr.
+                If a single certificate is conveyed, it is placed in a CBOR byte string.
               </li>
             <li>
-                If multiple certificates are conveyed, a CBOR array of bstrs is used, with each certificate being in its own bstr.
+                If multiple certificates are conveyed, a CBOR array of byte strings is used, with each certificate being in its own byte string.
               </li>
           </ul>
         </dd>
@@ -156,10 +156,10 @@
           </t>
           <ul spacing="normal">
             <li>
-                If a single certificate is conveyed, it is placed in a CBOR bstr.
+                If a single certificate is conveyed, it is placed in a CBOR byte string.
               </li>
             <li>
-                If multiple certificates are conveyed, a CBOR array of bstrs is used, with each certificate being in its own bstr.
+                If multiple certificates are conveyed, a CBOR array of byte strings is used, with each certificate being in its own byte string.
               </li>
           </ul>
         </dd>
@@ -169,7 +169,7 @@
             This header parameter provides the ability to identify an X.509 certificate by a hash value.
             The attribute is an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier.
-            The algorithm is registered in the "COSE Algorithms" registry
+            The algorithm is registered in the "COSE Algorithms" registry.
             The second element is a binary string containing the hash value.
           </t>
           <t>
@@ -423,7 +423,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <xi:include href="bibxml3/reference.I-D.ietf-tls-dtls13.xml"/>
         <xi:include href="bibxml/reference.RFC.8551.xml"/>
         <xi:include href="bibxml/reference.RFC.2585.xml"/>
-        <xi:include href="bibxml3/reference.I-D.selander-ace-cose-ecdhe.xml"/>
+        <xi:include href="bibxml3/reference.I-D.ietf-lake-edhoc.xml"/>
         <!-- <?rfc include="bibxml/reference.RFC.7468.xml" ?> PEM -->
         <xi:include href="bibxml/reference.RFC.8392.xml"/>
         <xi:include href="bibxml/reference.RFC.8152.xml"/>
