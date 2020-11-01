@@ -52,9 +52,6 @@
         This scenario assumes the presence of long term keys and a central authentication authority.
 	Basing such an application on public key certificates allows it to make use of well established key management disciplines.
       </t>
-      <t>
-        Example COSE messages for the various header parameters defined below can be found at https://github.com/cose-wg/Examples.
-      </t>
       
       <section anchor="requirements-terminology">
         <name>Requirements Terminology</name>
@@ -87,10 +84,11 @@
         It is also reasonable that a constrained device would have the hash of a certificate associated with a public key and be configured to use a public key for that thumbprint, but without performing the certificate evaluation or even having the entire certificate.
       </t>
       <t>
-        Certificates obtained from any of these methods MUST still be validated.
+        Parties that intend to rely on the assertions made by a certificate
+obtained from any of these methods still need to validate it.
         This validation can be done according to the PKIX rules in <xref target="RFC5280"/> or by using a different trust structure, such as a trusted certificate distributor for self-signed certificates.
         The PKIX validation includes matching against the trust anchors configured for the application.
-        These rules apply to certificates of a chain length of one as well as longer chains.
+        These rules apply when the validation succeeds in a single step as well as when certificate chains need to be built.
         If the application cannot establish trust in the certificate, that certificate cannot be used.
       </t>
       <t>
@@ -102,7 +100,7 @@
         <dd>
           <t>
 	    This header parameter contains a bag of X.509 certificates.
-	    The set of certificates in this header parameter is unordered and may contain self-signed certificates.
+	    The set of certificates in this header parameter is unordered and may contain self-signed certificates. Note that there could be duplicating certificates.
             The certificate bag can contain certificates which are completely extraneous to the message.
 	    (An example of this would be where a signed message is being used to transport a certificate containing a key agreement key.)
 	    As the certificates are unordered, the party evaluating the signature will need to be capable of building the certificate path as necessary.
@@ -170,7 +168,7 @@
             The attribute is an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier.
             The algorithm is registered in the "COSE Algorithms" registry.
-            The second element is a binary string containing the hash value.
+            The second element is a binary string containing the hash value computed over the DER encoded certificate.
           </t>
           <t>
 	    As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.
@@ -266,6 +264,9 @@
 COSE_X509 = bstr / [ 2*certs: bstr ]
 COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 ]]></artwork>
+      <t>
+        The content of the bstr are the bytes of a DER encoded certificate.
+      </t>
     </section>
     <section>
       <name>X.509 certificates and static-static ECDH</name>
