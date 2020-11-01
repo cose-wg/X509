@@ -165,7 +165,7 @@ obtained from any of these methods still need to validate it.
         <dd>
           <t>
             This header parameter provides the ability to identify an X.509 certificate by a hash value.
-            The attribute is an array of two elements.
+            The 'x5t' header parameter can be represented as an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier.
             The algorithm is registered in the "COSE Algorithms" registry.
             The second element is a binary string containing the hash value computed over the DER encoded certificate.
