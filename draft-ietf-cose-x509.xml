@@ -40,13 +40,13 @@
     <section anchor="introduction">
       <name>Introduction</name>
       <t>
-        In the process of writing <xref target="RFC8152"/> the working group discussed X.509 certificates  <xref target="RFC5280"/> and decided that no use cases were presented that showed a need to support certificates.
+        In the process of writing <xref target="RFC8152"/>, the working group discussed X.509 certificates <xref target="RFC5280"/> and decided that no use cases were presented that showed a need to support certificates.
         Since that time, a number of cases have been defined in which X.509 certificate support is necessary, and by implication, applications will need a documented and consistent way to handle such certificates.
         This document defines a set of attributes that will allow applications to transport and refer to X.509 certificates in a consistent manner.
       </t>
       <t>
         <!-- JLS - Robin did you really mean to just refer to version -00? -->
-	In some of these cases, a constrained device is being deployed in the context of an existing X.509 PKI: for example, in the 6TiSCH environment, <xref target="I-D.richardson-enrollment-roadmap"/> describes a device enrollment solution that relies on the presence in the device of a factory-installed certificate.
+	In some of these cases, a constrained device is being deployed in the context of an existing X.509 PKI: for example, in the 6TiSCH environment, <xref target="I-D.richardson-enrollment-roadmap"/> describes a device enrollment solution that relies on the presence of a factory-installed certificate on the device.
 	The <xref target="I-D.ietf-lake-edhoc"/> draft was also written with the idea that long term certificates could be used to provide for authentication of devices, and uses them to establish session keys.
 	Another possible scenario is the use of COSE as the basis for a secure messaging application.
         This scenario assumes the presence of long term keys and a central authentication authority.
@@ -166,12 +166,11 @@ obtained from any of these methods still need to validate it.
           <t>
             This header parameter provides the ability to identify an X.509 certificate by a hash value.
             The 'x5t' header parameter can be represented as an array of two elements.
-            The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier.
-            The algorithm is registered in the "COSE Algorithms" registry.
+            The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier corresponding to either the Value (integer) or Name (string) column of the algorithm registered in the "COSE Algorithms" registry.
             The second element is a binary string containing the hash value computed over the DER encoded certificate.
           </t>
           <t>
-	    As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.
+            As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.
           </t>
           <t>
             For interoperability, applications which use this header parameter MUST support the hash algorithm 'SHA-256', but can use other hash algorithms.
@@ -190,7 +189,7 @@ obtained from any of these methods still need to validate it.
         <dt>x5u:</dt>
         <dd>
           <t>
-            This header parameter provides the ability to identify an X.509 certificate by a URI <xref target="RFC3986"/>.
+            This header parameter provides the ability to identify an X.509 certificate by a URI <xref target="RFC3986"/>. It's type is a CBOR text string.
             The referenced resource can be any of the following media types:
           </t>
           <ul spacing="normal">
@@ -199,7 +198,7 @@ obtained from any of these methods still need to validate it.
             <!--              <t>application/pem-certificate-chain <xref target="I-D.ietf-acme-acme"/></t> -->
           </ul>
           <t>
-	    As this header parameter implies a trust relationship, the attribute MUST be in the protected attribute bucket.
+            As this header parameter implies a trust relationship, the attribute MUST be in the protected attribute bucket.
           </t>
           <t>
             The URI provided MUST provide integrity protection and server authentication.
@@ -210,16 +209,19 @@ obtained from any of these methods still need to validate it.
         </dd>
       </dl>
       <t>
-	The header parameters are used in the following locations:
+        The header parameters are used in the following locations:
       </t>
       <ul spacing="normal">
         <li>
-	    COSE_Signature and COSE_Sign1 objects: in these objects they identify the certificate to be used for validating the signature.
-	  </li>
+          COSE_Signature and COSE_Sign1 objects: in these objects they identify the certificate to be used for validating the signature.
+        </li>
         <li>
-            COSE_recipient objects: in this location they identify the certificate for the recipient of the message.
+          COSE_recipient objects: in this location they identify the certificate for the recipient of the message.
           </li>
       </ul>
+      <t>
+        The labels assigned to each header parameter can be found in the following table.
+      </t>
       <table anchor="Tags" align="center">
         <name>X.509 COSE Header Parameters</name>
         <thead>
@@ -386,7 +388,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         In constrained systems, there is a trade-off between the order of checking the signature and checking the certificate for validity.
         Validating certificates can require that network resources be accessed in order to get revocation information or retrieve certificates during path building.
         The resulting network access can consume power and network bandwidth.
-        On the other hand, an oracle can potentially be built based on detecting the network resources which is only done if the signature validation passes.
+        On the other hand, if the certificates are validated after the signature is validated, an oracle can potentially be built based on detecting the network resources which is only done if the signature validation passes.
         In any event, both the signature and certificate validation MUST be completed successfully before acting on any requests.
       </t>
       
@@ -404,6 +406,10 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         (2) The easiest example would be an RSA key which is 16K bits long.  Doing the match on this will take a significantly longer amount of time
             and use a significantly amount of memory than what would be used by a 2048-bit RSA key.
       -->
+      </t>
+
+      <t>
+        When processing x5u the security considerations of <xref target="RFC3986"/> also apply.
       </t>
       
     </section>
