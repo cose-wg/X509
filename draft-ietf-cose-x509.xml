@@ -5,7 +5,8 @@
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-07" category="info" submissionType="IETF" version="3">
+
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-07" category="std" submissionType="IETF" version="3" consensus="true">
   <!-- xml2rfc v2v3 conversion 2.24.0 -->
   <front>
     <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Header parameters for carrying and referencing X.509 certificates</title>
@@ -189,7 +190,7 @@ obtained from any of these methods still need to validate it.
         <dt>x5u:</dt>
         <dd>
           <t>
-            This header parameter provides the ability to identify an X.509 certificate by a URI <xref target="RFC3986"/>. It's type is a CBOR text string.
+            This header parameter provides the ability to identify an X.509 certificate by a URI <xref target="RFC3986"/>. It contains a CBOR text string.
             The referenced resource can be any of the following media types:
           </t>
           <ul spacing="normal">
@@ -409,7 +410,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </t>
 
       <t>
-        When processing x5u the security considerations of <xref target="RFC3986"/> also apply.
+        When processing x5u header parameter the security considerations of <xref target="RFC3986"/> also apply.
       </t>
       
     </section>
