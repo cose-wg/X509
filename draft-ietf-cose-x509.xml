@@ -82,7 +82,7 @@
       <t>
 	It is not necessarily expected that constrained devices themselves will evaluate and process X.509 certificates:
         it is perfectly reasonable for a constrained device to be provisioned with a certificate that it subsequently provides to a relying party - along with a signature or encrypted message - on the assumption that the relying party is not a constrained device, and is capable of performing the required certificate evaluation and processing.
-        It is also reasonable that a constrained device would have the hash of a certificate associated with a public key and be configured to use a public key for that thumbprint, but without performing the certificate evaluation or even having the entire certificate. In that case, there still needs to be an entity that is responsible for handling the possible certificate revocation.
+        It is also reasonable that a constrained device would have the hash of a certificate associated with a public key and be configured to use a public key for that thumbprint, but without performing the certificate evaluation or even having the entire certificate. In any case, there still needs to be an entity that is responsible for handling the possible certificate revocation.
       </t>
       <t>
         Parties that intend to rely on the assertions made by a certificate
@@ -90,7 +90,7 @@ obtained from any of these methods still need to validate it.
         This validation can be done according to the PKIX rules in <xref target="RFC5280"/> or by using a different trust structure, such as a trusted certificate distributor for self-signed certificates.
         The PKIX validation includes matching against the trust anchors configured for the application.
         These rules apply when the validation succeeds in a single step as well as when certificate chains need to be built.
-        If the application cannot establish trust in the certificate, that certificate cannot be used.
+        If the application cannot establish trust in the certificate, the public key contained in the certificate cannot be used for cryptographic operations.
       </t>
       <t>
         The header parameters defined in this document are:
@@ -138,7 +138,7 @@ obtained from any of these methods still need to validate it.
 	    This header parameter contains an ordered array of X.509 certificates.
 	    The certificates are to be ordered starting with the certificate containing the end-entity key followed by the certificate which signed it and so on.
 	    There is no requirement for the entire chain to be present in the element if there is reason to believe that the relying party already has, or can locate the missing certificates.
-            This means that the relying party is still required to do path building, but that a candidate path is proposed in this attribute.
+            This means that the relying party is still required to do path building, but that a candidate path is proposed in this header parameter.
           </t>
           <t>
       <!-- Robin
@@ -165,7 +165,7 @@ obtained from any of these methods still need to validate it.
         <dt>x5t:</dt>
         <dd>
           <t>
-            This header parameter provides the ability to identify an X.509 certificate by a hash value.
+            This header parameter provides the ability to identify an X.509 certificate by a hash value (a thumbprint).
             The 'x5t' header parameter can be represented as an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier corresponding to either the Value (integer) or Name (string) column of the algorithm registered in the "COSE Algorithms" registry.
             The second element is a binary string containing the hash value computed over the DER encoded certificate.
@@ -174,7 +174,7 @@ obtained from any of these methods still need to validate it.
             As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.
           </t>
           <t>
-            For interoperability, applications which use this header parameter MUST support the hash algorithm 'SHA-256', but can use other hash algorithms.
+            For interoperability, applications which use this header parameter MUST support the hash algorithm 'SHA-256', but can use other hash algorithms. This requirement allows for different implementations to be configured to use an interoperable algorithm, but does not preclude the use (by prior agreement) of other algorithms.
           </t>
           <t>RFC Editor please remove the following two paragraphs:</t>
           <t>
@@ -199,12 +199,12 @@ obtained from any of these methods still need to validate it.
             <!--              <t>application/pem-certificate-chain <xref target="I-D.ietf-acme-acme"/></t> -->
           </ul>
           <t>
-            As this header parameter implies a trust relationship, the attribute MUST be in the protected attribute bucket.
+            As this header parameter implies a trust relationship between the party generating the x5u parameter and the party hosting the referred-to resource, this header parameter MUST be in the protected attribute bucket.
           </t>
           <t>
             The URI provided MUST provide integrity protection and server authentication.
             For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC8446"/> or DTLS <xref target="I-D.ietf-tls-dtls13"/>.
-            If the certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors.
+            If the retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors.
             In particular, self-signed certificates MUST NOT be trusted without an out-of-band confirmation.
           </t>
         </dd>
@@ -329,21 +329,21 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
             <td align="left">x5t-sender</td>
             <td align="left">TBD</td>
             <td align="left">COSE_CertHash</td>
-            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</td>
+            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW</td>
             <td align="left">Thumbprint for the senders X.509 certificate</td>
           </tr>
           <tr>
             <td align="left">x5u-sender</td>
             <td align="left">TBD</td>
             <td align="left">uri</td>
-            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</td>
+            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW</td>
             <td align="left">URI for the senders X.509 certificate</td>
           </tr>
           <tr>
             <td align="left">x5chain-sender</td>
             <td align="left">TBD</td>
             <td align="left">COSE_X509</td>
-            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</td>
+            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW</td>
             <td align="left">static key X.509 certificate chain</td>
           </tr>
         </tbody>
@@ -410,7 +410,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </t>
 
       <t>
-        When processing x5u header parameter the security considerations of <xref target="RFC3986"/> also apply.
+        When processing x5u header parameter the security considerations of <xref target="RFC3986"/> and specifically those defined in Section 7.1 also apply.
       </t>
       
     </section>
