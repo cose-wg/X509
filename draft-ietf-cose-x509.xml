@@ -5,7 +5,8 @@
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-07" category="info" submissionType="IETF" version="3">
+
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-08" category="std" submissionType="IETF" version="3" consensus="true">
   <!-- xml2rfc v2v3 conversion 2.24.0 -->
   <front>
     <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Header parameters for carrying and referencing X.509 certificates</title>
@@ -20,7 +21,7 @@
     <abstract>
       <t>
         The CBOR Signing And Encrypted Message (COSE) structure uses references to keys in general.
-        For some algorithms, additional properties are defined which carry parts of keys as needed.
+        For some algorithms, additional properties are defined which carry parameters relating to keys as needed.
         The COSE Key structure is used for transporting keys outside of COSE messages.
         This document extends the way that keys can be identified and transported by providing attributes that refer to or contain X.509 certificates.
       </t>
@@ -40,27 +41,24 @@
     <section anchor="introduction">
       <name>Introduction</name>
       <t>
-        In the process of writing <xref target="RFC8152"/> the working group discussed X.509 certificates  <xref target="RFC5280"/> and decided that no use cases were presented that showed a need to support certificates.
-        Since that time a number of cases have been defined in which X.509 certificate support is necessary, and by implication, applications will need a documented and consistent way to handle such certificates.
+        In the process of writing <xref target="RFC8152"/>, the working group discussed X.509 certificates <xref target="RFC5280"/> and decided that no use cases were presented that showed a need to support certificates.
+        Since that time, a number of cases have been defined in which X.509 certificate support is necessary, and by implication, applications will need a documented and consistent way to handle such certificates.
         This document defines a set of attributes that will allow applications to transport and refer to X.509 certificates in a consistent manner.
       </t>
       <t>
         <!-- JLS - Robin did you really mean to just refer to version -00? -->
-	In some of these cases, a constrained device is being deployed in the context of an existing X.509 PKI: for example, in the 6TiSCH environment, <xref target="I-D.richardson-enrollment-roadmap"/> describes a device enrollment solution that relies on the presence in the device of a factory-installed certificate.
+	In some of these cases, a constrained device is being deployed in the context of an existing X.509 PKI: for example, in the 6TiSCH environment, <xref target="I-D.richardson-enrollment-roadmap"/> describes a device enrollment solution that relies on the presence of a factory-installed certificate on the device.
 	The <xref target="I-D.ietf-lake-edhoc"/> draft was also written with the idea that long term certificates could be used to provide for authentication of devices, and uses them to establish session keys.
-	A third scenario is the use of COSE as the basis for a secure messaging application.
+	Another possible scenario is the use of COSE as the basis for a secure messaging application.
         This scenario assumes the presence of long term keys and a central authentication authority.
 	Basing such an application on public key certificates allows it to make use of well established key management disciplines.
       </t>
-      <t>
-        Example COSE messages for the various header parameters defined below can be found at https://github.com/cose-wg/Examples.
-      </t>
-      
+
       <section anchor="requirements-terminology">
         <name>Requirements Terminology</name>
         <!--  NOTE FOR AUTHORS:
              We use the following terms in the document
-             
+
              field - an entry in a CBOR array
              parameter - an element in a CBOR map (as oppose to 'member' which is frequently used in JSON
              label - the key of an element in a CBOR map.   Unless otherwise separated from text, enclose with single quote marks
@@ -83,15 +81,16 @@
       </t>
       <t>
 	It is not necessarily expected that constrained devices themselves will evaluate and process X.509 certificates:
-        it is perfectly reasonable for a constrained device to be provisioned with a certificate which it can then provide to a relying party - along with a signature or encrypted message - on the assumption that the relying party is not a constrained device, and is capable of performing the required certificate evaluation and processing.
-        It is also reasonable that a constrained device would have the hash of a certificate associated with a public key and be configured to use a public key for that thumbprint, but without performing the certificate evaluation or even having the entire certificate.
+        it is perfectly reasonable for a constrained device to be provisioned with a certificate that it subsequently provides to a relying party - along with a signature or encrypted message - on the assumption that the relying party is not a constrained device, and is capable of performing the required certificate evaluation and processing.
+        It is also reasonable that a constrained device would have the hash of a certificate associated with a public key and be configured to use a public key for that thumbprint, but without performing the certificate evaluation or even having the entire certificate. In any case, there still needs to be an entity that is responsible for handling the possible certificate revocation.
       </t>
       <t>
-        Certificates obtained from any of these methods MUST still be validated.
+        Parties that intend to rely on the assertions made by a certificate
+obtained from any of these methods still need to validate it.
         This validation can be done according to the PKIX rules in <xref target="RFC5280"/> or by using a different trust structure, such as a trusted certificate distributor for self-signed certificates.
         The PKIX validation includes matching against the trust anchors configured for the application.
-        These rules apply to certificates of a chain length of one as well as longer chains.
-        If the application cannot establish trust in the certificate, that certificate cannot be used.
+        These rules apply when the validation succeeds in a single step as well as when certificate chains need to be built.
+        If the application cannot establish trust in the certificate, the public key contained in the certificate cannot be used for cryptographic operations.
       </t>
       <t>
         The header parameters defined in this document are:
@@ -102,7 +101,7 @@
         <dd>
           <t>
 	    This header parameter contains a bag of X.509 certificates.
-	    The set of certificates in this header parameter is unordered and may contain self-signed certificates.
+	    The set of certificates in this header parameter is unordered and may contain self-signed certificates. Note that there could be duplicating certificates.
             The certificate bag can contain certificates which are completely extraneous to the message.
 	    (An example of this would be where a signed message is being used to transport a certificate containing a key agreement key.)
 	    As the certificates are unordered, the party evaluating the signature will need to be capable of building the certificate path as necessary.
@@ -110,7 +109,7 @@
           </t>
           <t>
             The trust mechanism MUST process any certificates in this parameter as untrusted input.
-            The presence of a self-signed certificate in the parameter MUST NOT be used as a signal to modify the set of trust anchors.
+            The presence of a self-signed certificate in the parameter MUST NOT cause the update of the set of trust anchors without some out-of-band confirmation.
             As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket.
       <!-- Robin
       [Is the point being made here that the header is incidental to any trust processing that is done on the basis of the certificates in the bag?
@@ -139,7 +138,7 @@
 	    This header parameter contains an ordered array of X.509 certificates.
 	    The certificates are to be ordered starting with the certificate containing the end-entity key followed by the certificate which signed it and so on.
 	    There is no requirement for the entire chain to be present in the element if there is reason to believe that the relying party already has, or can locate the missing certificates.
-            This means that the relying party is still required to do path building, but that a candidate path is proposed in this attribute.
+            This means that the relying party is still required to do path building, but that a candidate path is proposed in this header parameter.
           </t>
           <t>
       <!-- Robin
@@ -148,7 +147,7 @@
       "As the trust mechanisms in operation here do not depend on the header element itself, the header attribute MAY be either protected or unprotected. "]
       -->
             The trust mechanism MUST process any certificates in this parameter as untrusted input.
-            The presence of a self-signed certificate in the parameter MUST NOT be used as a signal to modify the set of trust anchors.
+            The presence of a self-signed certificate in the parameter MUST NOT cause the update of the set of trust anchors without some out-of-band confirmation.
             As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket.
           </t>
           <t>
@@ -166,17 +165,16 @@
         <dt>x5t:</dt>
         <dd>
           <t>
-            This header parameter provides the ability to identify an X.509 certificate by a hash value.
-            The attribute is an array of two elements.
-            The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier.
-            The algorithm is registered in the "COSE Algorithms" registry.
-            The second element is a binary string containing the hash value.
+            This header parameter provides the ability to identify an X.509 certificate by a hash value (a thumbprint).
+            The 'x5t' header parameter can be represented as an array of two elements.
+            The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier corresponding to either the Value (integer) or Name (string) column of the algorithm registered in the "COSE Algorithms" registry.
+            The second element is a binary string containing the hash value computed over the DER encoded certificate.
           </t>
           <t>
-	    As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.
+            As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.
           </t>
           <t>
-            For interoperability, applications which use this header parameter MUST support the hash algorithm 'SHA-256', but can use other hash algorithms.
+            For interoperability, applications which use this header parameter MUST support the hash algorithm 'SHA-256', but can use other hash algorithms. This requirement allows for different implementations to be configured to use an interoperable algorithm, but does not preclude the use (by prior agreement) of other algorithms.
           </t>
           <t>RFC Editor please remove the following two paragraphs:</t>
           <t>
@@ -192,7 +190,7 @@
         <dt>x5u:</dt>
         <dd>
           <t>
-            This header parameter provides the ability to identify an X.509 certificate by a URI <xref target="RFC3986"/>.
+            This header parameter provides the ability to identify an X.509 certificate by a URI <xref target="RFC3986"/>. It contains a CBOR text string.
             The referenced resource can be any of the following media types:
           </t>
           <ul spacing="normal">
@@ -201,27 +199,29 @@
             <!--              <t>application/pem-certificate-chain <xref target="I-D.ietf-acme-acme"/></t> -->
           </ul>
           <t>
-	    As this header parameter implies a trust relationship, the attribute MUST be in the protected attribute bucket.
+            As this header parameter implies a trust relationship between the party generating the x5u parameter and the party hosting the referred-to resource, this header parameter MUST be in the protected attribute bucket.
           </t>
           <t>
             The URI provided MUST provide integrity protection and server authentication.
             For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC8446"/> or DTLS <xref target="I-D.ietf-tls-dtls13"/>.
-            If the certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors.
-            In particular, self-signed certificates MUST NOT be trusted without an out-of-band confirmation.
+            If the retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors or if an out-of-band confirmation can be received for trusting the retrieved certificate.
           </t>
         </dd>
       </dl>
       <t>
-	The header parameters are used in the following locations:
+        The header parameters are used in the following locations:
       </t>
       <ul spacing="normal">
         <li>
-	    COSE_Signature and COSE_Sign1 objects: in these objects they identify the certificate to be used for validating the signature.
-	  </li>
+          COSE_Signature and COSE_Sign1 objects: in these objects they identify the certificate to be used for validating the signature.
+        </li>
         <li>
-            COSE_recipient objects: in this location they identify the certificate for the recipient of the message.
+          COSE_recipient objects: in this location they identify the certificate for the recipient of the message.
           </li>
       </ul>
+      <t>
+        The labels assigned to each header parameter can be found in the following table.
+      </t>
       <table anchor="Tags" align="center">
         <name>X.509 COSE Header Parameters</name>
         <thead>
@@ -266,6 +266,9 @@
 COSE_X509 = bstr / [ 2*certs: bstr ]
 COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 ]]></artwork>
+      <t>
+        The content of the bstr are the bytes of a DER encoded certificate.
+      </t>
     </section>
     <section>
       <name>X.509 certificates and static-static ECDH</name>
@@ -280,14 +283,14 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         [I think this needs a little more explanation, for example (if correct):
         "For static-static ECDH key agreement, the message MUST use one of the following 3 header attributes;
         the x5bag attribute is not valid in this use case, because... ?x5bag implies that the sender and recipient may use different attributes?."
-        
+
         JLS
         No that is not correct.  If doing static-static, then there are two different certificates that need to be identified, that of the sender
         and that of the recipient.  The recipient certificate would be identified by the x5c or x5t properties.  The sender certificate
         would be defined by one of these certificates.  If you used x5t and x5t-sender, but include both certificates in the bag of certificates.
         Normally only the sender certificates would be included as it is assumed that the recipient can identify its certificate without being
         given the actual certificate.
-        
+
         How much of this needs to be added above?
         -->
 
@@ -325,21 +328,21 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
             <td align="left">x5t-sender</td>
             <td align="left">TBD</td>
             <td align="left">COSE_CertHash</td>
-            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</td>
+            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW</td>
             <td align="left">Thumbprint for the senders X.509 certificate</td>
           </tr>
           <tr>
             <td align="left">x5u-sender</td>
             <td align="left">TBD</td>
             <td align="left">uri</td>
-            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</td>
+            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW</td>
             <td align="left">URI for the senders X.509 certificate</td>
           </tr>
           <tr>
             <td align="left">x5chain-sender</td>
             <td align="left">TBD</td>
             <td align="left">COSE_X509</td>
-            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+AES192KW, ECDH-SS+AES256KW</td>
+            <td align="left">ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW</td>
             <td align="left">static key X.509 certificate chain</td>
           </tr>
         </tbody>
@@ -385,26 +388,38 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         In constrained systems, there is a trade-off between the order of checking the signature and checking the certificate for validity.
         Validating certificates can require that network resources be accessed in order to get revocation information or retrieve certificates during path building.
         The resulting network access can consume power and network bandwidth.
-        On the other hand, an oracle can potentially be built based on detecting the network resources which is only done if the signature validation passes.
+        On the other hand, if the certificates are validated after the signature is validated, an oracle can potentially be built based on detecting the network resources which is only done if the signature validation passes.
         In any event, both the signature and certificate validation MUST be completed successfully before acting on any requests.
       </t>
-      
+
       <t>
         Before using the key in a certificate, the key MUST be checked against the algorithm to be used and any algorithm specific checks need to be made.
         These checks can include validating that points are on curves for elliptical curve algorithms, and that sizes of RSA keys are of an acceptable size.
         The use of unvalidated keys can lead either to loss of security or excessive consumption of resources (for example using a 200K RSA key).
-        
+
         <!-- Robin
         Two questions:
         (1) are there any other important checks that should be noted here, or is the  COSE algs document the authoritative guide?
         (2) how does use of unvalidated keys lead to excessive resource consumption?
-        
+
         (1) The COSE algorithm draft(s) have the be the authoritative guides because the set is going to be algorithm specific.
         (2) The easiest example would be an RSA key which is 16K bits long.  Doing the match on this will take a significantly longer amount of time
             and use a significantly amount of memory than what would be used by a 2048-bit RSA key.
       -->
       </t>
-      
+
+      <t>
+        When processing x5u header parameter the security considerations of <xref target="RFC3986"/> and specifically those defined in Section <relref section="7.1" target="RFC3986" displayFormat="bare" /> also apply.
+      </t>
+
+      <t>
+        Regardless of the source, certification path validation is an important part of establishing trust in a certificate. <relref section="6" target="RFC5280" displayFormat="of" /> provides guidence for the path validation. The security considerations of <xref target="RFC5280" /> are also important for the correct usage of this document.
+      </t>
+
+      <t>
+        The security of the algorithm used for 'x5t' does not affect the security of the system as this header parameter selects which certificate that is already present on the system should be used, but it does not provide any trust.
+      </t>
+
     </section>
   </middle>
   <back>
@@ -414,6 +429,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <name>Normative References</name>
         <xi:include href="bibxml/reference.RFC.2119.xml"/>
         <xi:include href="bibxml/reference.RFC.5280.xml"/>
+        <xi:include href="bibxml/reference.RFC.8152.xml"/>
         <xi:include href="bibxml/reference.RFC.8174.xml"/>
         <!-- <xi:include href="bibxml/reference.I-D.ietf-cose-rfc8152bis-struct.xml"/>-->
       </references>
@@ -426,7 +442,6 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <xi:include href="bibxml3/reference.I-D.ietf-lake-edhoc.xml"/>
         <!-- <?rfc include="bibxml/reference.RFC.7468.xml" ?> PEM -->
         <xi:include href="bibxml/reference.RFC.8392.xml"/>
-        <xi:include href="bibxml/reference.RFC.8152.xml"/>
         <xi:include href="bibxml/reference.RFC.8610.xml"/>
         <!-- <xi:include href="bibxml/reference.I-D.ietf-acme-acme.xml"/> -->
         <xi:include href="bibxml/reference.RFC.3986.xml"/>
