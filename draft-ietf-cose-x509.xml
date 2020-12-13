@@ -6,7 +6,7 @@
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
 
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-07" category="std" submissionType="IETF" version="3" consensus="true">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-cose-x509-08" category="std" submissionType="IETF" version="3" consensus="true">
   <!-- xml2rfc v2v3 conversion 2.24.0 -->
   <front>
     <title abbrev="COSE X.509">CBOR Object Signing and Encryption (COSE): Header parameters for carrying and referencing X.509 certificates</title>
@@ -53,12 +53,12 @@
         This scenario assumes the presence of long term keys and a central authentication authority.
 	Basing such an application on public key certificates allows it to make use of well established key management disciplines.
       </t>
-      
+
       <section anchor="requirements-terminology">
         <name>Requirements Terminology</name>
         <!--  NOTE FOR AUTHORS:
              We use the following terms in the document
-             
+
              field - an entry in a CBOR array
              parameter - an element in a CBOR map (as oppose to 'member' which is frequently used in JSON
              label - the key of an element in a CBOR map.   Unless otherwise separated from text, enclose with single quote marks
@@ -109,7 +109,7 @@ obtained from any of these methods still need to validate it.
           </t>
           <t>
             The trust mechanism MUST process any certificates in this parameter as untrusted input.
-            The presence of a self-signed certificate in the parameter MUST NOT be used as a signal to modify the set of trust anchors.
+            The presence of a self-signed certificate in the parameter MUST NOT cause the update of the set of trust anchors without some out-of-band confirmation.
             As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket.
       <!-- Robin
       [Is the point being made here that the header is incidental to any trust processing that is done on the basis of the certificates in the bag?
@@ -147,7 +147,7 @@ obtained from any of these methods still need to validate it.
       "As the trust mechanisms in operation here do not depend on the header element itself, the header attribute MAY be either protected or unprotected. "]
       -->
             The trust mechanism MUST process any certificates in this parameter as untrusted input.
-            The presence of a self-signed certificate in the parameter MUST NOT be used as a signal to modify the set of trust anchors.
+            The presence of a self-signed certificate in the parameter MUST NOT cause the update of the set of trust anchors without some out-of-band confirmation.
             As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket.
           </t>
           <t>
@@ -204,8 +204,7 @@ obtained from any of these methods still need to validate it.
           <t>
             The URI provided MUST provide integrity protection and server authentication.
             For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC8446"/> or DTLS <xref target="I-D.ietf-tls-dtls13"/>.
-            If the retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors.
-            In particular, self-signed certificates MUST NOT be trusted without an out-of-band confirmation.
+            If the retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors or if an out-of-band confirmation can be received for trusting the retrieved certificate.
           </t>
         </dd>
       </dl>
@@ -284,14 +283,14 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         [I think this needs a little more explanation, for example (if correct):
         "For static-static ECDH key agreement, the message MUST use one of the following 3 header attributes;
         the x5bag attribute is not valid in this use case, because... ?x5bag implies that the sender and recipient may use different attributes?."
-        
+
         JLS
         No that is not correct.  If doing static-static, then there are two different certificates that need to be identified, that of the sender
         and that of the recipient.  The recipient certificate would be identified by the x5c or x5t properties.  The sender certificate
         would be defined by one of these certificates.  If you used x5t and x5t-sender, but include both certificates in the bag of certificates.
         Normally only the sender certificates would be included as it is assumed that the recipient can identify its certificate without being
         given the actual certificate.
-        
+
         How much of this needs to be added above?
         -->
 
@@ -392,17 +391,17 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         On the other hand, if the certificates are validated after the signature is validated, an oracle can potentially be built based on detecting the network resources which is only done if the signature validation passes.
         In any event, both the signature and certificate validation MUST be completed successfully before acting on any requests.
       </t>
-      
+
       <t>
         Before using the key in a certificate, the key MUST be checked against the algorithm to be used and any algorithm specific checks need to be made.
         These checks can include validating that points are on curves for elliptical curve algorithms, and that sizes of RSA keys are of an acceptable size.
         The use of unvalidated keys can lead either to loss of security or excessive consumption of resources (for example using a 200K RSA key).
-        
+
         <!-- Robin
         Two questions:
         (1) are there any other important checks that should be noted here, or is the  COSE algs document the authoritative guide?
         (2) how does use of unvalidated keys lead to excessive resource consumption?
-        
+
         (1) The COSE algorithm draft(s) have the be the authoritative guides because the set is going to be algorithm specific.
         (2) The easiest example would be an RSA key which is 16K bits long.  Doing the match on this will take a significantly longer amount of time
             and use a significantly amount of memory than what would be used by a 2048-bit RSA key.
@@ -410,9 +409,17 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </t>
 
       <t>
-        When processing x5u header parameter the security considerations of <xref target="RFC3986"/> and specifically those defined in Section 7.1 also apply.
+        When processing x5u header parameter the security considerations of <xref target="RFC3986"/> and specifically those defined in Section <relref section="7.1" target="RFC3986" displayFormat="bare" /> also apply.
       </t>
-      
+
+      <t>
+        Regardless of the source, certification path validation is an important part of establishing trust in a certificate. <relref section="6" target="RFC5280" displayFormat="of" /> provides guidence for the path validation. The security considerations of <xref target="RFC5280" /> are also important for the correct usage of this document.
+      </t>
+
+      <t>
+        The security of the algorithm used for 'x5t' does not affect the security of the system as this header parameter selects which certificate that is already present on the system should be used, but it does not provide any trust.
+      </t>
+
     </section>
   </middle>
   <back>
@@ -422,6 +429,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <name>Normative References</name>
         <xi:include href="bibxml/reference.RFC.2119.xml"/>
         <xi:include href="bibxml/reference.RFC.5280.xml"/>
+        <xi:include href="bibxml/reference.RFC.8152.xml"/>
         <xi:include href="bibxml/reference.RFC.8174.xml"/>
         <!-- <xi:include href="bibxml/reference.I-D.ietf-cose-rfc8152bis-struct.xml"/>-->
       </references>
@@ -434,7 +442,6 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <xi:include href="bibxml3/reference.I-D.ietf-lake-edhoc.xml"/>
         <!-- <?rfc include="bibxml/reference.RFC.7468.xml" ?> PEM -->
         <xi:include href="bibxml/reference.RFC.8392.xml"/>
-        <xi:include href="bibxml/reference.RFC.8152.xml"/>
         <xi:include href="bibxml/reference.RFC.8610.xml"/>
         <!-- <xi:include href="bibxml/reference.I-D.ietf-acme-acme.xml"/> -->
         <xi:include href="bibxml/reference.RFC.3986.xml"/>
