@@ -110,7 +110,7 @@ obtained from any of these methods still need to validate it.
           <t>
             The trust mechanism MUST process any certificates in this parameter as untrusted input.
             The presence of a self-signed certificate in the parameter MUST NOT cause the update of the set of trust anchors without some out-of-band confirmation.
-            As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket.
+            As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket. Sending the header parameter in the unprotected header bucket allows an intermediary to remove or add certificates.
       <!-- Robin
       [Is the point being made here that the header is incidental to any trust processing that is done on the basis of the certificates in the bag?
       If so, I suggest the following text:
@@ -119,6 +119,9 @@ obtained from any of these methods still need to validate it.
         JLS:
         Does this read better?
       -->
+          </t>
+          <t>
+				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the header parameter in the protected header, sending a x5bag in the unprotected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad as is done in EDHOC. 
           </t>
           <t>
             This header parameter allows for a single X.509 certificate or a bag of X.509 certificates to be carried in the message.
@@ -148,9 +151,12 @@ obtained from any of these methods still need to validate it.
       -->
             The trust mechanism MUST process any certificates in this parameter as untrusted input.
             The presence of a self-signed certificate in the parameter MUST NOT cause the update of the set of trust anchors without some out-of-band confirmation.
-            As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket.
+            As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket. Sending the header parameter in the unprotected header bucket allows an intermediary to remove or add certificates.
           </t>
           <t>
+				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the header parameter in the protected header, sending a x5chain in the unprotected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad as is done in EDHOC. 
+          </t>
+			 <t>
             This header parameter allows for a single X.509 certificate or a chain of X.509 certificates to be carried in the message.
           </t>
           <ul spacing="normal">
@@ -165,13 +171,19 @@ obtained from any of these methods still need to validate it.
         <dt>x5t:</dt>
         <dd>
           <t>
-            This header parameter provides the ability to identify an X.509 certificate by a hash value (a thumbprint).
+            This header parameter provides the ability to identify an end-entity X.509 certificate by a hash value (a thumbprint).
             The 'x5t' header parameter can be represented as an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier corresponding to either the Value (integer) or Name (string) column of the algorithm registered in the "COSE Algorithms" registry.
             The second element is a binary string containing the hash value computed over the DER encoded certificate.
           </t>
           <t>
             As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.
+          </t>
+          <t>
+				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the header parameter MUST be in the protected header. 
+          </t>
+          <t>
+				The 'x5t' header parameter can be used alone or together with the 'x5bag', 'x5chain', or 'x5u' header parameters to provide integrity protection of the end-entity certificate. 
           </t>
           <t>
             For interoperability, applications which use this header parameter MUST support the hash algorithm 'SHA-256', but can use other hash algorithms. This requirement allows for different implementations to be configured to use an interoperable algorithm, but does not preclude the use (by prior agreement) of other algorithms.
@@ -196,14 +208,22 @@ obtained from any of these methods still need to validate it.
           <ul spacing="normal">
             <li>application/pkix-cert <xref target="RFC2585"/></li>
             <li>application/pkcs7-mime; smime-type="certs-only" <xref target="RFC8551"/></li>
+            <li>application/cbor <xref target="RFC8949"/></li>
             <!--              <t>application/pem-certificate-chain <xref target="I-D.ietf-acme-acme"/></t> -->
           </ul>
           <t>
-            As this header parameter implies a trust relationship between the party generating the x5u parameter and the party hosting the referred-to resource, this header parameter MUST be in the protected attribute bucket.
+            When the application/cbor media type is used, the data is a COSE_X509 structure containing a chain.
           </t>
           <t>
-            The URI provided MUST provide integrity protection and server authentication.
+				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the x5u in the unprotected or protected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad as is done in EDHOC. 
+          </t>
+			 <t>
+				If the end-entity certificate is integrity protected by COSE, the URI does not need to provide any protection.
+          </t>
+ 			 <t>
+           If the end-entity certificate is not integrity protected by COSE, this header parameter implies a trust relationship between the party generating the x5u parameter and the party hosting the referred-to resource, this header parameter MUST then be in the protected attribute bucket. If the end-entity certificate is not integrity protected, the URI provided MUST also provide integrity protection and server authentication.
             For example, an HTTP or CoAP GET request to retrieve a certificate MUST use TLS <xref target="RFC8446"/> or DTLS <xref target="I-D.ietf-tls-dtls13"/>.
+
             If the retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors or if an out-of-band confirmation can be received for trusting the retrieved certificate.
           </t>
         </dd>
@@ -393,6 +413,14 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </t>
 
       <t>
+   	Unless it is known that the CA required proof-of-possession of the subject's private key to issue an end-entity certificate, the end-entity certificate MUST be integrity protected by COSE.  Without proof-of-possession, an attacker can trick the CA to issue an identity-misbinding certificate with someone else's "borrowed" public-key but with a different subject.  A MITM attacker can then perform an identity-misbinding attack by replacing the real end-entity certificate in COSE with such an identity-misbinding certificate.
+      </t>
+
+      <t>
+   	End-entity X.509 certificates contain identities that a passive on-path attacker eavesdropping on the conversation can use to identity and track the subject.  COSE does not provide identity protection by itself and the x5t and x5u header parameters are just alternative permanent identifiers and can also be used to track the subject. To provide identity protection, COSE can be sent inside a TLS or IPsec connection or used with EDHOC.
+      </t>
+
+      <t>
         Before using the key in a certificate, the key MUST be checked against the algorithm to be used and any algorithm specific checks need to be made.
         These checks can include validating that points are on curves for elliptical curve algorithms, and that sizes of RSA keys are of an acceptable size.
         The use of unvalidated keys can lead either to loss of security or excessive consumption of resources (for example using a 200K RSA key).
@@ -431,6 +459,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
         <xi:include href="bibxml/reference.RFC.5280.xml"/>
         <xi:include href="bibxml/reference.RFC.8152.xml"/>
         <xi:include href="bibxml/reference.RFC.8174.xml"/>
+        <xi:include href="bibxml/reference.RFC.8949.xml"/>
         <!-- <xi:include href="bibxml/reference.I-D.ietf-cose-rfc8152bis-struct.xml"/>-->
       </references>
       <references>
