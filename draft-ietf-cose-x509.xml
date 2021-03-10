@@ -417,7 +417,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </t>
 
       <t>
-   	End-entity X.509 certificates contain identities that a passive on-path attacker eavesdropping on the conversation can use to identity and track the subject.  COSE does not provide identity protection by itself and the x5t and x5u header parameters are just alternative permanent identifiers and can also be used to track the subject. To provide identity protection, COSE can be sent inside a TLS or IPsec connection or used with EDHOC.
+   	End-entity X.509 certificates contain identities that a passive on-path attacker eavesdropping on the conversation can use to identify and track the subject.  COSE does not provide identity protection by itself and the x5t and x5u header parameters are just alternative permanent identifiers and can also be used to track the subject. To provide identity protection, COSE can be sent inside a TLS or IPsec connection or used with EDHOC.
       </t>
 
       <t>
