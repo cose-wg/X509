@@ -227,7 +227,7 @@ obtained from any of these methods still need to validate it.
 	GET request to retrieve a certificate MUST use TLS <xref target="RFC8446"/> or DTLS <xref target="I-D.ietf-tls-dtls13"/>.
           </t>
  	<t>
-            If a retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the URI MUST provided integrity protection and server authentication and the server is configured as trusted to provide new trust anchors or if an out-of-band confirmation can be received for trusting the retrieved certificate.
+            If a retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the URI provided integrity protection and server authentication and the server is configured as trusted to provide new trust anchors or if an out-of-band confirmation can be received for trusting the retrieved certificate.
           </t>
         </dd>
       </dl>
