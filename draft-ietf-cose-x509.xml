@@ -215,18 +215,19 @@ obtained from any of these methods still need to validate it.
             When the application/cbor media type is used, the data is a COSE_X509 structure containing a chain.
           </t>
           <t>
-				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the x5u in the unprotected or protected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad as is done in EDHOC. 
+		Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the x5u in the unprotected or protected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad as is done in EDHOC. 
           </t>
-			 <t>
-				If the end-entity certificate is integrity protected by COSE, the URI does not need to provide any protection.
+	  <t>
+	     If the end-entity certificate is integrity protected by COSE, the URI does not need to provide any protection.
           </t>
- 			 <t>
+ 	<t>
 	If the end-entity certificate is not integrity protected by COSE, this header parameter implies a trust relationship between
 	the party generating the x5u parameter and the party hosting the referred-to resource, this header parameter MUST then be in the
 	protected attribute bucket and the URI MUST provide integrity protection and server authentication. For example, an HTTP or CoAP
 	GET request to retrieve a certificate MUST use TLS <xref target="RFC8446"/> or DTLS <xref target="I-D.ietf-tls-dtls13"/>.
-
-            If the retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the server is configured as trusted to provide new trust anchors or if an out-of-band confirmation can be received for trusting the retrieved certificate.
+          </t>
+ 	<t>
+            If a retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the URI MUST provided integrity protection and server authentication and the server is configured as trusted to provide new trust anchors or if an out-of-band confirmation can be received for trusting the retrieved certificate.
           </t>
         </dd>
       </dl>
