@@ -171,7 +171,7 @@ obtained from any of these methods still need to validate it.
         <dt>x5t:</dt>
         <dd>
           <t>
-            This header parameter provides the ability to identify an end-entity X.509 certificate by a hash value (a thumbprint).
+            This header parameter identifies the end-entity certificate by a hash value (a thumbprint).
             The 'x5t' header parameter can be represented as an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier corresponding to either the Value (integer) or Name (string) column of the algorithm registered in the "COSE Algorithms" registry.
             The second element is a binary string containing the hash value computed over the DER encoded certificate.
