@@ -121,7 +121,7 @@ obtained from any of these methods still need to validate it.
       -->
           </t>
           <t>
-				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the header parameter in the protected header, sending a x5bag in the unprotected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad as is done in EDHOC. 
+				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the header parameter in the protected header, sending a x5bag in the unprotected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad. 
           </t>
           <t>
             This header parameter allows for a single X.509 certificate or a bag of X.509 certificates to be carried in the message.
@@ -154,7 +154,7 @@ obtained from any of these methods still need to validate it.
             As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket. Sending the header parameter in the unprotected header bucket allows an intermediary to remove or add certificates.
           </t>
           <t>
-				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the header parameter in the protected header, sending a x5chain in the unprotected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad as is done in EDHOC. 
+				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the header parameter in the protected header, sending a x5chain in the unprotected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad as. 
           </t>
 			 <t>
             This header parameter allows for a single X.509 certificate or a chain of X.509 certificates to be carried in the message.
@@ -180,7 +180,7 @@ obtained from any of these methods still need to validate it.
             As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.
           </t>
           <t>
-				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the header parameter in the protected header or including the end-entity certificate in the external_aad as is done in EDHOC. 
+				Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the header parameter in the protected header or including the end-entity certificate in the external_aad. 
           </t>
 	  <t>
 				The 'x5t' header parameter can be used alone or together with the 'x5bag', 'x5chain', or 'x5u' header parameters to provide integrity protection of the end-entity certificate. 
@@ -215,7 +215,7 @@ obtained from any of these methods still need to validate it.
             When the application/cbor media type is used, the data is a COSE_X509 structure containing a chain.
           </t>
           <t>
-		Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the x5u in the unprotected or protected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad as is done in EDHOC. 
+		Unless it is known to both sender and recipient that proof-of-possession of the subject's private key was required for certificate issuance, the end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the x5u in the unprotected or protected header combined with a x5t in the protected header, or including the end-entity certificate in the external_aad. 
           </t>
 	  <t>
 	     If the end-entity certificate is integrity protected by COSE, the URI does not need to provide any protection.
@@ -420,7 +420,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </t>
 
       <t>
-   	End-entity X.509 certificates contain identities that a passive on-path attacker eavesdropping on the conversation can use to identify and track the subject.  COSE does not provide identity protection by itself and the x5t and x5u header parameters are just alternative permanent identifiers and can also be used to track the subject. To provide identity protection, COSE can be sent inside a TLS or IPsec connection or used with EDHOC.
+   	End-entity X.509 certificates contain identities that a passive on-path attacker eavesdropping on the conversation can use to identify and track the subject.  COSE does not provide identity protection by itself and the x5t and x5u header parameters are just alternative permanent identifiers and can also be used to track the subject. To provide identity protection, COSE can be sent inside another security protocol providing confidentiality.
       </t>
 
       <t>
