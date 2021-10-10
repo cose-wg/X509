@@ -166,7 +166,7 @@ obtained from any of these methods still need to validate it.
         <dd>
           <t>
             This header parameter provides the ability to identify an X.509 certificate by a hash value (a thumbprint).
-            The 'x5t' header parameter can be represented as an array of two elements.
+            The 'x5t' header parameter is represented as an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier corresponding to either the Value (integer) or Name (string) column of the algorithm registered in the "COSE Algorithms" registry.
             The second element is a binary string containing the hash value computed over the DER encoded certificate.
           </t>
@@ -409,7 +409,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
       </t>
 
       <t>
-        When processing x5u header parameter the security considerations of <xref target="RFC3986"/> and specifically those defined in Section <relref section="7.1" target="RFC3986" displayFormat="bare" /> also apply.
+        When processing the x5u header parameter the security considerations of <xref target="RFC3986"/> and specifically those defined in Section <relref section="7.1" target="RFC3986" displayFormat="bare" /> also apply.
       </t>
 
       <t>
