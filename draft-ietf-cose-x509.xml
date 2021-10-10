@@ -101,7 +101,7 @@ obtained from any of these methods still need to validate it.
         <dd>
           <t>
 	    This header parameter contains a bag of X.509 certificates.
-	    The set of certificates in this header parameter is unordered and may contain self-signed certificates. Note that there could be duplicating certificates.
+	    The set of certificates in this header parameter is unordered and may contain self-signed certificates. Note that there could be duplicate certificates.
             The certificate bag can contain certificates which are completely extraneous to the message.
 	    (An example of this would be where a signed message is being used to transport a certificate containing a key agreement key.)
 	    As the certificates are unordered, the party evaluating the signature will need to be capable of building the certificate path as necessary.
@@ -235,25 +235,25 @@ obtained from any of these methods still need to validate it.
         <tbody>
           <tr>
             <td align="left">x5bag</td>
-            <td align="left">TBD4</td>
+            <td align="left">32</td>
             <td align="left">COSE_X509</td>
             <td align="left">An unordered bag of X.509 certificates</td>
           </tr>
           <tr>
             <td align="left">x5chain</td>
-            <td align="left">TBD3</td>
+            <td align="left">33</td>
             <td align="left">COSE_X509</td>
             <td align="left">An ordered chain of X.509 certificates</td>
           </tr>
           <tr>
             <td align="left">x5t</td>
-            <td align="left">TBD1</td>
+            <td align="left">34</td>
             <td align="left">COSE_CertHash</td>
             <td align="left">Hash of an X.509 certificate</td>
           </tr>
           <tr>
             <td align="left">x5u</td>
-            <td align="left">TBD2</td>
+            <td align="left">35</td>
             <td align="left">uri</td>
             <td align="left">URI pointing to an X.509 certificate</td>
           </tr>
