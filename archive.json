@@ -1,0 +1,1642 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2021-10-18T06:11:32.546496+00:00",
+  "repo": "cose-wg/X509",
+  "labels": [
+    {
+      "name": "bug",
+      "description": null,
+      "color": "ee0701"
+    },
+    {
+      "name": "duplicate",
+      "description": null,
+      "color": "cccccc"
+    },
+    {
+      "name": "enhancement",
+      "description": null,
+      "color": "84b6eb"
+    },
+    {
+      "name": "help wanted",
+      "description": null,
+      "color": "128A0C"
+    },
+    {
+      "name": "invalid",
+      "description": null,
+      "color": "e6e6e6"
+    },
+    {
+      "name": "question",
+      "description": null,
+      "color": "cc317c"
+    },
+    {
+      "name": "wontfix",
+      "description": null,
+      "color": "ffffff"
+    },
+    {
+      "name": "hash-algs",
+      "description": "",
+      "color": "849C33"
+    },
+    {
+      "name": "x509",
+      "description": "",
+      "color": "7C03D2"
+    },
+    {
+      "name": "has-pr",
+      "description": "",
+      "color": "CBA68E"
+    }
+  ],
+  "issues": [
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWUzNDc2MzMwOTE=",
+      "title": " COSE_X509 CDDL",
+      "url": "https://github.com/cose-wg/X509/issues/3",
+      "state": "CLOSED",
+      "author": "emanjon",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The CDDL states\r\n\r\nCOSE_X509 = bstr / [ *certs: bstr ]\r\n\r\nIf I understand draft-ietf-cbor-cddl correctly, '*' means zero or more. Shouldn't it be\r\n\r\nCOSE_X509 = bstr / [ 2* certs: bstr ]\r\n\r\nwhere 2* means two or more\r\n",
+      "createdAt": "2018-08-04T17:01:59Z",
+      "updatedAt": "2019-11-21T03:29:34Z",
+      "closedAt": "2019-11-21T03:29:34Z",
+      "comments": [
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "There is a difference between what I was thinking and what is in the text.  I was actually thinking that you might want a bag of zero certificates - hence the *, but yes from the text is should be 2*",
+          "createdAt": "2018-08-04T17:15:43Z",
+          "updatedAt": "2018-08-04T17:15:43Z"
+        },
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "fixed",
+          "createdAt": "2019-11-21T03:29:34Z",
+          "updatedAt": "2019-11-21T03:29:34Z"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "MDU6SXNzdWU0ODA1MzE0ODQ=",
+      "title": "ref uri format",
+      "url": "https://github.com/cose-wg/X509/issues/11",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "It would be good to have a pointer to uri format definition (can be in terminology, but I'd prefer it after table 1 as that is where it appears first).",
+      "createdAt": "2019-08-14T07:48:21Z",
+      "updatedAt": "2021-05-11T15:55:55Z",
+      "closedAt": "2021-05-11T15:55:55Z",
+      "comments": [
+        {
+          "author": "kaduk",
+          "authorAssociation": "NONE",
+          "body": "We now reference RFC 3986 along with the x5u definition, so I think this can be closed.",
+          "createdAt": "2021-01-21T06:49:10Z",
+          "updatedAt": "2021-01-21T06:49:10Z"
+        },
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "As Ben has pointed out, now there is a reference to RFC3986, so closing.",
+          "createdAt": "2021-05-11T15:55:55Z",
+          "updatedAt": "2021-05-11T15:55:55Z"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "MDU6SXNzdWU0ODA1MzI4NDI=",
+      "title": "cert bag unordered",
+      "url": "https://github.com/cose-wg/X509/issues/12",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "the following text:\r\n\r\n      *  If multiple certificates are conveyed, a CBOR array of bstrs is\r\n         used.  Each certificate being in it's own slot.\r\n\r\nabout the \"its own slot\", confuses me. This seems to imply order. (I think this might be a copy-paste error).\r\n\r\nAlso minor \"it's\" -> \"its\" (here and in x5chain description)",
+      "createdAt": "2019-08-14T07:51:56Z",
+      "updatedAt": "2019-11-21T03:08:22Z",
+      "closedAt": "2019-11-21T03:08:22Z",
+      "comments": [
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "fixed",
+          "createdAt": "2019-11-21T03:08:22Z",
+          "updatedAt": "2019-11-21T03:08:22Z"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "MDU6SXNzdWU0ODA1MzQyMDU=",
+      "title": "Clarification needed",
+      "url": "https://github.com/cose-wg/X509/issues/13",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "x509"
+      ],
+      "body": "About x5t:\r\n\r\n> The first element is an algorithm identifier which is\r\n>       an integer or a string containing the hash algorithm identifier.\r\n\r\nShould this be taken from the COSE Algorithm registry? if not necessarily, what value can it take?",
+      "createdAt": "2019-08-14T07:55:11Z",
+      "updatedAt": "2021-10-12T17:12:52Z",
+      "closedAt": "2021-10-12T17:12:52Z",
+      "comments": [
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Seems like it does say the COSE Algorithms registry.  That would mean int or tstr is fine.\r\n\r\nSeems like this could be a normative reference to the definition of alg in table 2 in RFC 8152.",
+          "createdAt": "2020-03-18T19:06:06Z",
+          "updatedAt": "2020-03-18T19:06:06Z"
+        },
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Francesca's comment was fixed in the last version.  I don't want to reference CDDL to someplace else because there is no official CDDL structure in RFC 8152 and we don't have imports at this point.",
+          "createdAt": "2020-03-18T22:30:18Z",
+          "updatedAt": "2020-03-18T22:30:18Z"
+        },
+        {
+          "author": "fpalombini",
+          "authorAssociation": "NONE",
+          "body": "Right, thanks for adding the text about COSE Algorithm registry. No need for CDDL. You could add a reference to make it more clear what registry you are talking about (I would suggest not to table 2 of RFC8152 as Laurence mentions, but to the IANA registry itself https://www.iana.org/assignments/cose/cose.xhtml#algorithms since table 2 is only a subset of all registered algorithms, or to section 16.4 where the registry is created).",
+          "createdAt": "2020-03-19T09:12:17Z",
+          "updatedAt": "2020-03-19T09:12:17Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "MDU6SXNzdWU0ODA1MzQ1OTU=",
+      "title": "CDDL",
+      "url": "https://github.com/cose-wg/X509/issues/14",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "update CDDL ref to RFC8610 :)",
+      "createdAt": "2019-08-14T07:56:10Z",
+      "updatedAt": "2019-11-21T03:06:36Z",
+      "closedAt": "2019-11-21T03:06:36Z",
+      "comments": [
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "done",
+          "createdAt": "2019-11-21T03:06:36Z",
+          "updatedAt": "2019-11-21T03:06:36Z"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "MDU6SXNzdWU1MjY0MzIzNTY=",
+      "title": "Terminology -- header parameter?",
+      "url": "https://github.com/cose-wg/X509/issues/19",
+      "state": "CLOSED",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Aren't x5chain, x5t and such header parameters?\r\n",
+      "createdAt": "2019-11-21T08:14:22Z",
+      "updatedAt": "2020-10-20T17:09:07Z",
+      "closedAt": "2020-10-20T17:09:07Z",
+      "comments": [
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes - I need to do the other documents as well.",
+          "createdAt": "2019-11-21T08:41:49Z",
+          "updatedAt": "2019-11-21T08:41:49Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "This was fixed.",
+          "createdAt": "2020-10-20T17:09:07Z",
+          "updatedAt": "2020-10-20T17:09:07Z"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "MDU6SXNzdWU1ODM5NDQwNDE=",
+      "title": "Require DER encoding for x5t",
+      "url": "https://github.com/cose-wg/X509/issues/21",
+      "state": "CLOSED",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Since the data is being hashed, it has to be in a canonical form, so it should specify DER encoding.",
+      "createdAt": "2020-03-18T19:08:24Z",
+      "updatedAt": "2020-12-18T19:40:04Z",
+      "closedAt": "2020-12-18T19:40:04Z",
+      "comments": [
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "No that is not correct.  The form to be hashed is what ever is signed and there.  Forcing a re-encode to DER is known to generate errors.  This is standard behavior in the X.509 world.",
+          "createdAt": "2020-03-18T22:19:29Z",
+          "updatedAt": "2020-03-18T22:19:29Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Is x5t the hash of the leaf cert in x5bag or x5chain?  If so, that would explain why most of my comments are not making sense.\r\n\r\nI interpreted it as another way to identify a cert similar to x5bag. I was going to say that it needs to be an array like x5bag.\r\n\r\nPretty sure x5t needs some clarification.\r\n",
+          "createdAt": "2020-03-18T22:57:13Z",
+          "updatedAt": "2020-03-18T22:57:13Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "This is fixed in the -08 draft which actually says x5t is a hash over DER.",
+          "createdAt": "2020-12-18T19:40:04Z",
+          "updatedAt": "2020-12-18T19:40:04Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "MDU6SXNzdWU1ODM5NDU4Mjk=",
+      "title": "PEM, DER, BER or other format?",
+      "url": "https://github.com/cose-wg/X509/issues/22",
+      "state": "CLOSED",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "My first though would be that all certs should be DER format. No PEM or BER or such.",
+      "createdAt": "2020-03-18T19:12:02Z",
+      "updatedAt": "2020-12-18T19:47:47Z",
+      "closedAt": "2020-12-18T19:47:47Z",
+      "comments": [
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "This conflicts with my proposal in #24; maybe 24 is better.",
+          "createdAt": "2020-03-18T19:23:13Z",
+          "updatedAt": "2020-03-18T19:23:13Z"
+        },
+        {
+          "author": "mcr",
+          "authorAssociation": "NONE",
+          "body": "Laurence Lundblade <notifications@github.com> wrote:\n    > My first though would be that all certs should be DER format. No PEM or BER or such.\n\nAll certificates are in DER format.\nDER is a subset of BEM, and is never used for signed things.\nPEM is base64 encoded DER, so it's not a different format, just a different transport.\n",
+          "createdAt": "2020-03-18T20:44:16Z",
+          "updatedAt": "2020-03-18T20:44:16Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Sniffing bytes can be used reliably to tell PEM-wrapped DER from raw DER, but I do not think this standard should rely on it. If we choose to rely on it, it needs to be called out in the text. Also see #24",
+          "createdAt": "2020-03-18T21:14:04Z",
+          "updatedAt": "2020-03-18T22:34:39Z"
+        },
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "There is no need to sniff this, the content-type returned in the HTTP request will identify what the type of the content being returned is.  This is not something that is in the COSE message but is what is returned by HTTP.  These are all common formats that are returned in HTTP.",
+          "createdAt": "2020-03-18T22:23:55Z",
+          "updatedAt": "2020-03-18T22:23:55Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "x5u is fetched by HTTP, but x5bag and x5chain are not. They contain actual bytes of certs in bstrs. The spec doesn't say if they are PEM or DER, so without any specification in the draft or any tagging, you'd have to sniff.",
+          "createdAt": "2020-03-18T22:33:43Z",
+          "updatedAt": "2020-03-18T22:33:43Z"
+        },
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I just wet back and realized that I have completely removed PEM from the document.  The reference for an X.509 certificate is RFC 5280 and there is nothing but binary certificates in that document.  I don't think there is any issue with what is in the bag or chain.",
+          "createdAt": "2020-03-22T22:03:35Z",
+          "updatedAt": "2020-03-22T22:03:35Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "This is resolved. x5bag, x5chain and x5t are all DER now. x5u depends the RFC referenced and the content type (and is always DER as far as I read).",
+          "createdAt": "2020-12-18T19:47:47Z",
+          "updatedAt": "2020-12-18T19:47:47Z"
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "MDU6SXNzdWU1ODM5NDc2OTY=",
+      "title": "recommend that the COSE kid be a Subject Key Identifier",
+      "url": "https://github.com/cose-wg/X509/issues/23",
+      "state": "OPEN",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "x509"
+      ],
+      "body": "Particularly with x5bag, the signature verifier needs to figure out which cert is the leaf to use to verify the COSE signature.  CMS and such did with the Subject Key ID and it seems that should be a described option here.\r\n",
+      "createdAt": "2020-03-18T19:15:53Z",
+      "updatedAt": "2021-10-10T20:30:26Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I would not be using a kid in this case, I would be more likely to use a thumbprint for the identification purposes.  Given that we have consistently said that the structure of kid is not known, making it known in this case seems to be a bad idea to me.",
+          "createdAt": "2020-03-18T22:31:40Z",
+          "updatedAt": "2020-03-18T22:31:40Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Suppose I'm using COSE for code signing and a root has been embedded in the entity that will verify and run the signed code.  The cert chain is a leaf, two intermediates and a root. The two intermediates and leaf are put in an x5bag. How does the verifier know which of the three in the x5bag is the leaf?\r\n\r\nIt seems that it should be Subject Key ID as that is best practice for this identification AFAIK. Thus, there should be some COSE header that contains the Subject Key ID. If that is not the kid, then another header should be formally defined. If it is a thumbprint then how the thumbprint works should be described.\r\n\r\nSaid another way, I think this draft should give enough info (along with 5280) to accomplish chain formation with an x5bag for the code signing example or other similar uses.",
+          "createdAt": "2020-03-18T22:50:16Z",
+          "updatedAt": "2020-03-18T22:50:16Z"
+        },
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Starting at the top, this is a case where a chain makes more sense because it resolves that problem entirely.  Using a bag only makes sense if you have certificates that are outside of the chain.\r\n\r\nSecond, as I said I would put in a bag and a thumbprint.  The thumbprint would be used to identify the leaf certificate to use. ",
+          "createdAt": "2020-03-19T00:01:33Z",
+          "updatedAt": "2020-03-19T00:01:33Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Understand that a thumbprint can work, but the word \"thumbprint\" only occurs in the document once in Table 2 which applies only to ECDH.  Seems like there is some important text missing. \r\n\r\nIf x5t is the thumbprint, then it should say something like \"x5t identifies the leaf cert in the chain, such as the one with the public key to verify the signature on a COSE_Sign1.\"",
+          "createdAt": "2020-03-19T16:59:35Z",
+          "updatedAt": "2020-03-19T16:59:35Z"
+        },
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That is implied by the bullet items immediately prior to table 1.",
+          "createdAt": "2020-03-22T21:49:56Z",
+          "updatedAt": "2020-03-22T21:49:56Z"
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "MDU6SXNzdWU1ODM5NTExMTk=",
+      "title": "Register a CBOR tag for X.509 cert?",
+      "url": "https://github.com/cose-wg/X509/issues/24",
+      "state": "CLOSED",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "We have registered tags for lots of common data structures. X.509 certs are a common data structure. This RFC would be a convenient place to do it.\r\n\r\nIt could be polymorphic based on the type of the tag content\r\n- tstr implies PEM encoding\r\n- bstr implies DER encoding\r\n- array means hash of the cert\r\n- URI means reference\r\n\r\nThis could allow the removal of x5t and x5u entirely. They would just be folded in with x5bag and x5chain. Any individual cert in the bag or the chain could be any of the types.\r\n\r\nThis is partly in conflict with my issue #22 \r\n",
+      "createdAt": "2020-03-18T19:22:36Z",
+      "updatedAt": "2020-10-20T17:07:19Z",
+      "closedAt": "2020-10-20T17:07:18Z",
+      "comments": [
+        {
+          "author": "jimsch",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I am not sure why you think this would be needed.  The only reasonable answer here is to say that it is a DER encoded certificate and be done with it.  There is no need to carry a PEM cert in the message itself.  Having the thumbprint or URI would mean that things will get really sticky fast because the same certificate could be referenced many times by different methods.  That is just confusing.",
+          "createdAt": "2020-03-18T22:28:50Z",
+          "updatedAt": "2020-03-18T22:28:50Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "It was a thought. Removing the comment.",
+          "createdAt": "2020-10-20T17:07:18Z",
+          "updatedAt": "2020-10-20T17:07:18Z"
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "MDU6SXNzdWU3NzExMzQxODI=",
+      "title": "Identification of end-entity cert / consistency with JWS",
+      "url": "https://github.com/cose-wg/X509/issues/29",
+      "state": "OPEN",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "x509"
+      ],
+      "body": "JWS has almost the same header parameters at COSE (x5t, x5chain and x5u, but not x5bag). The semantics of them should be identical, unless there's a really good reason not to be. (EAT using JWT and CWT as semantically equivalent so issues like this pop up)\r\n\r\nCOSE X.509 is not very clear about determination of the end-entity cert. JWS is clear and explicit:\r\n  - x5t always refers to an end-entity\r\n  - In x5u the first cert is always the end-entity\r\n  - In x5c the first cert is always the end-entity\r\n\r\nJWS uses the phrase \"The certificate containing the public key corresponding to the key used to digitally sign\u201d rather than \"end-entity\u201d. I prefer end-entity, but either is fine.\r\n\r\nBy contrast, COSE X.509 only explicitly says how the end-entity is determined for an x5chain. Nothing is said for x5t, x5bag or x5u.\r\n\r\nSeems to me that COSE X.509 should be made identical to JWS for x5t, x5chain and x5u. \r\n\r\nThen COSE has the add-on bonus of x5bag. x5bag never determines the end-entity since it is un ordered. You have to have an x5t, kid or some other means of knowing which in the x5bag is the end-entity. And it is OK that x5bag doesn\u2019t even contain the end-entity.\r\n",
+      "createdAt": "2020-12-18T19:55:08Z",
+      "updatedAt": "2021-10-10T20:30:26Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jfhamme-cccs",
+          "authorAssociation": "NONE",
+          "body": "I think aligning with JWS in this case is reasonable.  \r\n\r\nI believe that x5u is a single URI string, so x5u should always refer to the end-entity certificate similar to x5t.   \r\n\r\nI actually prefer the JWS phrase \"key used to digitally sign\" rather than \"end-entity\" since I think that is less ambiguous.  ",
+          "createdAt": "2020-12-23T16:08:41Z",
+          "updatedAt": "2020-12-23T16:08:41Z"
+        },
+        {
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The COSE x5u requires application/pkix-cert or application/pkcs7-mime; pkix-cert is a single (DER) cert and cannot hold a chain, and pkcs7-mime is a well-defined and structured media type that we should not try to impose additional constraints on.  (JWS wants PEM form and allows chains or single certs.)\r\n\r\nI think the only potentially actionable thing here would be to add explicit text that x5t points to the end-entity.  I'm not opposed, but it seems that Jim thought this was self-evident, per https://github.com/cose-wg/X509/issues/23#issuecomment-602278913 .",
+          "createdAt": "2021-01-21T06:58:51Z",
+          "updatedAt": "2021-01-21T06:58:51Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "body": "- Makes sense to specify that x5t refer to a end-entity certificate\r\n\r\n\r\n- For x5chain, COSE seems well-defined: \"The certificates are to be ordered starting with the certificate containing the end-entity key followed by the certificate which signed it and so on.\"\r\n\r\n\r\n- Needs to be clear if x5u can carry a chain or only a single certificate. Currently the draft says:\r\n\"This header parameter provides the ability to identify an X.509 certificate by a URI \"\r\n\r\nBut I understand that application/pkcs7-mime can carry several certificates. The text should be updated to say something like:\r\n\"This header parameter provides the ability to identify X.509 certificates by a URI \"\r\n\r\n(I don't know the structure of pkcs7-mime by heart)",
+          "createdAt": "2021-01-21T08:50:33Z",
+          "updatedAt": "2021-01-21T08:50:33Z"
+        },
+        {
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "(Yes, pkcs7-mime can carry several certificates.  I don't know its structure by heart, either, though.)\r\nI agree that we are already clear for x5chain.",
+          "createdAt": "2021-01-21T09:10:03Z",
+          "updatedAt": "2021-01-21T09:10:03Z"
+        },
+        {
+          "author": "mcr",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Many of us what to avoid pkcs7 in future IoT things.  We don't have code for it, and don't really want include it.\r\nThat's why we have x5bag/x5chain being an array of pkix-cert.",
+          "createdAt": "2021-01-21T14:13:09Z",
+          "updatedAt": "2021-01-21T14:13:09Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "body": "I completly agree. I actually made an issue of exactly this earlier today for c5u.\r\n\r\nhttps://github.com/EricssonResearch/CBOR-certificates/issues/86\r\n\r\nc5u should NOT use pkcs7 and instead be an array of CBOR certs, just like c5bag/c5chain.\r\n\r\nSo, who wants pkcs7 for COSE? Why is x5u pkcs7 and not an array of bstr wrapped DER certs just ike x5bag/x5chain with media type application/cbor in the first place?",
+          "createdAt": "2021-01-21T14:22:45Z",
+          "updatedAt": "2021-01-21T14:22:45Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "body": "The table also says \"an certificate\". Needs to be certificates/bag/chain here as well\r\n\r\n```\r\n+-----------+-------+----------------+------------------------------+\r\n| c5u       |  TBD4 | uri            | URI pointing to a CBOR       |\r\n|           |       |                | certificate                  |\r\n+-----------+-------+----------------+------------------------------+\r\n```",
+          "createdAt": "2021-01-21T21:04:28Z",
+          "updatedAt": "2021-01-21T21:04:28Z"
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "MDU6SXNzdWU3NzExMzY5OTM=",
+      "title": "Header protection and consistency with JWS",
+      "url": "https://github.com/cose-wg/X509/issues/30",
+      "state": "OPEN",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "x509"
+      ],
+      "body": "JWS has almost the same header parameters at COSE (x5t, x5chain and x5u, but not x5bag). The semantics of them should be identical, unless there's a really good reason not to be. (EAT using JWT and CWT as semantically equivalent so issues like this pop up)\r\n\r\nJWS section 6 has clear text saying when header parameters need to be protected and when they don't.  It applies to all the parameters that could be used to identify a certificate including the kid.\r\n\r\nAll the same attacks and defenses apply for COSE X.509, so COSE X.509 should have a section with text that is almost identical to JWS section 6.",
+      "createdAt": "2020-12-18T20:00:38Z",
+      "updatedAt": "2021-10-10T20:30:27Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jfhamme-cccs",
+          "authorAssociation": "NONE",
+          "body": "I do not find JWS Section 6 to be clear regarding when header parameters need to be protected and when they don't.  \r\n\r\n> These Header Parameters MUST\r\n> be integrity protected if the information that they convey is to be\r\n> utilized in a trust decision; however, if the only information used\r\n> in the trust decision is a key, these parameters need not be\r\n> integrity protected, since changing them in a way that causes a\r\n> different key to be used will cause the validation to fail.\r\n\r\nI think that all certificate fields are \"utilized in a trust decision\", but I do not believe the intention in JWS was that the x5* headers should always be protected headers, otherwise it would have said that. The certificate fields are integrity protected by the digital signature on the certificate itself and the COSE X.509 I-D says that \"Certificates obtained from any of these methods MUST still be validated\" by PKIX or other trust structure.\r\n\r\nI suspect that the intention in the JWS text was to indicate that they must be protected headers if you are not relying on PKIX path validation to a local trusted root; that is, if you are using the Subject field, rfc822name or other certificate field to tell you who signed the message, without a trusted issuer.  I don't think you get much trust under such a scenario, but I can't think of another situation where the the \"information that [the certificate(s)] convey\" is not integrity protected already.",
+          "createdAt": "2020-12-23T16:31:25Z",
+          "updatedAt": "2020-12-23T16:45:30Z"
+        },
+        {
+          "author": "mcr",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Jonathan Hammell <notifications@github.com> wrote:\n    > I do not find JWS Section 6 to be clear regarding when header\n    > parameters need to be protected and when they don't.\n\n    >> These Header Parameters MUST\n    >> be integrity protected if the information that they convey is to be\n    >> utilized in a trust decision; however, if the only information used\n    >> in the trust decision is a key, these parameters need not be\n    >> integrity protected, since changing them in a way that causes a\n    >> different key to be used will cause the validation to fail.\n\n    > I think that all certificate fields are \"utilized in a trust decision\",\n    > but I do not believe the intention in JWS was that the x5* headers\n    > should always be protected headers, otherwise it would have said\n    > that. The certificate fields are integrity protected by the digital\n    > signature on the certificate itself and the COSE X.509 I-D says that\n    > \"Certificates obtained from any of these methods MUST still be\n    > validated\" by PKIX or other trust structure.\n\nHi, the JOSE JSON Serialization version of RFC7515 allows for protected and\nunprotected headers.\nThe JWS Compact Serialization has no allowance for unprotected headers.\nWhat does this mean compared to COSE.\n\n    > I suspect that the intention in the JWS text was to indicate that they\n    > must be protected headers if you are not relying on PKIX path\n    > validation to a local trusted root; that is, if you are using the\n    > Subject field, rfc822name or other certificate field to tell you who\n    > signed the message, without a trusted issuer.\n\nNo, having read 7515 several times yesterday, I didn't find any such text.\n\n",
+          "createdAt": "2020-12-23T20:01:10Z",
+          "updatedAt": "2020-12-23T20:01:10Z"
+        },
+        {
+          "author": "jfhamme-cccs",
+          "authorAssociation": "NONE",
+          "body": ">> I suspect that the intention in the JWS text was to indicate that they\r\n>> must be protected headers if you are not relying on PKIX path\r\n>> validation to a local trusted root; that is, if you are using the\r\n>> Subject field, rfc822name or other certificate field to tell you who\r\n>> signed the message, without a trusted issuer.\r\n>\r\n> No, having read 7515 several times yesterday, I didn't find any such text.\r\n\r\nAgreed. It was only a suspicion, but after some sleuthing it appears I was incorrect.\r\n\r\nI dug through the revision history of RFC 7515 (draft-ietf-jose-json-web-signature).  Revision 15 added the first relevant text to Section 6 that \"header parameters MUST be integrity protected if the information about the key that they convey is to be considered trusted.\"  I could not find any discussion on the mailing list other than the statement by Mike Jones (https://mailarchive.ietf.org/arch/msg/jose/klG-D3Rm9V7BkJbgPLI6SQELaXM/) that the revision was addressing issues filed by Jim Schaad and that Mike and Jim worked on it offline.  According to the document history, the updates to Section 6 were addressing issues #104, #105, #106 (e.g. https://trac.ietf.org/trac/jose/ticket/106), which were concerns regarding jku, jwk and x5u.  Concerns regarding x5t were raised in issue #107, but claimed to be \"Fixed - kind of by #104\".  Concerns regarding trust of x5c was not raised--issue #108 is about the processing of x5c. \r\n\r\nThe next update to this text in Section 6 was in Revision 37.  This revision added the text \"however, if the only information used in the trust decision is a key, these parameters need not be integrity protected, since changing them in a way that causes a different key to be used will cause the validation to fail.\"  This additional text seems to be based on a proposed clarification from Richard Barnes during IESG review (https://mailarchive.ietf.org/arch/msg/jose/YWje0hfyhEpNG9Fs8TkcliP-XaU/).  That thread is very interesting and I believe discusses the concerns that Laurence has raised in this Issue.\r\n\r\nI won't list all the points raised in that thread, but I will note that they reference risks described in RFC 2634, Section 5.  It appears from that thread that the necessity of integrity protecting the x5t and x5c headers was still actively being debated:\r\n  \"issue #104 was closed without any discussion on the list (AFAICT).  And that issue only related to 'jku', so the extension to all the other fields is unnecessary.\"\r\n\r\nIn the message from Richard where he proposed the text (https://mailarchive.ietf.org/arch/msg/jose/YWje0hfyhEpNG9Fs8TkcliP-XaU/), he explicitly states that the reason for it is if the \"content of a key identifier... is used for security decisions\".  Therefore, I still don't believe that the requirement to integrity protect applies to certificates in an x5c header.  Under the attack scenario discussed, the trust decision is the certificate chain validation as per RFC 7515, Appendix D, Item 4; Richard points out in \"[1]\" that if the attacker has compromised the identity in this way (i.e. the certificate issuer) then the attacker \"can provision whatever key he wants, and re-sign the message.\"  ",
+          "createdAt": "2020-12-23T23:41:07Z",
+          "updatedAt": "2020-12-23T23:41:07Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Nice to read some of the background from the creation of 7515.\r\n\r\n7515 section 6 doesn't say that header parameters must always be protected. I agree with that. I don't think the headers parameters should always be protected.\r\n\r\nThe attacks at issue are possible even when path validation was performed and succeeded. The protection of the headers is never an alternate to path validation.\r\n\r\nAs the 7515 discussion mentions identification of a key versus identification of a certificate is an important distinction. I understand this to be an issue because a certificate contains data in addition to the key that affects the ultimate trust decision. For example basic constraints, path length, key usage, the subject and so on. The signer presumably choose the particular certificate because they want this additional data in there certificate processed during validation.\r\n\r\nIt's true the attacker can't change these because the certificate is signed and checked by path validation, but it is possible that there are two different certificates with the same key that vary in other ways. The subject could be different. The key usage could be different and so on. That two certificates like this exists seems like questionable CA practice, but that is besides the point here.\r\n\r\nIf some second certificate with the same key happens to exist and the fields in it are somehow favorable for an attack, there is opportunity to reference it if the header is not protected. It's about securely binding all the data used in the trust decision by the RP to the message.\r\n\r\nI think this also applies when data contained in the identifier itself is used in the trust decision.\r\n\r\nAll that said, consistency with 7515 is equally important. If someone has a use case they implement with 7515, they should be able to implement it here too.\r\n\r\nIf we say here that some headers can never be protected then we a) have inconsistency with 7515, b) preclude defense against discussed attacks c) preclude defenses against attacks we haven't thought of yet.\r\n\r\n\r\n\r\n",
+          "createdAt": "2020-12-27T20:30:43Z",
+          "updatedAt": "2020-12-27T20:30:43Z"
+        },
+        {
+          "author": "mcr",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Laurence Lundblade <notifications@github.com> wrote:\n    > 7515 section 6 doesn't say that header parameters must always be\n    > protected. I agree with that. I don't think the headers parameters\n    > should always be protected.\n\n    > The attacks at issue are possible even when path validation was\n    > performed and succeeded. The protection of the headers is never an\n    > alternate to path validation.\n\nI think that this is the take home: certificates (or other identity claims)\ncan show up in any place, and being in the protected bucket provides no additional credences.\n\n    > If some second certificate with the same key happens to exist and the\n    > fields in it are somehow favorable for an attack, there is opportunity\n    > to reference it if the header is not protected. It's about securely\n    > binding all the data used in the trust decision by the RP to the\n    > message.\n\nyeah, but if such a thing existed, then all the security is moot.\n\n    > All that said, consistency with 7515 is equally important. If someone\n    > has a use case they implement with 7515, they should be able to\n    > implement it here too.\n\n    > If we say here that some headers can never be protected then we a) have\n    > inconsistency with 7515, b) preclude defense against discussed attacks\n    > c) preclude defenses against attacks we haven't thought of yet.\n\nThe major use of 7515 is the JSON Compact Serialization, JWT, which does not\neven have an unprotected bucket.  So if one wanted to be consistent with\nthat, then it all goes in the protected bucket, because there is no other\nplace.\n\n",
+          "createdAt": "2020-12-27T22:45:13Z",
+          "updatedAt": "2020-12-27T22:45:13Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "The main take home for me is that these headers should be allowed in either the protected or unprotected bucket.\r\n\r\nAmending my comment -- Right now all headers can be protected or unprotected except for x5u that must be protected.  That is pretty much OK. Nothing important is precluded.\r\n\r\nThere is the inconsistency that x5u must be protected in COSE, but not in JOSE and there's no explanation of why some headers should be protected in COSE, but there is in JOSE, so I still think that should be added.\r\n",
+          "createdAt": "2020-12-29T19:21:56Z",
+          "updatedAt": "2020-12-30T21:49:08Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "One more observation on code size that lines up with MCR's comment about JSON Compact Serialization. \r\n\r\nFrom my COSE_Sign1 that is trying to be very small, its clear that having two types of headers added a lot to the implementation, especially when you have to perform duplicate detection across the two types of headers.\r\n\r\nI haven't tried it yet, but I suspect just putting everything into protected headers will reduce code size. Protected headers don't really cost more than unprotected headers in performance or code size. I plan to try it.\r\n\r\n\r\n\r\n",
+          "createdAt": "2020-12-30T21:53:00Z",
+          "updatedAt": "2020-12-30T21:53:00Z"
+        },
+        {
+          "author": "jfhamme-cccs",
+          "authorAssociation": "NONE",
+          "body": "As I've argued earlier, I don't think the text should be consistent with JWS.  However, based on the background and discussion here, I would be okay with adding a paragraph to the Security Considerations (right after the second last paragraph, discussing path validation) with something like the following text:\r\n\r\n\"Protecting the integrity of the x5bag, x5chain and x5t contents by placing them in the protected header bucket MAY mitigate some risks of a misbehaving certificate authority (c.f. Section 5.1 of [RFC2634]).\"",
+          "createdAt": "2021-01-02T15:07:08Z",
+          "updatedAt": "2021-01-02T15:07:08Z"
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "MDU6SXNzdWU3NzExNDg0MjI=",
+      "title": "What is the trust relationship for the x5u parameter?",
+      "url": "https://github.com/cose-wg/X509/issues/31",
+      "state": "OPEN",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "x509",
+        "has-pr"
+      ],
+      "body": "The x5u text refers to a \"trust relationship\" between the signer and the host of the URI. What is that relationship? Since trust relationships are of critical importance in what we're doing here, I would expect it to be spelled out. \r\n\r\nIt seems like there's two roots of trust involved here. One for the chain that is used to verify the COSE and the other that is used to verify the TLS connection.\r\n\r\nI think the following sentence refers to the root of trust for the TLS connection, but can be confused with the root of trust for the COSE chain.\r\n\r\n> If the retrieved certificate does not\r\n      chain to an existing trust anchor, the certificate MUST NOT be\r\n      trusted unless the server is configured as trusted to provide new\r\n      trust anchors or if an out-of-band confirmation can be received\r\n      for trusting the retrieved certificate.\r\n\r\nAlso, maybe there should be a protected header that names the root of trust for the TLS connection? If there isn't the signer can't quite control the trust relationship as they don't know what roots the receiver has been configured with.\r\n\r\nI also think it is important to point out that the certs received this way must still be validated against the root used by the COSE chain. This is not the fetching of already-validate certificates.\r\n\r\nJWS seems to have similar issues.\r\n\r\n",
+      "createdAt": "2020-12-18T20:23:26Z",
+      "updatedAt": "2021-10-12T13:46:03Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "body": "Agree that this need to be very explicit. Currently I don't think it is not clear at all. This risks ending up in completely weak implementaions. There is a lot of cases where people believe that just because they have HTTPS everything is secure and trusted. \r\n\r\nIn general, I don't really se why x5u needs to be handled differently from x5t, x5chain, and x5bag. For x5u, x5bag, x5chain the information is untrusted, the receiver has to verify the certificate chain and any updates of the trust anchors requires out of band confirmation. On on-path attacker can modify the information in x5t, x5bag, x5chain like the HTTP server can modify x5u. I don't see why the trusted header and TLS are needed in this case. HTTP is just anohter way to get untrusted certificate information....\r\n\r\nIf x5u is intended to be used instead of chain validation or intended to distibute new root certs, this is not well described. In both these cases the most important trust relation is between the reciever of the x5u parameter and the HTTPS sever. The reciever need to have as much trust in the HTTPS server as it has in its trust anchors or even in the entity its providing trust anchors.\r\n\r\nI think the use cases and requirements for each use case need to be clearly defined. Right now I don't even understand what the use cases for x5u are.\r\n\r\n- Provide untrusted cert information like x5bag, x5chain, x5t?\r\n- Provide trusted cert information that does not need to be verified with a trust anchor?\r\n- Provide new trust anchors?",
+          "createdAt": "2021-01-21T10:08:28Z",
+          "updatedAt": "2021-01-21T10:08:28Z"
+        },
+        {
+          "author": "mcr",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree with you.  x5u is just a way to do x5* out of band.\r\nIf HTTPS is used, it is for privacy, and provides no additional trust.",
+          "createdAt": "2021-01-21T14:24:00Z",
+          "updatedAt": "2021-01-21T14:24:00Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Agreed.My preference would be for x5u (and c5u) to not have any special trust characteristics. It seems much cleaner and simpler that way.\r\n\r\nWe could do that in x509-cose and in cbor-cert and I think it would be good. However, JWS already has a text (that I find confusing) about some special trust.\r\n\r\n\r\n",
+          "createdAt": "2021-02-08T21:00:00Z",
+          "updatedAt": "2021-02-08T21:00:00Z"
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "MDU6SXNzdWU3OTA5MDA1ODM=",
+      "title": "Allow OSCORE [RFC8613] for x5u CoAP URIs",
+      "url": "https://github.com/cose-wg/X509/issues/33",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "x509",
+        "has-pr"
+      ],
+      "body": "The current text states:\r\n\r\n      The URI provided MUST provide integrity protection and server\r\n      authentication.  For example, an HTTP or CoAP GET request to\r\n      retrieve a certificate MUST use TLS [RFC8446] or DTLS\r\n      [I-D.ietf-tls-dtls13].\r\n\r\nIf integrity is really needed here which I don't understand I suggest:\r\n\r\n      The URI provided MUST provide integrity protection and server\r\n      authentication.  For example, an HTTP or CoAP GET request to\r\n      retrieve a certificate MAY use TLS [RFC8446], DTLS\r\n      [I-D.ietf-tls-dtls13] or OSCORE [RFC8613].\r\n\r\n",
+      "createdAt": "2021-01-21T10:11:06Z",
+      "updatedAt": "2021-10-12T13:42:54Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 36,
+      "id": "MDU6SXNzdWU4MzA5OTMwNTQ=",
+      "title": "Prefer just array for x5bag and x5chain",
+      "url": "https://github.com/cose-wg/X509/issues/36",
+      "state": "OPEN",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "wontfix",
+        "x509"
+      ],
+      "body": "x5bag and x5chain can be an array or bstr or just a bstr when a single cert. I would prefer to just allow the array and eliminate bstr-single-cert option.\r\n\r\nI did a rough encoding/decoding implementation in C of x5bag and x5chain. With bstr-single-cert object code is 210 + 110 = 320 bytes. Without it, object code is 70+130 = 200. So this adds 50% object code.\r\n\r\nThe API I picked just returns an array of certs whether there is one or more than one. I don't see any advantage to a special API for a single cert.\r\n\r\nAs far as I can tell the main advantage of this design is that it saves one byte on the wire when there is a single cert. Is there some other advantage? It doesn't seem worth the complexity to save one byte especially when certs are typically a few hundred bytes.",
+      "createdAt": "2021-03-13T20:53:54Z",
+      "updatedAt": "2021-10-10T20:30:27Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm fairly reluctant to remove functionality at this stage in the document lifecycle (formally, the draft is \"approved by the IESG pending edits\", and those edits are not supposed to be introducing gratuitous changes).\r\nIf we really want to it's not impossible, but might require redoing various last call processes.",
+          "createdAt": "2021-03-13T21:09:43Z",
+          "updatedAt": "2021-03-13T21:09:43Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Yeah, I understand.\r\n\r\nOne more reason to just have the array is to avoid two ways of representing the same thing and maybe a few interoperability problems that might arise with it.\r\n\r\nShould implementations error out when receiving arrays with one cert? Probably not. That error out seems mostly pedantic and adds code. Accepting a one-cert array can't hurt anything as far as I can see.",
+          "createdAt": "2021-03-13T23:54:04Z",
+          "updatedAt": "2021-03-13T23:54:04Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "There is no CDDL in that document, so I'm relying on interpreting English here, but to me it seems\r\n\r\n```\r\nbag-chain = bstr / [2* bstr]\r\n```\r\n\r\nso there should be no ambiguity.\r\nPlease holler if that wasn't intended.",
+          "createdAt": "2021-07-28T21:43:32Z",
+          "updatedAt": "2021-07-28T21:43:32Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Sorry, actually there is:\r\n\r\n```\r\n   COSE_X509 = bstr / [ 2*certs: bstr ]\r\n```\r\n",
+          "createdAt": "2021-07-28T21:44:11Z",
+          "updatedAt": "2021-07-28T21:44:11Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Agree there is no ambiguity. Was tacitly assuming some lazy implementors that would send an array of one.\r\n\r\nBut fully enforced decoding of:\r\n\r\n`COSE_X509 = bstr / [ 2*certs: bstr ]`\r\n\r\nis more code than decoding:\r\n\r\n`COSE_X509 = [+certs: bstr ]`\r\n\r\nThe value of the first representation is one less byte on the wire when there is one cert and maybe less code for senders that always only send one cert. Not a worthwhile gain IMO.\r\n\r\nBut, something we can live with and not worth delaying publication over.\r\n",
+          "createdAt": "2021-07-28T23:49:22Z",
+          "updatedAt": "2021-07-28T23:49:22Z"
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "MDU6SXNzdWU5MjgyOTU3ODE=",
+      "title": "media-type parameter, CoRE Content-Formats, ",
+      "url": "https://github.com/cose-wg/X509/issues/37",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "x509"
+      ],
+      "body": "John:\r\n\r\nWhen we discussed this at the meeting is was agreed to change application/cbor to something more specific. The PR now use \"application/cose-x509-chain\". And has the text \"When the application/cose-x509-chain media type is used, the data is a COSE_X509 structure containing a chain.\"\r\n\r\nI just noticed that an IANA section registering the media type is missing. I will add that to the PR. But before I do that:\r\n\r\n- Is application/cose-x509-chain the right thing?\r\n- Or should it be application/cose-x509 allowing for both bag and chain?\r\n- Or should there be two media types application/cose-x509-chain and application/cose-x509-bag?\r\n\r\nx5bag and x5chain separates bag and chain, while x5u could be either. Knowing that it is a chain simplifies processing, but removes the option to transfer additional certificates.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+      "createdAt": "2021-06-23T14:03:50Z",
+      "updatedAt": "2021-10-10T20:22:19Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "body": "Carsten:\r\n\r\n> - Or should there be two media types application/cose-x509-chain and application/cose-x509-bag?\r\n\r\nThat depends on whether the media type is needed to make the semantic distinction or that is taken from the context (here: header parameter).\r\n\r\nThe 8152 style was to have a single application/cose that would be further qualified by either an optional addition CBOR tag or an optional media-type parameter (cose-type=\u201c\u2026\u201d).\r\n\r\n(And don\u2019t forget to define CoRE Content-Formats\u2026)",
+          "createdAt": "2021-06-23T14:04:17Z",
+          "updatedAt": "2021-06-23T14:04:17Z"
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "I_kwDOBHEdPc485ol-",
+      "title": "hash-algs auth48",
+      "url": "https://github.com/cose-wg/X509/issues/38",
+      "state": "OPEN",
+      "author": "ivajloip",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "hash-algs"
+      ],
+      "body": "- [ ] 1) \r\n```\r\n<!-- [rfced] Please insert any keywords (beyond those that appear in the title) \r\nfor use on https://www.rfc-editor.org/search. -->\r\n```\r\n- [ ] 2) \r\n```\r\n<!--[rfced] The cited document doesn't mention indirect signatures.\r\nPlease check that this is the correct document to cite.\r\n\r\nOriginal:\r\nIndirect signing of content is a paradigm where the content is not\r\ndirectly signed, but instead a hash of the content is computed and\r\nthat hash value, along with an identifier for the hash algorithm, is\r\nincluded in the content that will be signed. ... An example of how this is\r\nused can be found in [I-D.ietf-suit-manifest].\r\n-->\r\n```\r\n\r\n- [ ] 3) \r\n```\r\n<!-- [rfced] Tables 1, 2, and 3:  The Capabilities column in the IANA\r\nregistry <https://www.iana.org/assignments/cose/> shows [kty] for all\r\nof the entries listed in these tables.  However, the text in this\r\ndocument says:\r\n\r\nThe COSE capabilities for this algorithm is an empty array.\r\n\r\nPlease review and let us know if the document should be updated or if the\r\nIANA registry needs to be updated.\r\n\r\nIn addition, please let us know if references to RFC-to-be 9053\r\n<draft-ietf-cose-rfc8152bis-algs> should be added to the reference\r\ncolumn (in addition to this document) to match the IANA registry. -->\r\n```\r\n- [ ] 4) \r\n```\r\n<!--[rfced] The following note appeared in the XML file:\r\n\r\n  RFC Editor\r\n      I think that this paragraph can be removed before publishing.\r\n\r\nWith the text removed, both [I-D.ietf-cose-rfc8152bis-algs] (RFC 9053) and\r\n[I-D.ietf-cose-rfc8152bis-struct] (RFC 9052) are no longer cited.   \r\nPlease let us know where they should be cited or if the references should\r\nbe removed.\r\n-->\r\n```",
+      "createdAt": "2021-10-09T15:53:48Z",
+      "updatedAt": "2021-10-09T15:53:48Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 39,
+      "id": "I_kwDOBHEdPc486ojC",
+      "title": "ISO 18013-5 replying on x509",
+      "url": "https://github.com/cose-wg/X509/issues/39",
+      "state": "OPEN",
+      "author": "ivajloip",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "x509"
+      ],
+      "body": "- bstr / [ 2*certs: bstr ] is referenced\r\n- X.509 header must be placed in the unprotected bucket",
+      "createdAt": "2021-10-10T14:45:17Z",
+      "updatedAt": "2021-10-10T14:45:17Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "MDExOlB1bGxSZXF1ZXN0OTQ5NDk2NTg=",
+      "title": "Publish the -00 version",
+      "url": "https://github.com/cose-wg/X509/pull/1",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2016-11-23T06:12:49Z",
+      "updatedAt": "2016-11-23T06:15:47Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "008f6f5144b82eae002d215a7c2895d614936638",
+      "headRepository": "jimsch/X509",
+      "headRefName": "master",
+      "headRefOid": "5061cc32cc768336b95ab66565accc0184e9355d",
+      "closedAt": "2016-11-23T06:15:47Z",
+      "mergedAt": "2016-11-23T06:15:47Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "f2040e0c9b0171278fddc736c93d0b8b323215d7"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTIyMDc4MDQ4",
+      "title": "Edits to fill out more sections",
+      "url": "https://github.com/cose-wg/X509/pull/2",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2017-05-23T19:36:41Z",
+      "updatedAt": "2017-05-23T19:39:45Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "f2040e0c9b0171278fddc736c93d0b8b323215d7",
+      "headRepository": "jimsch/X509",
+      "headRefName": "master",
+      "headRefOid": "a928ca39e48b648256924f689e5fdeb6c1c4ec7d",
+      "closedAt": "2017-05-23T19:39:45Z",
+      "mergedAt": "2017-05-23T19:39:45Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "2ca2b38f784010c1d6a1e8e15c6e0f727b051796"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjQwMDU3MDM5",
+      "title": "Updates to document",
+      "url": "https://github.com/cose-wg/X509/pull/4",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Add text to deal w/ static-static DH",
+      "createdAt": "2018-12-20T05:35:53Z",
+      "updatedAt": "2018-12-22T18:01:06Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "4f55317d422ade75de057487fe55925a87a33854",
+      "headRepository": "jimsch/X509",
+      "headRefName": "dec-18-01",
+      "headRefOid": "6d16b16bc8a83e5e628ec10ee2033ad6d139bad9",
+      "closedAt": "2018-12-22T18:00:55Z",
+      "mergedAt": "2018-12-22T18:00:55Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "d8021eb27f86cefc85a06e66b5d2040eb833c824"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 5,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjQwNTQ5NTcw",
+      "title": "Update for circle",
+      "url": "https://github.com/cose-wg/X509/pull/5",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2018-12-21T18:43:10Z",
+      "updatedAt": "2018-12-21T18:46:19Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "2ca2b38f784010c1d6a1e8e15c6e0f727b051796",
+      "headRepository": "cose-wg/X509",
+      "headRefName": "cli2",
+      "headRefOid": "b6ef8b8e469e35dc6f145c2e742a5eee931e6d9b",
+      "closedAt": "2018-12-21T18:46:15Z",
+      "mergedAt": "2018-12-21T18:46:15Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "4f55317d422ade75de057487fe55925a87a33854"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjQwOTM2MDM3",
+      "title": "Updates for the -01 version",
+      "url": "https://github.com/cose-wg/X509/pull/6",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2018-12-26T08:09:29Z",
+      "updatedAt": "2018-12-26T08:41:23Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "d8021eb27f86cefc85a06e66b5d2040eb833c824",
+      "headRepository": "jimsch/X509",
+      "headRefName": "dec-24",
+      "headRefOid": "f808032b949c9f05f85ee5df9b8ba0265ac6bf50",
+      "closedAt": "2018-12-26T08:41:18Z",
+      "mergedAt": "2018-12-26T08:41:18Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "706d61f496df99027d9e18186d3c0f3a65bff4d9"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjQ4NjIzOTkx",
+      "title": "Rename draft",
+      "url": "https://github.com/cose-wg/X509/pull/7",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Draft has been adopted by the WG.",
+      "createdAt": "2019-01-29T19:10:15Z",
+      "updatedAt": "2019-01-29T19:36:44Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "706d61f496df99027d9e18186d3c0f3a65bff4d9",
+      "headRepository": "jimsch/X509",
+      "headRefName": "rename-draft",
+      "headRefOid": "da8df60df85327324864c4a3780bef486b3bb5dd",
+      "closedAt": "2019-01-29T19:36:38Z",
+      "mergedAt": "2019-01-29T19:36:38Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "2e5027e4d478a055d3de52fb374b833c4abcf37a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjQ4NjQ0NTM0",
+      "title": "Sync up",
+      "url": "https://github.com/cose-wg/X509/pull/8",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Clean history",
+      "createdAt": "2019-01-29T20:20:14Z",
+      "updatedAt": "2019-01-29T20:24:51Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "2e5027e4d478a055d3de52fb374b833c4abcf37a",
+      "headRepository": "jimsch/X509",
+      "headRefName": "master",
+      "headRefOid": "81911e7906cccbc80b32bc312e37f298e5bfbd38",
+      "closedAt": "2019-01-29T20:24:51Z",
+      "mergedAt": "2019-01-29T20:24:51Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "e8531dc18b31c3bbf8fa9d8057c65b894946cdb1"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjYwMDg5NjEw",
+      "title": "Updates for latest version",
+      "url": "https://github.com/cose-wg/X509/pull/9",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Separate hash draft from x509 draft\r\nUpdates to x509 draft\r\nadd more hash functions",
+      "createdAt": "2019-03-11T18:41:30Z",
+      "updatedAt": "2019-03-11T18:45:08Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "e8531dc18b31c3bbf8fa9d8057c65b894946cdb1",
+      "headRepository": "jimsch/X509",
+      "headRefName": "master",
+      "headRefOid": "106fddd30ba0f03a7d0e7e13bfe8a702fe1a53b1",
+      "closedAt": "2019-03-11T18:45:08Z",
+      "mergedAt": "2019-03-11T18:45:08Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "3aac6bd64d3fb428a22ec42b301af7ead37cb9ae"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 10,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mjg2ODUxMDU3",
+      "title": "Update the -01 version of hash draft",
+      "url": "https://github.com/cose-wg/X509/pull/10",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-06-10T21:53:23Z",
+      "updatedAt": "2019-08-19T01:12:20Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "7b6e007d2cb1b0d7ade83d377c4a9146226aa083",
+      "headRepository": "jimsch/X509",
+      "headRefName": "master",
+      "headRefOid": "fd095b86c75465483beef9ad2bbcd7d1767f17f9",
+      "closedAt": "2019-08-19T01:12:20Z",
+      "mergedAt": "2019-08-19T01:12:20Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "18f83a58a096099c2d8af18c4c96040e78a0377d"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 15,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzA4NDExNTQz",
+      "title": "Move from the v2 to the v3 vocabulary",
+      "url": "https://github.com/cose-wg/X509/pull/15",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Change versions of xml2rfc vocabulary\r\nAddress some comments from Sean.",
+      "createdAt": "2019-08-19T01:05:16Z",
+      "updatedAt": "2019-08-19T01:08:26Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "3aac6bd64d3fb428a22ec42b301af7ead37cb9ae",
+      "headRepository": "jimsch/X509",
+      "headRefName": "v2v3",
+      "headRefOid": "27edf56c458fb5445c68c8e0b58565409b9c92de",
+      "closedAt": "2019-08-19T01:08:22Z",
+      "mergedAt": "2019-08-19T01:08:22Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "7b6e007d2cb1b0d7ade83d377c4a9146226aa083"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 17,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzE2NjEzOTA0",
+      "title": "sync up",
+      "url": "https://github.com/cose-wg/X509/pull/17",
+      "state": "CLOSED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-09-11T20:06:31Z",
+      "updatedAt": "2020-07-29T15:11:59Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "40216bb6fa55e4434cd0e1865de3662e0013326c",
+      "headRepository": "jimsch/X509",
+      "headRefName": "master",
+      "headRefOid": "392d6982cf800d71cc8beeaf77def303015a43b8",
+      "closedAt": "2020-07-29T15:11:58Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 18,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDkyNDg2",
+      "title": "Deal with WGLC Comments",
+      "url": "https://github.com/cose-wg/X509/pull/18",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Deal with WGLC comments from various people.",
+      "createdAt": "2019-11-04T21:38:33Z",
+      "updatedAt": "2019-11-04T22:03:08Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "18f83a58a096099c2d8af18c4c96040e78a0377d",
+      "headRepository": "jimsch/X509",
+      "headRefName": "wglc-1",
+      "headRefOid": "2a66ab0a369ba2f672a9d74880d79ef0fb98a910",
+      "closedAt": "2019-11-04T22:03:08Z",
+      "mergedAt": "2019-11-04T22:03:08Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "1ad63a0ebd771cd667b82f571e2ddb2805c321e5"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 20,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mzg1MDg0NTk4",
+      "title": "Wglc 1",
+      "url": "https://github.com/cose-wg/X509/pull/20",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-07T01:28:35Z",
+      "updatedAt": "2020-03-09T22:16:53Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "1ad63a0ebd771cd667b82f571e2ddb2805c321e5",
+      "headRepository": "jimsch/X509",
+      "headRefName": "wglc-1",
+      "headRefOid": "da07723c21786e8ac5c2c1a977ecd868e094d000",
+      "closedAt": "2020-03-07T01:31:08Z",
+      "mergedAt": "2020-03-07T01:31:08Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "32c2bf2b2411250f6d9232b43ae0813ac9d88a44"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 25,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDIxMDk4MTc5",
+      "title": "AD review and last call comments",
+      "url": "https://github.com/cose-wg/X509/pull/25",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "* Murray\r\n* Tom Petch",
+      "createdAt": "2020-05-21T01:24:31Z",
+      "updatedAt": "2020-05-29T21:34:40Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "32c2bf2b2411250f6d9232b43ae0813ac9d88a44",
+      "headRepository": "jimsch/X509",
+      "headRefName": "AD-Review",
+      "headRefOid": "02d5ff8264c7936f1d99879225b717ac2bbff825",
+      "closedAt": "2020-05-29T21:34:33Z",
+      "mergedAt": "2020-05-29T21:34:33Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "40216bb6fa55e4434cd0e1865de3662e0013326c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 26,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDMxNTIyNTM5",
+      "title": "Iesg",
+      "url": "https://github.com/cose-wg/X509/pull/26",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-06-09T04:06:06Z",
+      "updatedAt": "2020-09-14T19:53:41Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "40216bb6fa55e4434cd0e1865de3662e0013326c",
+      "headRepository": "jimsch/X509",
+      "headRefName": "IESG",
+      "headRefOid": "00f1280aa01ffb8bcf81ebe7457cae64e6e4767f",
+      "closedAt": "2020-09-14T19:53:32Z",
+      "mergedAt": "2020-09-14T19:53:32Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "e870a84868e9335a207e46b4dbeb2d8c8d485a1a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 27,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDg4ODU2MDg2",
+      "title": "Address all of the AD comments",
+      "url": "https://github.com/cose-wg/X509/pull/27",
+      "state": "MERGED",
+      "author": "jimsch",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-09-17T18:35:50Z",
+      "updatedAt": "2020-09-17T18:36:43Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "e870a84868e9335a207e46b4dbeb2d8c8d485a1a",
+      "headRepository": "jimsch/X509",
+      "headRefName": "barry-review",
+      "headRefOid": "7a7120f2660be23dfd26b0769f4a819b91c53cfe",
+      "closedAt": "2020-09-17T18:36:39Z",
+      "mergedAt": "2020-09-17T18:36:38Z",
+      "mergedBy": "jimsch",
+      "mergeCommit": {
+        "oid": "90dc7f817f80a6ac81341807cd82db6eb43ff57b"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 28,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA2MzAyNDYx",
+      "title": "A few nits left",
+      "url": "https://github.com/cose-wg/X509/pull/28",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "... and found during the IoTdir review.",
+      "createdAt": "2020-10-19T21:55:33Z",
+      "updatedAt": "2020-10-20T05:15:15Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "aa4caad6374396fb706f3e756bea6f222458d42c",
+      "headRepository": "cabo/X509",
+      "headRefName": "master",
+      "headRefOid": "2a5e7355c72a3877fd085b95407f90c19ccc5da8",
+      "closedAt": "2020-10-20T05:15:08Z",
+      "mergedAt": "2020-10-20T05:15:08Z",
+      "mergedBy": "ivajloip",
+      "mergeCommit": {
+        "oid": "863c9714537aacb851d26e62e1774209471a335b"
+      },
+      "comments": [
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks, Carsten!",
+          "createdAt": "2020-10-20T05:15:15Z",
+          "updatedAt": "2020-10-20T05:15:15Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 32,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTU4OTE5Mzcx",
+      "title": "fix a few nits",
+      "url": "https://github.com/cose-wg/X509/pull/32",
+      "state": "MERGED",
+      "author": "kaduk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-01-21T06:59:34Z",
+      "updatedAt": "2021-10-10T20:14:19Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "4ed52bf1063f8a89a58c6b9d6453df3ea76459b9",
+      "headRepository": "kaduk/X509",
+      "headRefName": "nits",
+      "headRefOid": "88c3b45d1ebb96b36ce82a77766e7ae69002bf6e",
+      "closedAt": "2021-10-10T20:14:19Z",
+      "mergedAt": "2021-10-10T20:14:19Z",
+      "mergedBy": "ivajloip",
+      "mergeCommit": {
+        "oid": "7c632dbdc5b8c6ba099c315f9382fe141eee2561"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 34,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTYyODgwNjQw",
+      "title": "recommend referring directly to constrained BRSKI, ",
+      "url": "https://github.com/cose-wg/X509/pull/34",
+      "state": "MERGED",
+      "author": "mcr",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "as enrollment-roadmap is never gonna get published, and indirection not worth it",
+      "createdAt": "2021-01-28T00:06:06Z",
+      "updatedAt": "2021-10-10T20:16:36Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "4ed52bf1063f8a89a58c6b9d6453df3ea76459b9",
+      "headRepository": "mcr/X509",
+      "headRefName": "idevid-brski-pointer",
+      "headRefOid": "0d6f733a3d93a94dbe846dcc4267655da26fa9e7",
+      "closedAt": "2021-10-10T20:16:36Z",
+      "mergedAt": "2021-10-10T20:16:36Z",
+      "mergedBy": "ivajloip",
+      "mergeCommit": {
+        "oid": "44f8f06680feb0e4b743124bebc4620bcd322dc2"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 35,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTc5MTQ4MjI0",
+      "title": "Security fixes, clarification, and functionality fixes - Adressing #2\u2026",
+      "url": "https://github.com/cose-wg/X509/pull/35",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "FIRST_TIME_CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "\u20269 #30 #31 #33\r\n\r\nThe PR aims to aims to address issues #29 #30 #31 #33 based on the dicussion on the list and during the last interim. The solution is to use x5t together with the other parameters as suggested by Russ:\r\n\r\n- Added to x5bag, x5chain, and x5u that integrity protection in COSE is requiured unless it is known that the CA did proof-of-possession.\r\n- Added that integrity protection can be achieved by combining x5t with x5bag, x5chain, or x5u.  \r\n- Added explanation that sending x5bag or x5cahing in unprotected allows an intermediary to remove or add certificates.\r\n- Added clarification that x5t refer to an end-entity certificate.\r\n- Added media type application/cbor for a COSE_X509 chain.\r\n- Added that when the end-entity certificate is intergrity protected by COSE, URI protection is not needed.\r\n- Security consideration on why integrity protection of the end-entity certificate is required is there was no proof-of-possession.\r\n- Security consideration on identity protection.\r\n\r\nI think this addresses all the related use case and security issues.\r\n - If the requirement are followed, it is secure.\r\n - No changes required to existing secure deployments.\r\n - It is still possible to send x5bag and x5chain in uprotected.\r\n - No extra overhead is required when used in EDHOC.\r\n - When used in EDHOC, plain unprotected CoAP can be used.\r\n\r\nI tried to make the changnes so that no existing secure deployment need to change their implementation. Could otherwise discussed if integrity protection should be a MUST, but that would change existing implementaions (which is they do proof-of-possession are already secure).",
+      "createdAt": "2021-02-24T09:32:58Z",
+      "updatedAt": "2021-10-12T14:03:47Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "4ed52bf1063f8a89a58c6b9d6453df3ea76459b9",
+      "headRepository": "emanjon/X509",
+      "headRefName": "patch-1",
+      "headRefOid": "966389c9550fc1b275d06b60c3546c4fb1920886",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjEwNDUxNzQx",
+          "commit": {
+            "abbreviatedOid": "23a79ef"
+          },
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-12T05:01:22Z",
+          "updatedAt": "2021-03-12T05:01:22Z",
+          "comments": [
+            {
+              "originalPosition": 92,
+              "body": "This doesn't address the case where a CA correctly and intentionally issued two certs for the same key with different characteristics (e.g., key use, expiration, other extensions) and the attacker swapped them.\r\n\r\nMaybe this: \"When any field in a certificate beyond the key (e.g., key use, expiration, other extensions) is used in security decisions by the receiver, the COSE header containing or referencing the certificate should be in the protected bucket\". ",
+              "createdAt": "2021-03-12T05:01:22Z",
+              "updatedAt": "2021-03-12T18:47:49Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjEwNDU1ODE0",
+          "commit": {
+            "abbreviatedOid": "23a79ef"
+          },
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-12T05:14:40Z",
+          "updatedAt": "2021-03-12T05:14:40Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "Shorter more direct text:  \"This header parameter identifies the end-entity certificate by a hash value (a thumbprint).\"",
+              "createdAt": "2021-03-12T05:14:40Z",
+              "updatedAt": "2021-03-12T18:47:49Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjEwNTEzOTQ0",
+          "commit": {
+            "abbreviatedOid": "23a79ef"
+          },
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-12T07:35:06Z",
+          "updatedAt": "2021-03-12T07:35:06Z",
+          "comments": [
+            {
+              "originalPosition": 92,
+              "body": "I think this point to that COSE integrity protection of the end-entity certificate needs to be MUST.",
+              "createdAt": "2021-03-12T07:35:06Z",
+              "updatedAt": "2021-03-12T18:47:49Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjExMTY2MTYw",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "mcr",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-12T21:30:28Z",
+          "updatedAt": "2021-03-12T21:30:29Z",
+          "comments": [
+            {
+              "originalPosition": 92,
+              "body": "This is silly.  If the CA \"correctly\" and \"intentionally\" issued two certificates, and an attacker can swap them, (then anyone else could do so as well, in any every other protocol we have) then the receiver or the protocol is broken.  If this needs to go into the protected header, then we can just put the public key in alone.",
+              "createdAt": "2021-03-12T21:30:28Z",
+              "updatedAt": "2021-03-12T21:30:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjEyNTA0NDMw",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-15T18:11:28Z",
+          "updatedAt": "2021-03-15T18:11:29Z",
+          "comments": [
+            {
+              "originalPosition": 92,
+              "body": "Agreed that other protocols like CMS don't protect against this possible attack. It is a new protocol attack that was somewhat recently uncovered. When new attacks are found, we still fix them when we can even though we can't fix them everywhere. \r\n\r\nI also agree that it rather obscure and that CA's should do this.\r\n\r\nI think my comments here are in line with what Ben said a long time ago and with the text in JWS.\r\n\r\nAll I want is that these headers can be either protected or not and some encouragement that they be protected. We don't have to agree on the exact attack or document the exact attack.",
+              "createdAt": "2021-03-15T18:11:28Z",
+              "updatedAt": "2021-03-15T18:11:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE0OTY4MDEw",
+          "commit": {
+            "abbreviatedOid": "35e8686"
+          },
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-18T04:18:08Z",
+          "updatedAt": "2021-03-18T04:18:59Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "\"the external_aad\" itself is something of an EDHOC reference; phrasing as \"including the end-entity certificate in an integrity protection mechanism at the application layer\" might be more generic.\r\n(applies throughout but I will just say it once)",
+              "createdAt": "2021-03-18T04:18:09Z",
+              "updatedAt": "2021-03-18T04:18:59Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE0OTY5Mjk4",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-18T04:22:06Z",
+          "updatedAt": "2021-03-18T04:22:39Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "This clarification seems anti-helpful.  The existing sentence tries to emphasize that the server is specifically trusted to provide new trust anchors, but the new sentence is just talking about \"retrieve a certificate\" with no explicit mention of authenticating the server or that the authenticated server is trusted to provide trust anchors.",
+              "createdAt": "2021-03-18T04:22:06Z",
+              "updatedAt": "2021-03-18T04:22:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjU3ODkwNDYz",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-05-12T13:32:49Z",
+          "updatedAt": "2021-05-12T13:32:49Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "> \"the external_aad\" itself is something of an EDHOC reference;\r\n\r\nNot really, RFC 8152 has the a whole section 4.3 describing Externally Supplied Data, i.e. external_aad. external_aad is very much a COSE construct. I think qhat you suggest would be yet another way that would be outside of COSE.\r\n",
+              "createdAt": "2021-05-12T13:32:49Z",
+              "updatedAt": "2021-05-12T13:32:49Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjU3OTA4Mjcz",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-05-12T13:47:30Z",
+          "updatedAt": "2021-05-12T13:47:30Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "None of these sentences are new. The only change I made was to change to order of \"If a retrieced\" and \"For example\". The reason for this is that after the addition of The end-entity certificate MUST be integrity protected by COSE, the \"MUST use TLS or DTLS\" is no longer general but specific for the case \"If a retrieved certificate\". \r\n\r\nIt seems like you suggest deleting the sentence about TLS and DTLS. Do you still want to do that even if the text is not new?",
+              "createdAt": "2021-05-12T13:47:30Z",
+              "updatedAt": "2021-05-12T13:47:30Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjU3OTExODQ0",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-05-12T13:50:29Z",
+          "updatedAt": "2021-05-12T13:50:29Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "We could change the text to:\r\n\r\n\"This can e.g. be done by sending the header parameter in the protected header, sending a x5bag in the unprotected header combined with a x5t in the protected header, including the end-entity certificate in the external_aad, or ncluding the end-entity certificate in an integrity protection mechanism at the application layer\"\r\n\r\nBut anything that is not using the Externally Supplied Data / external_aad mechanism provided by COSE would not longer meet the requirement \"The end-entity certificate MUST be integrity protected by COSE.\". That requirement would then have to change.",
+              "createdAt": "2021-05-12T13:50:29Z",
+              "updatedAt": "2021-05-12T13:50:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjU3OTE0Nzgx",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-05-12T13:52:52Z",
+          "updatedAt": "2021-05-12T13:52:53Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "Good I changed according to your suggestion",
+              "createdAt": "2021-05-12T13:52:52Z",
+              "updatedAt": "2021-05-12T13:52:53Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjU3OTIwNDg4",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-05-12T13:57:30Z",
+          "updatedAt": "2021-05-12T13:57:31Z",
+          "comments": [
+            {
+              "originalPosition": 92,
+              "body": "Maybe we can discuss this at the COSE interim today",
+              "createdAt": "2021-05-12T13:57:30Z",
+              "updatedAt": "2021-05-12T13:57:31Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjU4Nzc5NDIx",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "emanjon",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-05-13T10:31:46Z",
+          "updatedAt": "2021-05-13T10:31:47Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I would suggest keeping the text as is. Or do you want to open it up for integrity protection outside of COSE. That probably comes with additional problems on how to bind things to the COSE message.",
+              "createdAt": "2021-05-13T10:31:46Z",
+              "updatedAt": "2021-05-13T10:31:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOBHEdPc4uTmDz",
+          "commit": {
+            "abbreviatedOid": "966389c"
+          },
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T05:02:27Z",
+          "updatedAt": "2021-10-12T14:03:47Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n            As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket. Please refer to <xref target=\"security-considerations\"/> for a discussion on the implications of sending this header parameter in unprotected header bucket.\r\n```",
+              "createdAt": "2021-10-12T05:02:27Z",
+              "updatedAt": "2021-10-12T14:03:47Z"
+            },
+            {
+              "originalPosition": 24,
+              "body": "```suggestion\r\n            As the contents of this header parameter are untrusted input, the header parameter can be in either the protected or unprotected header bucket. Please refer to <xref target=\"security-considerations\"/> for a discussion on the implications of sending this header parameter in unprotected header bucket.\r\n```",
+              "createdAt": "2021-10-12T05:04:26Z",
+              "updatedAt": "2021-10-12T14:03:47Z"
+            },
+            {
+              "originalPosition": 27,
+              "body": "I am trying to make this simpler to read and request the same things. Also must (as opposed to MUST) appears to me more appropriate for an example.\r\n\r\n```suggestion\r\n            If a retrieved certificate does not chain to an existing trust anchor, the certificate MUST NOT be trusted unless the provided URI is integrity protected, the communication with the server is integrity protected, the server is authentication, and the server is configured as trusted to provide new trust anchors or if an out-of-band confirmation can be received for trusting the retrieved certificate. For example, an HTTP or CoAP GET request to retrieve a certificate must use TLS <xref target=\"RFC8446\"/> or DTLS <xref target=\"I-D.ietf-tls-dtls13\"/>.\r\n```",
+              "createdAt": "2021-10-12T05:27:19Z",
+              "updatedAt": "2021-10-12T14:03:47Z"
+            },
+            {
+              "originalPosition": 82,
+              "body": "```suggestion\r\nProtecting the integrity of the x5bag, x5chain and x5t contents by placing them in the protected header bucket MAY mitigate some risks of a misbehaving certificate authority (c.f. Section 5.1 of [RFC2634]).\r\n```",
+              "createdAt": "2021-10-12T13:58:59Z",
+              "updatedAt": "2021-10-12T14:03:47Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "id": "PR_kwDOBHEdPc4tE8gh",
+      "title": "Fix #13 - add link to iana registry",
+      "url": "https://github.com/cose-wg/X509/pull/40",
+      "state": "MERGED",
+      "author": "ivajloip",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-10-12T14:51:02Z",
+      "updatedAt": "2021-10-12T18:13:38Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "44f8f06680feb0e4b743124bebc4620bcd322dc2",
+      "headRepository": "cose-wg/X509",
+      "headRefName": "add-link-to-iana-registry",
+      "headRefOid": "50f251524651edc7c7c06642d409d445e92ac1e1",
+      "closedAt": "2021-10-12T17:12:51Z",
+      "mergedAt": "2021-10-12T17:12:51Z",
+      "mergedBy": "ivajloip",
+      "mergeCommit": {
+        "oid": "0a90ac007c5bd55b333bfd46ff781688e762e4e4"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
