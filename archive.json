@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-18T06:11:32.546496+00:00",
+  "timestamp": "2022-01-17T21:52:54.276766+00:00",
   "repo": "cose-wg/X509",
   "labels": [
     {
@@ -52,6 +52,11 @@
       "name": "has-pr",
       "description": "",
       "color": "CBA68E"
+    },
+    {
+      "name": "fixed?",
+      "description": "",
+      "color": "C2E0C6"
     }
   ],
   "issues": [
@@ -350,11 +355,12 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
-        "x509"
+        "x509",
+        "fixed?"
       ],
       "body": "Particularly with x5bag, the signature verifier needs to figure out which cert is the leaf to use to verify the COSE signature.  CMS and such did with the Subject Key ID and it seems that should be a described option here.\r\n",
       "createdAt": "2020-03-18T19:15:53Z",
-      "updatedAt": "2021-10-10T20:30:26Z",
+      "updatedAt": "2021-11-29T20:11:33Z",
       "closedAt": null,
       "comments": [
         {
@@ -391,6 +397,34 @@
           "body": "That is implied by the bullet items immediately prior to table 1.",
           "createdAt": "2020-03-22T21:49:56Z",
           "updatedAt": "2020-03-22T21:49:56Z"
+        },
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Is that fixed now (with commit d6ba2d537fdc7207bac88f804b73e48f9d164ed3)",
+          "createdAt": "2021-11-10T07:05:56Z",
+          "updatedAt": "2021-11-10T07:05:56Z"
+        },
+        {
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think we can consider it addressed, yes.  @laurencelundblade  is encouraged to chime in as well, of course.",
+          "createdAt": "2021-11-19T23:17:49Z",
+          "updatedAt": "2021-11-19T23:17:49Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "It still doesn't say \"the x5t header indicates the end-entity certificate\" in any explicit way that I can see. I searched the tip of the repo document for \"end-entity\" and \"leaf\" to check. JWS is more clear.\r\n\r\nThe solution to this one and #29 are probably the same, so maybe it's OK to close this one if #29 stays open.\r\n\r\n",
+          "createdAt": "2021-11-20T02:18:53Z",
+          "updatedAt": "2021-11-20T02:18:53Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "I've made a PR to resolve this: #41",
+          "createdAt": "2021-11-29T20:11:33Z",
+          "updatedAt": "2021-11-29T20:11:33Z"
         }
       ]
     },
@@ -435,11 +469,12 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
-        "x509"
+        "x509",
+        "fixed?"
       ],
       "body": "JWS has almost the same header parameters at COSE (x5t, x5chain and x5u, but not x5bag). The semantics of them should be identical, unless there's a really good reason not to be. (EAT using JWT and CWT as semantically equivalent so issues like this pop up)\r\n\r\nCOSE X.509 is not very clear about determination of the end-entity cert. JWS is clear and explicit:\r\n  - x5t always refers to an end-entity\r\n  - In x5u the first cert is always the end-entity\r\n  - In x5c the first cert is always the end-entity\r\n\r\nJWS uses the phrase \"The certificate containing the public key corresponding to the key used to digitally sign\u201d rather than \"end-entity\u201d. I prefer end-entity, but either is fine.\r\n\r\nBy contrast, COSE X.509 only explicitly says how the end-entity is determined for an x5chain. Nothing is said for x5t, x5bag or x5u.\r\n\r\nSeems to me that COSE X.509 should be made identical to JWS for x5t, x5chain and x5u. \r\n\r\nThen COSE has the add-on bonus of x5bag. x5bag never determines the end-entity since it is un ordered. You have to have an x5t, kid or some other means of knowing which in the x5bag is the end-entity. And it is OK that x5bag doesn\u2019t even contain the end-entity.\r\n",
       "createdAt": "2020-12-18T19:55:08Z",
-      "updatedAt": "2021-10-10T20:30:26Z",
+      "updatedAt": "2021-11-29T20:11:49Z",
       "closedAt": null,
       "comments": [
         {
@@ -458,7 +493,7 @@
         },
         {
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "- Makes sense to specify that x5t refer to a end-entity certificate\r\n\r\n\r\n- For x5chain, COSE seems well-defined: \"The certificates are to be ordered starting with the certificate containing the end-entity key followed by the certificate which signed it and so on.\"\r\n\r\n\r\n- Needs to be clear if x5u can carry a chain or only a single certificate. Currently the draft says:\r\n\"This header parameter provides the ability to identify an X.509 certificate by a URI \"\r\n\r\nBut I understand that application/pkcs7-mime can carry several certificates. The text should be updated to say something like:\r\n\"This header parameter provides the ability to identify X.509 certificates by a URI \"\r\n\r\n(I don't know the structure of pkcs7-mime by heart)",
           "createdAt": "2021-01-21T08:50:33Z",
           "updatedAt": "2021-01-21T08:50:33Z"
@@ -479,17 +514,73 @@
         },
         {
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "I completly agree. I actually made an issue of exactly this earlier today for c5u.\r\n\r\nhttps://github.com/EricssonResearch/CBOR-certificates/issues/86\r\n\r\nc5u should NOT use pkcs7 and instead be an array of CBOR certs, just like c5bag/c5chain.\r\n\r\nSo, who wants pkcs7 for COSE? Why is x5u pkcs7 and not an array of bstr wrapped DER certs just ike x5bag/x5chain with media type application/cbor in the first place?",
           "createdAt": "2021-01-21T14:22:45Z",
           "updatedAt": "2021-01-21T14:22:45Z"
         },
         {
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "The table also says \"an certificate\". Needs to be certificates/bag/chain here as well\r\n\r\n```\r\n+-----------+-------+----------------+------------------------------+\r\n| c5u       |  TBD4 | uri            | URI pointing to a CBOR       |\r\n|           |       |                | certificate                  |\r\n+-----------+-------+----------------+------------------------------+\r\n```",
           "createdAt": "2021-01-21T21:04:28Z",
           "updatedAt": "2021-01-21T21:04:28Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "I spent some time working on an implementation and started wondering what you do to decide on the end-entity if both an x5chain and x5t are present. Does one take precedence?  JWS doesn't mention precedence.\r\n\r\nMy conclusion is that it doesn't matter because if either is present it MUST be the end-entity. And, if it is not, the error will be caught in chain path formation and verification. So give precedence to which ever is easiest in your implementation.\r\n",
+          "createdAt": "2021-11-20T07:45:08Z",
+          "updatedAt": "2021-11-20T07:45:08Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I would say that if x5t does not agree with the first certificate in x5chain it is an fatal error. That is the whole idea of using both\r\n\r\n`The 'x5t' header parameter can be used alone or together with the 'x5bag', 'x5chain', or 'x5u' header parameters to provide integrity protection of the end-entity certificate. \r\n`",
+          "createdAt": "2021-11-20T07:52:37Z",
+          "updatedAt": "2021-11-20T07:52:37Z"
+        },
+        {
+          "author": "mcr",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Given that these might occur in the unprotected headers, which are subject to manipulation by a third party, I would agree with @laurencelundblade . None of x5t nor x5chain or x5bag provide any kind of authorization along with them: if one trusts the result, it has to be via other means.  They are present as a convenience because perhaps the certificate can't be otherwise found (or the verifier has no connectivity).\r\n\r\nThe COSE object could have been sitting on a dusty, lichen covered disk for a 1000 years before being retrieved and validated.\r\n(*queue* Guardians of the Galaxy soundtrack...)",
+          "createdAt": "2021-11-20T16:02:16Z",
+          "updatedAt": "2021-11-20T16:02:16Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Which headers are the parameters sent in? Are we discussing which order they are processed or if only one is processed?\r\n\r\nThe only only combination that makes sense to me is:\r\n  x5chain in unprotected and x5t in protected. x5chain could be ignored but the receiver has to veryfy that x5t agrees with the end certificate used to verify the signature. \r\n\r\nThe following three combination makes little sense, should they even be allowed?\r\n   x5chain in unprotected and x5t in unprotected. \r\n   x5chain in protected and x5t in unprotected.\r\n   x5chain in protected and x5t in protected.\r\n\r\n(is it Blue Swede singing Ooga-Chaka Ooga-Ooga Ooga-Chaka Ooga-Ooga you are thinking of :)\r\n",
+          "createdAt": "2021-11-20T17:32:06Z",
+          "updatedAt": "2021-11-20T17:32:06Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Agreed that the only combination of the two that is useful is x5chain unprotected and x5t protected.\r\n \r\nWhat to do when you get both x5chain and x5t protected? My choice would be to use x5chain and ignore x5t. I wouldn't bother with the cross-check. That is just extra code that makes the implementation bigger. If x5chain is wrong, then the verification process will error out. Also, this is a redundant wasteful representation that a sender shouldn't send, so it is wasteful to write code for it.\r\n\r\nGoing further...\r\n\r\nAssuming only protected headers for the moment, here's the permutations a full general purpose verifier should handle, the permutations that are useful:\r\n- No headers, the receiver knows and gets the end-entity and other certs by other means.\r\n- x5t only\r\n- x5chain only\r\n- x5chain and x5t (only necessary when x5chain is unprotected and x5t is protected; otherwise discouraged)\r\n- x5t and x5bag (the end-entity may or may not be in the bag, intermediates might be in the bag too)\r\n- x5chain and x5bag (the bag might contain intermediates)\r\n- x5t and x5chain and x5bag\r\n- (need to factor in x5u too)\r\n\r\nI think it will be rare that use of protected headers is too expensive or inconvenient. I don't expect much use of unprotected headers. Maybe we even discourage their use.\r\n\r\nThus, I think the case where x5chain is unprotected and needs to be helped by a protected x5t will be rare. I would even say it is better to just send x5chain protected unless there is a really good reason that it can't be.\r\n\r\nI believe this lines up with JWS, which I think is very important.\r\n\r\n\r\n\r\n\r\n",
+          "createdAt": "2021-11-22T20:19:40Z",
+          "updatedAt": "2021-11-22T20:19:40Z"
+        },
+        {
+          "author": "mcr",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm not sure that this document should provide a priority between the different headers, but I would agree that this document should say that users of COSE should do that. (So EAT should say \"use x5chain before x5t\")\r\n(I think that whether the header is protected or not is largely meaningless)",
+          "createdAt": "2021-11-23T10:07:48Z",
+          "updatedAt": "2021-11-23T10:07:48Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Yes, the document should allow all the permutations with no favorites or priorities. I don't think even EAT should prioritize. An EAT profile however probably would (if it chose to recommend X.509).",
+          "createdAt": "2021-11-23T18:13:04Z",
+          "updatedAt": "2021-11-23T18:13:04Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "I've made a PR to resolve this: #41",
+          "createdAt": "2021-11-29T20:11:49Z",
+          "updatedAt": "2021-11-29T20:11:49Z"
         }
       ]
     },
@@ -503,11 +594,12 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
-        "x509"
+        "x509",
+        "fixed?"
       ],
       "body": "JWS has almost the same header parameters at COSE (x5t, x5chain and x5u, but not x5bag). The semantics of them should be identical, unless there's a really good reason not to be. (EAT using JWT and CWT as semantically equivalent so issues like this pop up)\r\n\r\nJWS section 6 has clear text saying when header parameters need to be protected and when they don't.  It applies to all the parameters that could be used to identify a certificate including the kid.\r\n\r\nAll the same attacks and defenses apply for COSE X.509, so COSE X.509 should have a section with text that is almost identical to JWS section 6.",
       "createdAt": "2020-12-18T20:00:38Z",
-      "updatedAt": "2021-10-10T20:30:27Z",
+      "updatedAt": "2021-11-10T07:02:33Z",
       "closedAt": null,
       "comments": [
         {
@@ -579,16 +671,16 @@
       "assignees": [],
       "labels": [
         "x509",
-        "has-pr"
+        "fixed?"
       ],
       "body": "The x5u text refers to a \"trust relationship\" between the signer and the host of the URI. What is that relationship? Since trust relationships are of critical importance in what we're doing here, I would expect it to be spelled out. \r\n\r\nIt seems like there's two roots of trust involved here. One for the chain that is used to verify the COSE and the other that is used to verify the TLS connection.\r\n\r\nI think the following sentence refers to the root of trust for the TLS connection, but can be confused with the root of trust for the COSE chain.\r\n\r\n> If the retrieved certificate does not\r\n      chain to an existing trust anchor, the certificate MUST NOT be\r\n      trusted unless the server is configured as trusted to provide new\r\n      trust anchors or if an out-of-band confirmation can be received\r\n      for trusting the retrieved certificate.\r\n\r\nAlso, maybe there should be a protected header that names the root of trust for the TLS connection? If there isn't the signer can't quite control the trust relationship as they don't know what roots the receiver has been configured with.\r\n\r\nI also think it is important to point out that the certs received this way must still be validated against the root used by the COSE chain. This is not the fetching of already-validate certificates.\r\n\r\nJWS seems to have similar issues.\r\n\r\n",
       "createdAt": "2020-12-18T20:23:26Z",
-      "updatedAt": "2021-10-12T13:46:03Z",
+      "updatedAt": "2021-11-10T07:02:52Z",
       "closedAt": null,
       "comments": [
         {
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Agree that this need to be very explicit. Currently I don't think it is not clear at all. This risks ending up in completely weak implementaions. There is a lot of cases where people believe that just because they have HTTPS everything is secure and trusted. \r\n\r\nIn general, I don't really se why x5u needs to be handled differently from x5t, x5chain, and x5bag. For x5u, x5bag, x5chain the information is untrusted, the receiver has to verify the certificate chain and any updates of the trust anchors requires out of band confirmation. On on-path attacker can modify the information in x5t, x5bag, x5chain like the HTTP server can modify x5u. I don't see why the trusted header and TLS are needed in this case. HTTP is just anohter way to get untrusted certificate information....\r\n\r\nIf x5u is intended to be used instead of chain validation or intended to distibute new root certs, this is not well described. In both these cases the most important trust relation is between the reciever of the x5u parameter and the HTTPS sever. The reciever need to have as much trust in the HTTPS server as it has in its trust anchors or even in the entity its providing trust anchors.\r\n\r\nI think the use cases and requirements for each use case need to be clearly defined. Right now I don't even understand what the use cases for x5u are.\r\n\r\n- Provide untrusted cert information like x5bag, x5chain, x5t?\r\n- Provide trusted cert information that does not need to be verified with a trust anchor?\r\n- Provide new trust anchors?",
           "createdAt": "2021-01-21T10:08:28Z",
           "updatedAt": "2021-01-21T10:08:28Z"
@@ -616,15 +708,15 @@
       "url": "https://github.com/cose-wg/X509/issues/33",
       "state": "OPEN",
       "author": "emanjon",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [
         "x509",
-        "has-pr"
+        "fixed?"
       ],
       "body": "The current text states:\r\n\r\n      The URI provided MUST provide integrity protection and server\r\n      authentication.  For example, an HTTP or CoAP GET request to\r\n      retrieve a certificate MUST use TLS [RFC8446] or DTLS\r\n      [I-D.ietf-tls-dtls13].\r\n\r\nIf integrity is really needed here which I don't understand I suggest:\r\n\r\n      The URI provided MUST provide integrity protection and server\r\n      authentication.  For example, an HTTP or CoAP GET request to\r\n      retrieve a certificate MAY use TLS [RFC8446], DTLS\r\n      [I-D.ietf-tls-dtls13] or OSCORE [RFC8613].\r\n\r\n",
       "createdAt": "2021-01-21T10:11:06Z",
-      "updatedAt": "2021-10-12T13:42:54Z",
+      "updatedAt": "2021-11-10T07:03:03Z",
       "closedAt": null,
       "comments": []
     },
@@ -633,7 +725,7 @@
       "id": "MDU6SXNzdWU4MzA5OTMwNTQ=",
       "title": "Prefer just array for x5bag and x5chain",
       "url": "https://github.com/cose-wg/X509/issues/36",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "laurencelundblade",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -643,8 +735,8 @@
       ],
       "body": "x5bag and x5chain can be an array or bstr or just a bstr when a single cert. I would prefer to just allow the array and eliminate bstr-single-cert option.\r\n\r\nI did a rough encoding/decoding implementation in C of x5bag and x5chain. With bstr-single-cert object code is 210 + 110 = 320 bytes. Without it, object code is 70+130 = 200. So this adds 50% object code.\r\n\r\nThe API I picked just returns an array of certs whether there is one or more than one. I don't see any advantage to a special API for a single cert.\r\n\r\nAs far as I can tell the main advantage of this design is that it saves one byte on the wire when there is a single cert. Is there some other advantage? It doesn't seem worth the complexity to save one byte especially when certs are typically a few hundred bytes.",
       "createdAt": "2021-03-13T20:53:54Z",
-      "updatedAt": "2021-10-10T20:30:27Z",
-      "closedAt": null,
+      "updatedAt": "2021-11-21T19:49:18Z",
+      "closedAt": "2021-11-21T19:49:18Z",
       "comments": [
         {
           "author": "kaduk",
@@ -680,6 +772,13 @@
           "body": "Agree there is no ambiguity. Was tacitly assuming some lazy implementors that would send an array of one.\r\n\r\nBut fully enforced decoding of:\r\n\r\n`COSE_X509 = bstr / [ 2*certs: bstr ]`\r\n\r\nis more code than decoding:\r\n\r\n`COSE_X509 = [+certs: bstr ]`\r\n\r\nThe value of the first representation is one less byte on the wire when there is one cert and maybe less code for senders that always only send one cert. Not a worthwhile gain IMO.\r\n\r\nBut, something we can live with and not worth delaying publication over.\r\n",
           "createdAt": "2021-07-28T23:49:22Z",
           "updatedAt": "2021-07-28T23:49:22Z"
+        },
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "Closing since I opened this and agree to wont fix.",
+          "createdAt": "2021-11-21T19:49:18Z",
+          "updatedAt": "2021-11-21T19:49:18Z"
         }
       ]
     },
@@ -723,9 +822,24 @@
       ],
       "body": "- [ ] 1) \r\n```\r\n<!-- [rfced] Please insert any keywords (beyond those that appear in the title) \r\nfor use on https://www.rfc-editor.org/search. -->\r\n```\r\n- [ ] 2) \r\n```\r\n<!--[rfced] The cited document doesn't mention indirect signatures.\r\nPlease check that this is the correct document to cite.\r\n\r\nOriginal:\r\nIndirect signing of content is a paradigm where the content is not\r\ndirectly signed, but instead a hash of the content is computed and\r\nthat hash value, along with an identifier for the hash algorithm, is\r\nincluded in the content that will be signed. ... An example of how this is\r\nused can be found in [I-D.ietf-suit-manifest].\r\n-->\r\n```\r\n\r\n- [ ] 3) \r\n```\r\n<!-- [rfced] Tables 1, 2, and 3:  The Capabilities column in the IANA\r\nregistry <https://www.iana.org/assignments/cose/> shows [kty] for all\r\nof the entries listed in these tables.  However, the text in this\r\ndocument says:\r\n\r\nThe COSE capabilities for this algorithm is an empty array.\r\n\r\nPlease review and let us know if the document should be updated or if the\r\nIANA registry needs to be updated.\r\n\r\nIn addition, please let us know if references to RFC-to-be 9053\r\n<draft-ietf-cose-rfc8152bis-algs> should be added to the reference\r\ncolumn (in addition to this document) to match the IANA registry. -->\r\n```\r\n- [ ] 4) \r\n```\r\n<!--[rfced] The following note appeared in the XML file:\r\n\r\n  RFC Editor\r\n      I think that this paragraph can be removed before publishing.\r\n\r\nWith the text removed, both [I-D.ietf-cose-rfc8152bis-algs] (RFC 9053) and\r\n[I-D.ietf-cose-rfc8152bis-struct] (RFC 9052) are no longer cited.   \r\nPlease let us know where they should be cited or if the references should\r\nbe removed.\r\n-->\r\n```",
       "createdAt": "2021-10-09T15:53:48Z",
-      "updatedAt": "2021-10-09T15:53:48Z",
+      "updatedAt": "2021-11-10T15:13:51Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "My take on those questions:\r\n\r\n1. SHA-1 Hash Algorithm, SHA-2 Hash Algorithms, SHAKE Algorithms?\r\n2. Is [Severable Elements](https://datatracker.ietf.org/doc/html/draft-ietf-suit-manifest-16#section-5.4) what was meant?\r\n3. \r\n> Tables 1, 2, and 3:  The Capabilities column in the IANA\r\n> registry <https://www.iana.org/assignments/cose/> shows [kty] for all\r\n> of the entries listed in these tables.  However, the text in this\r\n> document says:\r\n> \r\n> The COSE capabilities for this algorithm is an empty array.\r\n>\r\n> Please review and let us know if the document should be updated or if the\r\n> IANA registry needs to be updated.\r\n\r\nI believe the value should be [kty].\r\n\r\n> In addition, please let us know if references to RFC-to-be 9053\r\n> <draft-ietf-cose-rfc8152bis-algs> should be added to the reference\r\n> column (in addition to this document) to match the IANA registry. \r\n\r\nProbably I don't understand the question, but rfc8152bis-algs is an informative reference.\r\n4. That seems safe to remove.",
+          "createdAt": "2021-11-10T06:58:55Z",
+          "updatedAt": "2021-11-10T06:58:55Z"
+        },
+        {
+          "author": "linuxwolf",
+          "authorAssociation": "MEMBER",
+          "body": "> My take on those questions:\r\n> \r\n>     1. SHA-1 Hash Algorithm, SHA-2 Hash Algorithms, SHAKE Algorithms?\r\n> \r\n\r\nThat makes sense to me.\r\n\r\n>     2. Is [Severable Elements](https://datatracker.ietf.org/doc/html/draft-ietf-suit-manifest-16#section-5.4) what was meant?\r\n> \r\nI think the document is the correct one to cite.  I don't think the link needs to be more specific, and indeed the use of \"detached\" throughout the document.\r\n\r\n> \r\n> > Tables 1, 2, and 3:  The Capabilities column in the IANA\r\n> > registry https://www.iana.org/assignments/cose/ shows [kty] for all\r\n> > of the entries listed in these tables.  However, the text in this\r\n> > document says:\r\n> > The COSE capabilities for this algorithm is an empty array.\r\n> > Please review and let us know if the document should be updated or if the\r\n> > IANA registry needs to be updated.\r\n> \r\n> I believe the value should be [kty].\r\n> \r\nI think that's right.\r\n\r\n> > In addition, please let us know if references to RFC-to-be 9053\r\n> >  should be added to the reference\r\n> > column (in addition to this document) to match the IANA registry.\r\n> \r\n> Probably I don't understand the question, but rfc8152bis-algs is an informative reference. 4. That seems safe to remove.\r\n\r\nThis is asking if references to rfc8152bis-algs should be included in the IANA registry in addition to this document, and I don't think that is necessary.",
+          "createdAt": "2021-11-10T15:13:50Z",
+          "updatedAt": "2021-11-10T15:13:50Z"
+        }
+      ]
     },
     {
       "number": 39,
@@ -742,6 +856,22 @@
       "body": "- bstr / [ 2*certs: bstr ] is referenced\r\n- X.509 header must be placed in the unprotected bucket",
       "createdAt": "2021-10-10T14:45:17Z",
       "updatedAt": "2021-10-10T14:45:17Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 42,
+      "id": "I_kwDOBHEdPc4_tqw3",
+      "title": "Do SHA-3/SHAKE algorithms need bit-order disclaimer?",
+      "url": "https://github.com/cose-wg/X509/issues/42",
+      "state": "OPEN",
+      "author": "kaduk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As mentioned in https://mailarchive.ietf.org/arch/msg/cose/pvLdj1lp75I3SiScI4yx_J1ird8/ we register codepoints for NIST algorithms that have a different bit order than implementations have traditionally expected.  That thread concerns the issue as it relates to ECDSA, that is defined to act on bit strings rather than byte strings, though most IETF protocols deal only in byte strings (for which there does not seem to be any real controversy).  Are there situations where cose hash algorithms need to be treated as bit strings that might merit a disclaimer about SHA-3 needing special handling?",
+      "createdAt": "2021-12-01T22:34:05Z",
+      "updatedAt": "2021-12-01T22:34:05Z",
       "closedAt": null,
       "comments": []
     }
@@ -1290,25 +1420,33 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTc5MTQ4MjI0",
       "title": "Security fixes, clarification, and functionality fixes - Adressing #2\u2026",
       "url": "https://github.com/cose-wg/X509/pull/35",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
-      "authorAssociation": "FIRST_TIME_CONTRIBUTOR",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "\u20269 #30 #31 #33\r\n\r\nThe PR aims to aims to address issues #29 #30 #31 #33 based on the dicussion on the list and during the last interim. The solution is to use x5t together with the other parameters as suggested by Russ:\r\n\r\n- Added to x5bag, x5chain, and x5u that integrity protection in COSE is requiured unless it is known that the CA did proof-of-possession.\r\n- Added that integrity protection can be achieved by combining x5t with x5bag, x5chain, or x5u.  \r\n- Added explanation that sending x5bag or x5cahing in unprotected allows an intermediary to remove or add certificates.\r\n- Added clarification that x5t refer to an end-entity certificate.\r\n- Added media type application/cbor for a COSE_X509 chain.\r\n- Added that when the end-entity certificate is intergrity protected by COSE, URI protection is not needed.\r\n- Security consideration on why integrity protection of the end-entity certificate is required is there was no proof-of-possession.\r\n- Security consideration on identity protection.\r\n\r\nI think this addresses all the related use case and security issues.\r\n - If the requirement are followed, it is secure.\r\n - No changes required to existing secure deployments.\r\n - It is still possible to send x5bag and x5chain in uprotected.\r\n - No extra overhead is required when used in EDHOC.\r\n - When used in EDHOC, plain unprotected CoAP can be used.\r\n\r\nI tried to make the changnes so that no existing secure deployment need to change their implementation. Could otherwise discussed if integrity protection should be a MUST, but that would change existing implementaions (which is they do proof-of-possession are already secure).",
       "createdAt": "2021-02-24T09:32:58Z",
-      "updatedAt": "2021-10-12T14:03:47Z",
+      "updatedAt": "2021-10-18T06:12:44Z",
       "baseRepository": "cose-wg/X509",
       "baseRefName": "master",
       "baseRefOid": "4ed52bf1063f8a89a58c6b9d6453df3ea76459b9",
       "headRepository": "emanjon/X509",
       "headRefName": "patch-1",
       "headRefOid": "966389c9550fc1b275d06b60c3546c4fb1920886",
-      "closedAt": null,
+      "closedAt": "2021-10-18T06:12:43Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Merged manually with commit fe66e72c1.",
+          "createdAt": "2021-10-18T06:12:43Z",
+          "updatedAt": "2021-10-18T06:12:43Z"
+        }
+      ],
       "reviews": [
         {
           "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjEwNDUxNzQx",
@@ -1356,7 +1494,7 @@
             "abbreviatedOid": "23a79ef"
           },
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2021-03-12T07:35:06Z",
@@ -1456,7 +1594,7 @@
             "abbreviatedOid": "966389c"
           },
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2021-05-12T13:32:49Z",
@@ -1476,7 +1614,7 @@
             "abbreviatedOid": "966389c"
           },
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2021-05-12T13:47:30Z",
@@ -1496,7 +1634,7 @@
             "abbreviatedOid": "966389c"
           },
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2021-05-12T13:50:29Z",
@@ -1516,7 +1654,7 @@
             "abbreviatedOid": "966389c"
           },
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2021-05-12T13:52:52Z",
@@ -1536,7 +1674,7 @@
             "abbreviatedOid": "966389c"
           },
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2021-05-12T13:57:30Z",
@@ -1556,7 +1694,7 @@
             "abbreviatedOid": "966389c"
           },
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2021-05-13T10:31:46Z",
@@ -1634,6 +1772,34 @@
       "mergedBy": "ivajloip",
       "mergeCommit": {
         "oid": "0a90ac007c5bd55b333bfd46ff781688e762e4e4"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 41,
+      "id": "PR_kwDOBHEdPc4vJhgt",
+      "title": "Clearly state purpose of x5t header",
+      "url": "https://github.com/cose-wg/X509/pull/41",
+      "state": "MERGED",
+      "author": "laurencelundblade",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Explicitly state the purpose of the x5t header in a way similar and compatible with JWT.\r\n\r\nUses \"end-entity\" because it occurs elsewhere in the document, but would also be fine using the terminology that JWT uses if it was used consistently in the document.",
+      "createdAt": "2021-11-29T20:10:50Z",
+      "updatedAt": "2022-01-17T21:52:18Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "fe66e72c1ce2fd118f80de8d296639761e6c494b",
+      "headRepository": "laurencelundblade/X509",
+      "headRefName": "master",
+      "headRefOid": "d5845ea6e4105758f6f183dbfb8f1c8767bfcc24",
+      "closedAt": "2022-01-17T21:52:18Z",
+      "mergedAt": "2022-01-17T21:52:18Z",
+      "mergedBy": "ivajloip",
+      "mergeCommit": {
+        "oid": "97d91751e21a3340a016543be22088e7468d8a4a"
       },
       "comments": [],
       "reviews": []
