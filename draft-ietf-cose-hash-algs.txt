@@ -4,8 +4,8 @@
 
 Network Working Group                                          J. Schaad
 Internet-Draft                                            August Cellars
-Intended status: Informational                           18 October 2021
-Expires: 21 April 2022
+Intended status: Informational                           17 January 2022
+Expires: 21 July 2022
 
 
        CBOR Object Signing and Encryption (COSE): Hash Algorithms
@@ -46,21 +46,21 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 April 2022.
+   This Internet-Draft will expire on 21 July 2022.
 
 
 
 
 
 
-Schaad                    Expires 21 April 2022                 [Page 1]
+Schaad                    Expires 21 July 2022                  [Page 1]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
 Copyright Notice
 
-   Copyright (c) 2021 IETF Trust and the persons identified as the
+   Copyright (c) 2022 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -68,9 +68,9 @@ Copyright Notice
    license-info) in effect on the date of publication of this document.
    Please review these documents carefully, as they describe your rights
    and restrictions with respect to this document.  Code Components
-   extracted from this document must include Simplified BSD License text
-   as described in Section 4.e of the Trust Legal Provisions and are
-   provided without warranty as described in the Simplified BSD License.
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
 
 Table of Contents
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Schaad                    Expires 21 April 2022                 [Page 2]
+Schaad                    Expires 21 July 2022                  [Page 2]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
    *  Indirect signing of content, and
@@ -165,9 +165,9 @@ Internet-Draft                 COSE Hashes                  October 2021
 
 
 
-Schaad                    Expires 21 April 2022                 [Page 3]
+Schaad                    Expires 21 July 2022                  [Page 3]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
    A hash function is a map from one, normally large, bit string to a
@@ -221,9 +221,9 @@ Internet-Draft                 COSE Hashes                  October 2021
 
 
 
-Schaad                    Expires 21 April 2022                 [Page 4]
+Schaad                    Expires 21 July 2022                  [Page 4]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
    *  The hash algorithm identifier.
@@ -277,9 +277,9 @@ Internet-Draft                 COSE Hashes                  October 2021
 
 
 
-Schaad                    Expires 21 April 2022                 [Page 5]
+Schaad                    Expires 21 July 2022                  [Page 5]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
 3.1.  SHA-1 Hash Algorithm
@@ -333,9 +333,9 @@ Internet-Draft                 COSE Hashes                  October 2021
 
 
 
-Schaad                    Expires 21 April 2022                 [Page 6]
+Schaad                    Expires 21 July 2022                  [Page 6]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
    *  *SHA-256/64* provides a truncated hash.  The length of the
@@ -389,9 +389,9 @@ Internet-Draft                 COSE Hashes                  October 2021
 
 
 
-Schaad                    Expires 21 April 2022                 [Page 7]
+Schaad                    Expires 21 July 2022                  [Page 7]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
    +===========+=====+===========+==============+=========+============+
@@ -445,9 +445,9 @@ Internet-Draft                 COSE Hashes                  October 2021
 
 
 
-Schaad                    Expires 21 April 2022                 [Page 8]
+Schaad                    Expires 21 July 2022                  [Page 8]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
    +========+=====+=============+==============+=========+=============+
@@ -501,9 +501,9 @@ Internet-Draft                 COSE Hashes                  October 2021
 
 
 
-Schaad                    Expires 21 April 2022                 [Page 9]
+Schaad                    Expires 21 July 2022                  [Page 9]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
 5.  Security Considerations
@@ -557,9 +557,9 @@ Internet-Draft                 COSE Hashes                  October 2021
 
 
 
-Schaad                    Expires 21 April 2022                [Page 10]
+Schaad                    Expires 21 July 2022                 [Page 10]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
    [RFC3174]  Eastlake 3rd, D. and P. Jones, "US Secure Hash Algorithm 1
@@ -601,9 +601,9 @@ Internet-Draft                 COSE Hashes                  October 2021
               "A Concise Binary Object Representation (CBOR)-based
               Serialization Format for the Software Updates for Internet
               of Things (SUIT) Manifest", Work in Progress, Internet-
-              Draft, draft-ietf-suit-manifest-14, 12 July 2021,
+              Draft, draft-ietf-suit-manifest-16, 25 October 2021,
               <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
-              manifest-14>.
+              manifest-16>.
 
    [BCP201]   Housley, R., "Guidelines for Cryptographic Algorithm
               Agility and Selecting Mandatory-to-Implement Algorithms",
@@ -613,9 +613,9 @@ Internet-Draft                 COSE Hashes                  October 2021
 
 
 
-Schaad                    Expires 21 April 2022                [Page 11]
+Schaad                    Expires 21 July 2022                 [Page 11]
 
-Internet-Draft                 COSE Hashes                  October 2021
+Internet-Draft                 COSE Hashes                  January 2022
 
 
    [SHA-1-collision]
@@ -669,4 +669,4 @@ Author's Address
 
 
 
-Schaad                    Expires 21 April 2022                [Page 12]
+Schaad                    Expires 21 July 2022                 [Page 12]

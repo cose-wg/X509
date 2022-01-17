@@ -14,11 +14,11 @@
         This document extends the way that keys can be identified and transported by providing attributes that refer to or contain X.509 certificates.
        
     " name="description">
-<meta content="xml2rfc 3.9.1" name="generator">
+<meta content="xml2rfc 3.11.1" name="generator">
 <meta content="draft-ietf-cose-x509-08" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.9.1
-    Python 3.9.5
+  xml2rfc 3.11.1
+    Python 3.9.7
     appdirs 1.4.4
     ConfigArgParse 1.3
     google-i18n-address 2.5.0
@@ -26,13 +26,13 @@
     intervaltree 3.1.0
     Jinja2 2.11.3
     kitchen 1.2.6
-    lxml 4.6.3
+    lxml 4.6.4
     pycountry 20.7.3
-    pyflakes 2.3.0
+    pyflakes 2.3.1
     PyYAML 5.4.1
-    requests 2.25.1
+    requests 2.26.0
     setuptools 52.0.0
-    six 1.15.0
+    six 1.16.0
 -->
 <link href="draft-ietf-cose-x509.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -822,11 +822,11 @@ address div.right {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">COSE X.509</td>
-<td class="right">October 2021</td>
+<td class="right">January 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Schaad</td>
-<td class="center">Expires 21 April 2022</td>
+<td class="center">Expires 21 July 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -837,12 +837,12 @@ address div.right {
 <dd class="workgroup">Network Working Group</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-18" class="published">18 October 2021</time>
+<time datetime="2022-01-17" class="published">17 January 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-21">21 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-07-21">21 July 2022</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -891,7 +891,7 @@ address div.right {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 July 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -900,7 +900,7 @@ address div.right {
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2021 IETF Trust and the persons identified as the
+            Copyright (c) 2022 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -909,9 +909,9 @@ address div.right {
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
             respect to this document. Code Components extracted from this
-            document must include Simplified BSD License text as described in
+            document must include Revised BSD License text as described in
             Section 4.e of the Trust Legal Provisions and are provided without
-            warranty as described in the Simplified BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="toc">
@@ -919,47 +919,47 @@ address div.right {
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="ulEmpty ulBare toc compact">
-<li class="ulEmpty ulBare toc compact" id="section-toc.1-1.1">
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
-<ul class="ulEmpty ulBare toc compact">
-<li class="ulEmpty ulBare toc compact" id="section-toc.1-1.1.2.1">
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
                 <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-requirements-terminology" class="xref">Requirements Terminology</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.2">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-x509-cose-header-parameters" class="xref">X.509 COSE Header Parameters</a></p>
 </li>
-          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.3">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-x509-certificates-and-stati" class="xref">X.509 certificates and static-static ECDH</a></p>
 </li>
-          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.4">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
-<ul class="ulEmpty ulBare toc compact">
-<li class="ulEmpty ulBare toc compact" id="section-toc.1-1.4.2.1">
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-cose-header-parameter-regis" class="xref">COSE Header Parameter Registry</a></p>
 </li>
-              <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.4.2.2">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-cose-header-algorithm-param" class="xref">COSE Header Algorithm Parameter Registry</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.5">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
 </li>
-          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.6">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-references" class="xref">References</a></p>
-<ul class="ulEmpty ulBare toc compact">
-<li class="ulEmpty ulBare toc compact" id="section-toc.1-1.6.2.1">
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
 </li>
-              <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.6.2.2">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
                 <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.7">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#appendix-A" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a></p>
 </li>
         </ul>
@@ -1071,14 +1071,14 @@ obtained from any of these methods still need to validate it.
 <dt id="section-2-5.5">x5t:</dt>
         <dd style="margin-left: 1.5em" id="section-2-5.6">
           <p id="section-2-5.6.1">
-            This header parameter provides the ability to identify an X.509 certificate by a hash value (a thumbprint).
+            This header parameter identifies the end-entity X.509 certificate by a hash value (a thumbprint).
             The 'x5t' header parameter is represented as an array of two elements.
             The first element is an algorithm identifier which is an integer or a string containing the hash algorithm identifier corresponding to either the Value (integer) or Name (string) column of the algorithm registered in the "COSE Algorithms" registry <span><a href="https://www.iana.org/assignments/cose/cose.xhtml#algorithms">https://www.iana.org/assignments/cose/cose.xhtml#algorithms</a></span>.
             The second element is a binary string containing the hash value computed over the DER encoded certificate.<a href="#section-2-5.6.1" class="pilcrow">¶</a></p>
 <p id="section-2-5.6.2">
             As this header parameter does not provide any trust, the header parameter can be in either a protected or unprotected header bucket.<a href="#section-2-5.6.2" class="pilcrow">¶</a></p>
 <p id="section-2-5.6.3">
-           The end-entity certificate MUST be integrity protected by COSE. This can e.g. be done by sending the header parameter in the protected header or including the end-entity certificate in the external_aad.<a href="#section-2-5.6.3" class="pilcrow">¶</a></p>
+           The identification of the end-entity certificate MUST be integrity protected by COSE. This can be done by sending the header parameter in the protected header or including the end-entity certificate in the external_aad.<a href="#section-2-5.6.3" class="pilcrow">¶</a></p>
 <p id="section-2-5.6.4">
    The 'x5t' header parameter can be used alone or together with the 'x5bag', 'x5chain', or 'x5u' header parameters to provide integrity protection of the end-entity certificate.<a href="#section-2-5.6.4" class="pilcrow">¶</a></p>
 <p id="section-2-5.6.5">
@@ -1171,7 +1171,7 @@ obtained from any of these methods still need to validate it.
 </div>
 <p id="section-2-10">
         Below is an equivalent CDDL <span>[<a href="#RFC8610" class="xref">RFC8610</a>]</span> description of the text above.<a href="#section-2-10" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft art-CDDL" id="section-2-11">
+<div class="alignLeft art-CDDL art-text artwork" id="section-2-11">
 <pre>
 COSE_X509 = bstr / [ 2*certs: bstr ]
 COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
@@ -1362,7 +1362,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 <dd class="break"></dd>
 <dt id="I-D.ietf-lake-edhoc">[I-D.ietf-lake-edhoc]</dt>
         <dd>
-<span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Mattsson, J. P.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Ephemeral Diffie-Hellman Over COSE (EDHOC)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lake-edhoc-11</span>, <time datetime="2021-09-24" class="refDate">24 September 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lake-edhoc-11">https://datatracker.ietf.org/doc/html/draft-ietf-lake-edhoc-11</a>&gt;</span>. </dd>
+<span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Mattsson, J. P.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Ephemeral Diffie-Hellman Over COSE (EDHOC)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lake-edhoc-12</span>, <time datetime="2021-10-20" class="refDate">20 October 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lake-edhoc-12">https://datatracker.ietf.org/doc/html/draft-ietf-lake-edhoc-12</a>&gt;</span>. </dd>
 <dd class="break"></dd><dt id="RFC8392">[RFC8392]</dt>
         <dd>
 <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"CBOR Web Token (CWT)"</span>, <span class="seriesInfo">RFC 8392</span>, <span class="seriesInfo">DOI 10.17487/RFC8392</span>, <time datetime="2018-05" class="refDate">May 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8392">https://www.rfc-editor.org/info/rfc8392</a>&gt;</span>. </dd>
@@ -1376,7 +1376,7 @@ COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
 <dd class="break"></dd>
 <dt id="I-D.ietf-anima-constrained-voucher">[I-D.ietf-anima-constrained-voucher]</dt>
       <dd>
-<span class="refAuthor">Richardson, M.</span>, <span class="refAuthor">Stok, P. V. D.</span>, <span class="refAuthor">Kampanakis, P.</span>, and <span class="refAuthor">E. Dijk</span>, <span class="refTitle">"Constrained Voucher Artifacts for Bootstrapping Protocols"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-constrained-voucher-13</span>, <time datetime="2021-07-25" class="refDate">25 July 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-constrained-voucher-13">https://datatracker.ietf.org/doc/html/draft-ietf-anima-constrained-voucher-13</a>&gt;</span>. </dd>
+<span class="refAuthor">Richardson, M.</span>, <span class="refAuthor">Stok, P. V. D.</span>, <span class="refAuthor">Kampanakis, P.</span>, and <span class="refAuthor">E. Dijk</span>, <span class="refTitle">"Constrained Bootstrapping Remote Secure Key Infrastructure (BRSKI)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-constrained-voucher-15</span>, <time datetime="2021-12-07" class="refDate">7 December 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-constrained-voucher-15">https://datatracker.ietf.org/doc/html/draft-ietf-anima-constrained-voucher-15</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
