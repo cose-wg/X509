@@ -90,7 +90,7 @@ This includes the full suite of enrollment protocols, trust anchors, trust
 chaining and revocation checking that have been defined over time by the
 IETF and other organizations.
 The key structures that have been defined in COSE currently do not support
-all of these properties although some may be found in COSE Web Tokens (CWT) {{RFC8392}}.
+all of these properties, although some may be found in COSE Web Tokens (CWT) {{RFC8392}}.
 
 It is not necessarily expected that constrained devices themselves will evaluate
 and process X.509 certificates:
@@ -347,8 +347,8 @@ x5u-sender:
   The structure and processing are the same as 'x5u'.
 
 | Name           | Label | Type          | Algorithm                                                                          | Description                                  |
-| x5t-sender     | TBD   | COSE_CertHash | ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW | Thumbprint for the senders X.509 certificate |
-| x5u-sender     | TBD   | uri           | ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW | URI for the senders X.509 certificate        |
+| x5t-sender     | TBD   | COSE_CertHash | ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW | Thumbprint for the sender's X.509 certificate |
+| x5u-sender     | TBD   | uri           | ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW | URI for the sender's X.509 certificate       |
 | x5chain-sender | TBD   | COSE_X509     | ECDH-SS+HKDF-256, ECDH-SS+HKDF-512, ECDH-SS+A128KW, ECDH-SS+A192KW, ECDH-SS+A256KW | static key X.509 certificate chain           |
 {: #Tags2 title='Static ECDH Algorithm Values' align='center'}
 
@@ -374,7 +374,7 @@ Establishing trust in a certificate is a vital part of processing.
 A major component of establishing trust is determining what the set of trust
 anchors are for the process.
 A new self-signed certificate appearing on the client cannot be a trigger
-to modify the set of trust anchors, because a well defined trust-establishment
+to modify the set of trust anchors, because a well-defined trust-establishment
 process is required.
 One common way for a new trust anchor to be added (or removed) from a device
 is by doing a new firmware upgrade.
@@ -438,7 +438,7 @@ of {{RFC3986}} and specifically those defined in Section {{7.1<RFC3986}} also ap
 
 Regardless of the source, certification path validation is an important part
 of establishing trust in a certificate. {{Section 6 of RFC5280}}
-provides guidence for the path validation. The security considerations
+provides guidance for the path validation. The security considerations
 of {{RFC5280}} are also important for the correct usage of this document.
 
 The security of the algorithm used for 'x5t' does not affect the security
