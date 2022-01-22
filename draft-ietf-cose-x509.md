@@ -21,7 +21,7 @@ author:
   email: ietf@augustcellars.com
 informative:
   RFC8446:
-  I-D.ietf-tls-dtls13:
+  I-D.ietf-tls-dtls13: # to be replaced by RFC9147
   RFC8551:
   RFC2585:
   I-D.ietf-lake-edhoc:
@@ -434,7 +434,7 @@ consumption of resources (for example using a 200K RSA key).
        -->
 
 When processing the x5u header parameter the security considerations
-of {{RFC3986}} and specifically those defined in Section {{7.1<RFC3986}} also apply.
+of {{RFC3986}} and specifically those defined in {{Section 7.1 of RFC3986}} also apply.
 
 Regardless of the source, certification path validation is an important part
 of establishing trust in a certificate. {{Section 6 of RFC5280}}
@@ -448,3 +448,6 @@ trust.
 
 
 --- back
+
+# Acknowledgements
+{:unnumbered}
