@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-01-17T21:52:54.276766+00:00",
+  "timestamp": "2022-01-24T21:33:44.653661+00:00",
   "repo": "cose-wg/X509",
   "labels": [
     {
@@ -350,7 +350,7 @@
       "id": "MDU6SXNzdWU1ODM5NDc2OTY=",
       "title": "recommend that the COSE kid be a Subject Key Identifier",
       "url": "https://github.com/cose-wg/X509/issues/23",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "laurencelundblade",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -360,8 +360,8 @@
       ],
       "body": "Particularly with x5bag, the signature verifier needs to figure out which cert is the leaf to use to verify the COSE signature.  CMS and such did with the Subject Key ID and it seems that should be a described option here.\r\n",
       "createdAt": "2020-03-18T19:15:53Z",
-      "updatedAt": "2021-11-29T20:11:33Z",
-      "closedAt": null,
+      "updatedAt": "2022-01-17T21:52:55Z",
+      "closedAt": "2022-01-17T21:52:55Z",
       "comments": [
         {
           "author": "jimsch",
@@ -425,6 +425,13 @@
           "body": "I've made a PR to resolve this: #41",
           "createdAt": "2021-11-29T20:11:33Z",
           "updatedAt": "2021-11-29T20:11:33Z"
+        },
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thank you, Laurence! ",
+          "createdAt": "2022-01-17T21:52:55Z",
+          "updatedAt": "2022-01-17T21:52:55Z"
         }
       ]
     },
@@ -464,7 +471,7 @@
       "id": "MDU6SXNzdWU3NzExMzQxODI=",
       "title": "Identification of end-entity cert / consistency with JWS",
       "url": "https://github.com/cose-wg/X509/issues/29",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "laurencelundblade",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -474,8 +481,8 @@
       ],
       "body": "JWS has almost the same header parameters at COSE (x5t, x5chain and x5u, but not x5bag). The semantics of them should be identical, unless there's a really good reason not to be. (EAT using JWT and CWT as semantically equivalent so issues like this pop up)\r\n\r\nCOSE X.509 is not very clear about determination of the end-entity cert. JWS is clear and explicit:\r\n  - x5t always refers to an end-entity\r\n  - In x5u the first cert is always the end-entity\r\n  - In x5c the first cert is always the end-entity\r\n\r\nJWS uses the phrase \"The certificate containing the public key corresponding to the key used to digitally sign\u201d rather than \"end-entity\u201d. I prefer end-entity, but either is fine.\r\n\r\nBy contrast, COSE X.509 only explicitly says how the end-entity is determined for an x5chain. Nothing is said for x5t, x5bag or x5u.\r\n\r\nSeems to me that COSE X.509 should be made identical to JWS for x5t, x5chain and x5u. \r\n\r\nThen COSE has the add-on bonus of x5bag. x5bag never determines the end-entity since it is un ordered. You have to have an x5t, kid or some other means of knowing which in the x5bag is the end-entity. And it is OK that x5bag doesn\u2019t even contain the end-entity.\r\n",
       "createdAt": "2020-12-18T19:55:08Z",
-      "updatedAt": "2021-11-29T20:11:49Z",
-      "closedAt": null,
+      "updatedAt": "2022-01-17T21:53:40Z",
+      "closedAt": "2022-01-17T21:53:40Z",
       "comments": [
         {
           "author": "jfhamme-cccs",
@@ -581,6 +588,13 @@
           "body": "I've made a PR to resolve this: #41",
           "createdAt": "2021-11-29T20:11:49Z",
           "updatedAt": "2021-11-29T20:11:49Z"
+        },
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thank you, Laurence! This has now been merged.",
+          "createdAt": "2022-01-17T21:53:40Z",
+          "updatedAt": "2022-01-17T21:53:40Z"
         }
       ]
     },
@@ -868,10 +882,12 @@
       "author": "kaduk",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "hash-algs"
+      ],
       "body": "As mentioned in https://mailarchive.ietf.org/arch/msg/cose/pvLdj1lp75I3SiScI4yx_J1ird8/ we register codepoints for NIST algorithms that have a different bit order than implementations have traditionally expected.  That thread concerns the issue as it relates to ECDSA, that is defined to act on bit strings rather than byte strings, though most IETF protocols deal only in byte strings (for which there does not seem to be any real controversy).  Are there situations where cose hash algorithms need to be treated as bit strings that might merit a disclaimer about SHA-3 needing special handling?",
       "createdAt": "2021-12-01T22:34:05Z",
-      "updatedAt": "2021-12-01T22:34:05Z",
+      "updatedAt": "2022-01-24T05:58:12Z",
       "closedAt": null,
       "comments": []
     }
@@ -1801,6 +1817,60 @@
       "mergeCommit": {
         "oid": "97d91751e21a3340a016543be22088e7468d8a4a"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 43,
+      "id": "PR_kwDOBHEdPc4xcwK7",
+      "title": "Move to markdown",
+      "url": "https://github.com/cose-wg/X509/pull/43",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "(makes it easier to edit)",
+      "createdAt": "2022-01-22T22:25:16Z",
+      "updatedAt": "2022-01-24T21:33:18Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "97d91751e21a3340a016543be22088e7468d8a4a",
+      "headRepository": "cabo/X509",
+      "headRefName": "markdown",
+      "headRefOid": "d27418bd30d50cec3627b5ef44268dbab47201ef",
+      "closedAt": "2022-01-24T21:33:18Z",
+      "mergedAt": "2022-01-24T21:33:18Z",
+      "mergedBy": "ivajloip",
+      "mergeCommit": {
+        "oid": "c4eb929477a3ab1a5de7fd83db9007b810d6f2f1"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 44,
+      "id": "PR_kwDOBHEdPc4xcxfO",
+      "title": "Add Media type registration for application/cose-x509",
+      "url": "https://github.com/cose-wg/X509/pull/44",
+      "state": "OPEN",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-01-22T22:58:46Z",
+      "updatedAt": "2022-01-22T22:58:46Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "97d91751e21a3340a016543be22088e7468d8a4a",
+      "headRepository": "cabo/X509",
+      "headRefName": "media-type-registration",
+      "headRefOid": "7f2beb0b84008f6f9dd20eef91644ec13c3ad8ec",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
