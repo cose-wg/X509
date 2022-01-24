@@ -30,6 +30,8 @@ informative:
   RFC3986:
   I-D.ietf-anima-constrained-voucher:
   RFC6838:
+  RFC8613:
+  RFC2634:
 normative:
   RFC5280:
   RFC8152:
@@ -272,12 +274,13 @@ x5u:
   in the external_aad. As the end-entity certificate is integrity protected
   by COSE, the URI does not need to provide any protection.
 
-  If a retrieved certificate does not chain to an existing trust anchor, the
+  If a retrieved certificate does not chain to an existing trust anchor, that
   certificate MUST NOT be trusted unless the URI provided integrity protection
   and server authentication and the server is configured as trusted to provide
   new trust anchors or if an out-of-band confirmation can be received for trusting
-  the retrieved certificate. For example, an HTTP or CoAP GET request to retrieve
-  a certificate MUST use TLS {{RFC8446}} or DTLS {{I-D.ietf-tls-dtls13}}.
+  the retrieved certificate. In case an HTTP or CoAP GET request is used to
+  retrieve a certificate, TLS {{RFC8446}}, DTLS {{I-D.ietf-tls-dtls13}} or
+  {{RFC8613}} SHOULD be used.
 
 The header parameters are used in the following locations:
 
@@ -519,6 +522,10 @@ Regardless of the source, certification path validation is an important part
 of establishing trust in a certificate. {{Section 6 of RFC5280}}
 provides guidance for the path validation. The security considerations
 of {{RFC5280}} are also important for the correct usage of this document.
+
+Protecting the integrity of the x5bag, x5chain and x5t contents by placing them
+in the protected header bucket MAY mitigate some risks of a misbehaving
+certificate authority (c.f. {{Section 5.1 of RFC2634}}).
 
 The security of the algorithm used for 'x5t' does not affect the security
 of the system as this header parameter selects which certificate that is
