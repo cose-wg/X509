@@ -29,6 +29,7 @@ informative:
   RFC8610:
   RFC3986:
   I-D.ietf-anima-constrained-voucher:
+  RFC6838:
 normative:
   RFC5280:
   RFC8152:
@@ -255,12 +256,15 @@ x5u:
 
   * application/pkcs7-mime; smime-type="certs-only" {{RFC8551}}
 
-  * application/cose-x509-chain {{RFC8949}}
+  * application/cose-x509 {{media-type}}
+  * application/cose-x509; usage=chain {{media-type}}
 
   <!--               <t>application/pem-certificate-chain <xref target="I-D.ietf-acme-acme"/></t>  -->
 
-  When the application/cose-x509-chain media type is used, the data is a COSE_X509
-  structure containing a chain.
+  When the application/cose-x509 media type is used, the data is a
+  CBOR sequence of single-entry COSE_X509 structures (encoding "bstr").
+  If the parameter "usage" is
+  set to "chain", this sequence indicates a certificate chain.
 
   The end-entity certificate MUST be integrity protected by COSE. This can
   e.g. be done by sending the x5u in the unprotected or protected header combined
@@ -365,6 +369,81 @@ For each item, the 'Reference' field points to this document.
 
 IANA is requested to register the new COSE Header Algorithm parameters in {{Tags2}} in the "COSE Header Algorithm Parameters" registry.
 For each item, the 'Reference' field points to this document.
+
+## Media Type application/cose-x509 {#media-type}
+
+When the application/cose-x509 media type is used, the data is a
+CBOR sequence of single-entry COSE_X509 structures (encoding "bstr").
+If the parameter "usage" is
+set to "chain", this sequence indicates a certificate chain.
+
+IANA is requested to register the following media type {{RFC6838}}:
+
+Type name:
+: application
+
+Subtype name:
+: cose-x509
+
+Required parameters:
+: N/A
+
+Optional parameters:
+: usage
+
+  * Can be absent to provide no further information about the intended
+    meaning of the order in the CBOR sequence of certificates.
+  * Can be set to "chain" to indicate that the sequence of data items is
+    to be interpreted as a certificate chain.
+
+Encoding considerations:
+: binary
+
+Security considerations:
+: See the Security Considerations section of RFCthis.
+
+Interoperability considerations:
+: N/A
+
+Published specification:
+: RFCthis
+
+Applications that use this media type:
+: Applications that employ COSE and use X.509 as a certificate type.
+
+Fragment identifier considerations:
+: N/A
+
+Additional information:
+: Deprecated alias names for this type:
+  : N/A
+
+  Magic number(s):
+  : N/A
+
+  File extension(s):
+  : N/A
+
+  Macintosh file type code(s):
+  : N/A
+
+Person & email address to contact for further information:
+   iesg@ietf.org
+
+Intended usage:
+: COMMON
+
+Restrictions on usage:
+: N/A
+
+Author:
+: COSE WG
+
+Change controller:
+: IESG
+
+Provisional registration? (standards tree only):
+: no
 
 
 
