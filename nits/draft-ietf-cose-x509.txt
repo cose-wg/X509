@@ -359,13 +359,13 @@ Internet-Draft                 COSE X.509                   January 2022
       does not need to provide any protection.
 
       If a retrieved certificate does not chain to an existing trust
-      anchor, the certificate MUST NOT be trusted unless the URI
+      anchor, that certificate MUST NOT be trusted unless the URI
       provided integrity protection and server authentication and the
       server is configured as trusted to provide new trust anchors or if
       an out-of-band confirmation can be received for trusting the
-      retrieved certificate.  For example, an HTTP or CoAP GET request
-      to retrieve a certificate MUST use TLS [RFC8446] or DTLS
-      [I-D.ietf-tls-dtls13].
+      retrieved certificate.  In case an HTTP or CoAP GET request is
+      used to retrieve a certificate, TLS [RFC8446], DTLS
+      [I-D.ietf-tls-dtls13] or [RFC8613] SHOULD be used.
 
    The header parameters are used in the following locations:
 
@@ -644,6 +644,11 @@ Internet-Draft                 COSE X.509                   January 2022
    considerations of [RFC5280] are also important for the correct usage
    of this document.
 
+   Protecting the integrity of the x5bag, x5chain and x5t contents by
+   placing them in the protected header bucket MAY mitigate some risks
+   of a misbehaving certificate authority (c.f.  Section 5.1 of
+   [RFC2634]).
+
    The security of the algorithm used for 'x5t' does not affect the
    security of the system as this header parameter selects which
    certificate that is already present on the system should be used, but
@@ -658,11 +663,6 @@ Internet-Draft                 COSE X.509                   January 2022
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
-              Housley, R., and W. Polk, "Internet X.509 Public Key
-              Infrastructure Certificate and Certificate Revocation List
-              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
-              <https://www.rfc-editor.org/info/rfc5280>.
 
 
 
@@ -673,6 +673,12 @@ Schaad                    Expires 28 July 2022                 [Page 12]
 
 Internet-Draft                 COSE X.509                   January 2022
 
+
+   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
+              Housley, R., and W. Polk, "Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
+              <https://www.rfc-editor.org/info/rfc5280>.
 
    [RFC8152]  Schaad, J., "CBOR Object Signing and Encryption (COSE)",
               RFC 8152, DOI 10.17487/RFC8152, July 2017,
@@ -717,18 +723,21 @@ Internet-Draft                 COSE X.509                   January 2022
               RFC 2585, DOI 10.17487/RFC2585, May 1999,
               <https://www.rfc-editor.org/info/rfc2585>.
 
-   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
-              Resource Identifier (URI): Generic Syntax", STD 66,
-              RFC 3986, DOI 10.17487/RFC3986, January 2005,
-              <https://www.rfc-editor.org/info/rfc3986>.
-
-
 
 
 Schaad                    Expires 28 July 2022                 [Page 13]
 
 Internet-Draft                 COSE X.509                   January 2022
 
+
+   [RFC2634]  Hoffman, P., Ed., "Enhanced Security Services for S/MIME",
+              RFC 2634, DOI 10.17487/RFC2634, June 1999,
+              <https://www.rfc-editor.org/info/rfc2634>.
+
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
+              RFC 3986, DOI 10.17487/RFC3986, January 2005,
+              <https://www.rfc-editor.org/info/rfc3986>.
 
    [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
               Specifications and Registration Procedures", BCP 13,
@@ -754,6 +763,11 @@ Internet-Draft                 COSE X.509                   January 2022
               JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
               June 2019, <https://www.rfc-editor.org/info/rfc8610>.
 
+   [RFC8613]  Selander, G., Mattsson, J., Palombini, F., and L. Seitz,
+              "Object Security for Constrained RESTful Environments
+              (OSCORE)", RFC 8613, DOI 10.17487/RFC8613, July 2019,
+              <https://www.rfc-editor.org/info/rfc8613>.
+
 Acknowledgements
 
 Author's Address
@@ -762,20 +776,6 @@ Author's Address
    August Cellars
 
    Email: ietf@augustcellars.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
