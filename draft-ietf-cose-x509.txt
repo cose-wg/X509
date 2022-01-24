@@ -81,12 +81,13 @@ Table of Contents
    4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
      4.1.  COSE Header Parameter Registry  . . . . . . . . . . . . .   9
      4.2.  COSE Header Algorithm Parameter Registry  . . . . . . . .   9
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
-   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
-     6.1.  Normative References  . . . . . . . . . . . . . . . . . .  11
-     6.2.  Informative References  . . . . . . . . . . . . . . . . .  11
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  13
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  13
+     4.3.  Media Type application/cose-x509  . . . . . . . . . . . .  10
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .  13
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  14
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction
 
@@ -105,7 +106,6 @@ Table of Contents
    solution that relies on the presence of a factory-installed
    certificate on the device.  The [I-D.ietf-lake-edhoc] draft was also
    written with the idea that long term certificates could be used to
-   provide for authentication of devices, and uses them to establish
 
 
 
@@ -114,6 +114,7 @@ Schaad                    Expires 28 July 2022                  [Page 2]
 Internet-Draft                 COSE X.509                   January 2022
 
 
+   provide for authentication of devices, and uses them to establish
    session keys.  Another possible scenario is the use of COSE as the
    basis for a secure messaging application.  This scenario assumes the
    presence of long term keys and a central authentication authority.
@@ -151,7 +152,6 @@ Internet-Draft                 COSE X.509                   January 2022
    certificate evaluation or even having the entire certificate.  In any
    case, there still needs to be an entity that is responsible for
    handling the possible certificate revocation.
-
 
 
 
@@ -342,10 +342,14 @@ Internet-Draft                 COSE X.509                   January 2022
 
       *  application/pkcs7-mime; smime-type="certs-only" [RFC8551]
 
-      *  application/cose-x509-chain [RFC8949]
+      *  application/cose-x509 Section 4.3
 
-      When the application/cose-x509-chain media type is used, the data
-      is a COSE_X509 structure containing a chain.
+      *  application/cose-x509; usage=chain Section 4.3
+
+      When the application/cose-x509 media type is used, the data is a
+      CBOR sequence of single-entry COSE_X509 structures (encoding
+      "bstr").  If the parameter "usage" is set to "chain", this
+      sequence indicates a certificate chain.
 
       The end-entity certificate MUST be integrity protected by COSE.
       This can e.g. be done by sending the x5u in the unprotected or
@@ -373,10 +377,6 @@ Internet-Draft                 COSE X.509                   January 2022
 
    The labels assigned to each header parameter can be found in the
    following table.
-
-
-
-
 
 
 
@@ -506,6 +506,72 @@ Schaad                    Expires 28 July 2022                  [Page 9]
 Internet-Draft                 COSE X.509                   January 2022
 
 
+4.3.  Media Type application/cose-x509
+
+   When the application/cose-x509 media type is used, the data is a CBOR
+   sequence of single-entry COSE_X509 structures (encoding "bstr").  If
+   the parameter "usage" is set to "chain", this sequence indicates a
+   certificate chain.
+
+   IANA is requested to register the following media type [RFC6838]:
+
+   Type name:  application
+
+   Subtype name:  cose-x509
+
+   Required parameters:  N/A
+
+   Optional parameters:  usage
+
+      *  Can be absent to provide no further information about the
+         intended meaning of the order in the CBOR sequence of
+         certificates.
+
+      *  Can be set to "chain" to indicate that the sequence of data
+         items is to be interpreted as a certificate chain.
+
+   Encoding considerations:  binary
+
+   Security considerations:  See the Security Considerations section of
+      RFCthis.
+
+   Interoperability considerations:  N/A
+
+   Published specification:  RFCthis
+
+   Applications that use this media type:  Applications that employ COSE
+      and use X.509 as a certificate type.
+
+   Fragment identifier considerations:  N/A
+
+   Additional information:  Deprecated alias names for this type:  N/A
+
+                            Magic number(s):  N/A
+
+                            File extension(s):  N/A
+
+                            Macintosh file type code(s):  N/A
+
+   Person & email address to contact for further information:
+   iesg@ietf.org
+
+
+
+Schaad                    Expires 28 July 2022                 [Page 10]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
+   Intended usage:  COMMON
+
+   Restrictions on usage:  N/A
+
+   Author:  COSE WG
+
+   Change controller:  IESG
+
+   Provisional registration? (standards tree only):  no
+
 5.  Security Considerations
 
    Establishing trust in a certificate is a vital part of processing.  A
@@ -538,6 +604,20 @@ Internet-Draft                 COSE X.509                   January 2022
    entity certificate in COSE with such an identity-misbinding
    certificate.
 
+
+
+
+
+
+
+
+
+
+Schaad                    Expires 28 July 2022                 [Page 11]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
    End-entity X.509 certificates contain identities that a passive on-
    path attacker eavesdropping on the conversation can use to identify
    and track the subject.  COSE does not provide identity protection by
@@ -553,14 +633,6 @@ Internet-Draft                 COSE X.509                   January 2022
    are of an acceptable size.  The use of unvalidated keys can lead
    either to loss of security or excessive consumption of resources (for
    example using a 200K RSA key).
-
-
-
-
-Schaad                    Expires 28 July 2022                 [Page 10]
-
-Internet-Draft                 COSE X.509                   January 2022
-
 
    When processing the x5u header parameter the security considerations
    of [RFC3986] and specifically those defined in Section 7.1 of
@@ -592,6 +664,16 @@ Internet-Draft                 COSE X.509                   January 2022
               (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
               <https://www.rfc-editor.org/info/rfc5280>.
 
+
+
+
+
+
+Schaad                    Expires 28 July 2022                 [Page 12]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
    [RFC8152]  Schaad, J., "CBOR Object Signing and Encryption (COSE)",
               RFC 8152, DOI 10.17487/RFC8152, July 2017,
               <https://www.rfc-editor.org/info/rfc8152>.
@@ -610,14 +692,6 @@ Internet-Draft                 COSE X.509                   January 2022
    [I-D.ietf-anima-constrained-voucher]
               Richardson, M., Stok, P. V. D., Kampanakis, P., and E.
               Dijk, "Constrained Bootstrapping Remote Secure Key
-
-
-
-Schaad                    Expires 28 July 2022                 [Page 11]
-
-Internet-Draft                 COSE X.509                   January 2022
-
-
               Infrastructure (BRSKI)", Work in Progress, Internet-Draft,
               draft-ietf-anima-constrained-voucher-15, 7 December 2021,
               <https://www.ietf.org/archive/id/draft-ietf-anima-
@@ -648,6 +722,19 @@ Internet-Draft                 COSE X.509                   January 2022
               RFC 3986, DOI 10.17487/RFC3986, January 2005,
               <https://www.rfc-editor.org/info/rfc3986>.
 
+
+
+
+Schaad                    Expires 28 July 2022                 [Page 13]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
+   [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
+              Specifications and Registration Procedures", BCP 13,
+              RFC 6838, DOI 10.17487/RFC6838, January 2013,
+              <https://www.rfc-editor.org/info/rfc6838>.
+
    [RFC8392]  Jones, M., Wahlstroem, E., Erdtman, S., and H. Tschofenig,
               "CBOR Web Token (CWT)", RFC 8392, DOI 10.17487/RFC8392,
               May 2018, <https://www.rfc-editor.org/info/rfc8392>.
@@ -666,13 +753,6 @@ Internet-Draft                 COSE X.509                   January 2022
               Express Concise Binary Object Representation (CBOR) and
               JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
               June 2019, <https://www.rfc-editor.org/info/rfc8610>.
-
-
-
-Schaad                    Expires 28 July 2022                 [Page 12]
-
-Internet-Draft                 COSE X.509                   January 2022
-
 
 Acknowledgements
 
@@ -701,28 +781,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Schaad                    Expires 28 July 2022                 [Page 13]
+Schaad                    Expires 28 July 2022                 [Page 14]
