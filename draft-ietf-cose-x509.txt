@@ -4,8 +4,8 @@
 
 Network Working Group                                          J. Schaad
 Internet-Draft                                            August Cellars
-Intended status: Standards Track                         17 January 2022
-Expires: 21 July 2022
+Intended status: Standards Track                         24 January 2022
+Expires: 28 July 2022
 
 
     CBOR Object Signing and Encryption (COSE): Header parameters for
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 July 2022.
+   This Internet-Draft will expire on 28 July 2022.
 
 
 
 
 
-Schaad                    Expires 21 July 2022                  [Page 1]
+Schaad                    Expires 28 July 2022                  [Page 1]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -81,11 +81,12 @@ Table of Contents
    4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
      4.1.  COSE Header Parameter Registry  . . . . . . . . . . . . .   9
      4.2.  COSE Header Algorithm Parameter Registry  . . . . . . . .   9
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
    6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
      6.1.  Normative References  . . . . . . . . . . . . . . . . . .  11
      6.2.  Informative References  . . . . . . . . . . . . . . . . .  11
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  12
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  13
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  13
 
 1.  Introduction
 
@@ -105,15 +106,15 @@ Table of Contents
    certificate on the device.  The [I-D.ietf-lake-edhoc] draft was also
    written with the idea that long term certificates could be used to
    provide for authentication of devices, and uses them to establish
-   session keys.  Another possible scenario is the use of COSE as the
 
 
 
-Schaad                    Expires 21 July 2022                  [Page 2]
+Schaad                    Expires 28 July 2022                  [Page 2]
 
 Internet-Draft                 COSE X.509                   January 2022
 
 
+   session keys.  Another possible scenario is the use of COSE as the
    basis for a secure messaging application.  This scenario assumes the
    presence of long term keys and a central authentication authority.
    Basing such an application on public key certificates allows it to
@@ -123,8 +124,8 @@ Internet-Draft                 COSE X.509                   January 2022
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in BCP
-   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
 2.  X.509 COSE Header Parameters
@@ -134,8 +135,8 @@ Internet-Draft                 COSE X.509                   January 2022
    enrollment protocols, trust anchors, trust chaining and revocation
    checking that have been defined over time by the IETF and other
    organizations.  The key structures that have been defined in COSE
-   currently do not support all of these properties although some may be
-   found in COSE Web Tokens (CWT) [RFC8392].
+   currently do not support all of these properties, although some may
+   be found in COSE Web Tokens (CWT) [RFC8392].
 
    It is not necessarily expected that constrained devices themselves
    will evaluate and process X.509 certificates: it is perfectly
@@ -151,6 +152,24 @@ Internet-Draft                 COSE X.509                   January 2022
    case, there still needs to be an entity that is responsible for
    handling the possible certificate revocation.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+Schaad                    Expires 28 July 2022                  [Page 3]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
    Parties that intend to rely on the assertions made by a certificate
    obtained from any of these methods still need to validate it.  This
    validation can be done according to the PKIX rules in [RFC5280] or by
@@ -162,13 +181,6 @@ Internet-Draft                 COSE X.509                   January 2022
    the application cannot establish trust in the certificate, the public
    key contained in the certificate cannot be used for cryptographic
    operations.
-
-
-
-Schaad                    Expires 21 July 2022                  [Page 3]
-
-Internet-Draft                 COSE X.509                   January 2022
-
 
    The header parameters defined in this document are:
 
@@ -206,26 +218,19 @@ Internet-Draft                 COSE X.509                   January 2022
       *  If a single certificate is conveyed, it is placed in a CBOR
          byte string.
 
+
+
+
+Schaad                    Expires 28 July 2022                  [Page 4]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
       *  If multiple certificates are conveyed, a CBOR array of byte
          strings is used, with each certificate being in its own byte
          string.
 
    x5chain:  This header parameter contains an ordered array of X.509
-
-
-
-
-
-
-
-
-
-
-Schaad                    Expires 21 July 2022                  [Page 4]
-
-Internet-Draft                 COSE X.509                   January 2022
-
-
       certificates.  The certificates are to be ordered starting with
       the certificate containing the end-entity key followed by the
       certificate which signed it and so on.  There is no requirement
@@ -261,6 +266,22 @@ Internet-Draft                 COSE X.509                   January 2022
          string.
 
    x5t:  This header parameter identifies the end-entity X.509
+
+
+
+
+
+
+
+
+
+
+
+Schaad                    Expires 28 July 2022                  [Page 5]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
       certificate by a hash value (a thumbprint).  The 'x5t' header
       parameter is represented as an array of two elements.  The first
       element is an algorithm identifier which is an integer or a string
@@ -274,13 +295,6 @@ Internet-Draft                 COSE X.509                   January 2022
       As this header parameter does not provide any trust, the header
       parameter can be in either a protected or unprotected header
       bucket.
-
-
-
-Schaad                    Expires 21 July 2022                  [Page 5]
-
-Internet-Draft                 COSE X.509                   January 2022
-
 
       The identification of the end-entity certificate MUST be integrity
       protected by COSE.  This can be done by sending the header
@@ -317,6 +331,13 @@ Internet-Draft                 COSE X.509                   January 2022
       certificate by a URI [RFC3986].  It contains a CBOR text string.
       The referenced resource can be any of the following media types:
 
+
+
+Schaad                    Expires 28 July 2022                  [Page 6]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
       *  application/pkix-cert [RFC2585]
 
       *  application/pkcs7-mime; smime-type="certs-only" [RFC8551]
@@ -325,18 +346,6 @@ Internet-Draft                 COSE X.509                   January 2022
 
       When the application/cose-x509-chain media type is used, the data
       is a COSE_X509 structure containing a chain.
-
-
-
-
-
-
-
-
-Schaad                    Expires 21 July 2022                  [Page 6]
-
-Internet-Draft                 COSE X.509                   January 2022
-
 
       The end-entity certificate MUST be integrity protected by COSE.
       This can e.g. be done by sending the x5u in the unprotected or
@@ -365,6 +374,26 @@ Internet-Draft                 COSE X.509                   January 2022
    The labels assigned to each header parameter can be found in the
    following table.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Schaad                    Expires 28 July 2022                  [Page 7]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
          +=========+=======+===============+=====================+
          | Name    | Label | Value Type    | Description         |
          +=========+=======+===============+=====================+
@@ -384,15 +413,6 @@ Internet-Draft                 COSE X.509                   January 2022
                    Table 1: X.509 COSE Header Parameters
 
    Below is an equivalent CDDL [RFC8610] description of the text above.
-
-
-
-
-
-Schaad                    Expires 21 July 2022                  [Page 7]
-
-Internet-Draft                 COSE X.509                   January 2022
-
 
    COSE_X509 = bstr / [ 2*certs: bstr ]
    COSE_CertHash = [ hashAlg: (int / tstr), hashValue: bstr ]
@@ -421,46 +441,29 @@ Internet-Draft                 COSE X.509                   January 2022
       'x5t'.
 
    x5u-sender:  This header parameter contains a URI for the sender's
-      key exchange certificate.  The structure and processing are the
-      same as 'x5u'.
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Schaad                    Expires 21 July 2022                  [Page 8]
+Schaad                    Expires 28 July 2022                  [Page 8]
 
 Internet-Draft                 COSE X.509                   January 2022
 
+
+      key exchange certificate.  The structure and processing are the
+      same as 'x5u'.
 
    +===============+=====+=============+===================+===========+
    |Name           |Label|Type         | Algorithm         |Description|
    +===============+=====+=============+===================+===========+
    |x5t-sender     |TBD  |COSE_CertHash| ECDH-SS+HKDF-256, |Thumbprint |
    |               |     |             | ECDH-SS+HKDF-512, |for the    |
-   |               |     |             | ECDH-SS+A128KW,   |senders    |
+   |               |     |             | ECDH-SS+A128KW,   |sender's   |
    |               |     |             | ECDH-SS+A192KW,   |X.509      |
    |               |     |             | ECDH-SS+A256KW    |certificate|
    +---------------+-----+-------------+-------------------+-----------+
    |x5u-sender     |TBD  |uri          | ECDH-SS+HKDF-256, |URI for the|
-   |               |     |             | ECDH-SS+HKDF-512, |senders    |
+   |               |     |             | ECDH-SS+HKDF-512, |sender's   |
    |               |     |             | ECDH-SS+A128KW,   |X.509      |
    |               |     |             | ECDH-SS+A192KW,   |certificate|
    |               |     |             | ECDH-SS+A256KW    |           |
@@ -490,22 +493,27 @@ Internet-Draft                 COSE X.509                   January 2022
    registry.  For each item, the 'Reference' field points to this
    document.
 
+
+
+
+
+
+
+
+
+Schaad                    Expires 28 July 2022                  [Page 9]
+
+Internet-Draft                 COSE X.509                   January 2022
+
+
 5.  Security Considerations
 
    Establishing trust in a certificate is a vital part of processing.  A
    major component of establishing trust is determining what the set of
    trust anchors are for the process.  A new self-signed certificate
    appearing on the client cannot be a trigger to modify the set of
-   trust anchors, because a well defined trust-establishment process is
+   trust anchors, because a well-defined trust-establishment process is
    required.  One common way for a new trust anchor to be added (or
-
-
-
-Schaad                    Expires 21 July 2022                  [Page 9]
-
-Internet-Draft                 COSE X.509                   January 2022
-
-
    removed) from a device is by doing a new firmware upgrade.
 
    In constrained systems, there is a trade-off between the order of
@@ -546,25 +554,21 @@ Internet-Draft                 COSE X.509                   January 2022
    either to loss of security or excessive consumption of resources (for
    example using a 200K RSA key).
 
-   When processing the x5u header parameter the security considerations
-   of [RFC3986] and specifically those defined in Section 7.1 also
-   apply.
 
 
 
-
-
-
-
-
-Schaad                    Expires 21 July 2022                 [Page 10]
+Schaad                    Expires 28 July 2022                 [Page 10]
 
 Internet-Draft                 COSE X.509                   January 2022
 
 
+   When processing the x5u header parameter the security considerations
+   of [RFC3986] and specifically those defined in Section 7.1 of
+   [RFC3986] also apply.
+
    Regardless of the source, certification path validation is an
    important part of establishing trust in a certificate.  Section 6 of
-   [RFC5280] provides guidence for the path validation.  The security
+   [RFC5280] provides guidance for the path validation.  The security
    considerations of [RFC5280] are also important for the correct usage
    of this document.
 
@@ -603,46 +607,59 @@ Internet-Draft                 COSE X.509                   January 2022
 
 6.2.  Informative References
 
-   [RFC8446]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
-              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
-              <https://www.rfc-editor.org/info/rfc8446>.
-
-   [I-D.ietf-tls-dtls13]
-              Rescorla, E., Tschofenig, H., and N. Modadugu, "The
-              Datagram Transport Layer Security (DTLS) Protocol Version
+   [I-D.ietf-anima-constrained-voucher]
+              Richardson, M., Stok, P. V. D., Kampanakis, P., and E.
+              Dijk, "Constrained Bootstrapping Remote Secure Key
 
 
 
-Schaad                    Expires 21 July 2022                 [Page 11]
+Schaad                    Expires 28 July 2022                 [Page 11]
 
 Internet-Draft                 COSE X.509                   January 2022
 
 
+              Infrastructure (BRSKI)", Work in Progress, Internet-Draft,
+              draft-ietf-anima-constrained-voucher-15, 7 December 2021,
+              <https://www.ietf.org/archive/id/draft-ietf-anima-
+              constrained-voucher-15.txt>.
+
+   [I-D.ietf-lake-edhoc]
+              Selander, G., Mattsson, J. P., and F. Palombini,
+              "Ephemeral Diffie-Hellman Over COSE (EDHOC)", Work in
+              Progress, Internet-Draft, draft-ietf-lake-edhoc-12, 20
+              October 2021, <https://www.ietf.org/archive/id/draft-ietf-
+              lake-edhoc-12.txt>.
+
+   [I-D.ietf-tls-dtls13]
+              Rescorla, E., Tschofenig, H., and N. Modadugu, "The
+              Datagram Transport Layer Security (DTLS) Protocol Version
               1.3", Work in Progress, Internet-Draft, draft-ietf-tls-
               dtls13-43, 30 April 2021,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              dtls13-43>.
-
-   [RFC8551]  Schaad, J., Ramsdell, B., and S. Turner, "Secure/
-              Multipurpose Internet Mail Extensions (S/MIME) Version 4.0
-              Message Specification", RFC 8551, DOI 10.17487/RFC8551,
-              April 2019, <https://www.rfc-editor.org/info/rfc8551>.
+              <https://www.ietf.org/archive/id/draft-ietf-tls-
+              dtls13-43.txt>.
 
    [RFC2585]  Housley, R. and P. Hoffman, "Internet X.509 Public Key
               Infrastructure Operational Protocols: FTP and HTTP",
               RFC 2585, DOI 10.17487/RFC2585, May 1999,
               <https://www.rfc-editor.org/info/rfc2585>.
 
-   [I-D.ietf-lake-edhoc]
-              Selander, G., Mattsson, J. P., and F. Palombini,
-              "Ephemeral Diffie-Hellman Over COSE (EDHOC)", Work in
-              Progress, Internet-Draft, draft-ietf-lake-edhoc-12, 20
-              October 2021, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-lake-edhoc-12>.
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
+              RFC 3986, DOI 10.17487/RFC3986, January 2005,
+              <https://www.rfc-editor.org/info/rfc3986>.
 
    [RFC8392]  Jones, M., Wahlstroem, E., Erdtman, S., and H. Tschofenig,
               "CBOR Web Token (CWT)", RFC 8392, DOI 10.17487/RFC8392,
               May 2018, <https://www.rfc-editor.org/info/rfc8392>.
+
+   [RFC8446]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
+              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
+              <https://www.rfc-editor.org/info/rfc8446>.
+
+   [RFC8551]  Schaad, J., Ramsdell, B., and S. Turner, "Secure/
+              Multipurpose Internet Mail Extensions (S/MIME) Version 4.0
+              Message Specification", RFC 8551, DOI 10.17487/RFC8551,
+              April 2019, <https://www.rfc-editor.org/info/rfc8551>.
 
    [RFC8610]  Birkholz, H., Vigano, C., and C. Bormann, "Concise Data
               Definition Language (CDDL): A Notational Convention to
@@ -650,29 +667,16 @@ Internet-Draft                 COSE X.509                   January 2022
               JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
               June 2019, <https://www.rfc-editor.org/info/rfc8610>.
 
-   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
-              Resource Identifier (URI): Generic Syntax", STD 66,
-              RFC 3986, DOI 10.17487/RFC3986, January 2005,
-              <https://www.rfc-editor.org/info/rfc3986>.
-
-   [I-D.ietf-anima-constrained-voucher]
-              Richardson, M., Stok, P. V. D., Kampanakis, P., and E.
-              Dijk, "Constrained Bootstrapping Remote Secure Key
-              Infrastructure (BRSKI)", Work in Progress, Internet-Draft,
-              draft-ietf-anima-constrained-voucher-15, 7 December 2021,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-anima-
-              constrained-voucher-15>.
-
-Author's Address
 
 
-
-
-
-Schaad                    Expires 21 July 2022                 [Page 12]
+Schaad                    Expires 28 July 2022                 [Page 12]
 
 Internet-Draft                 COSE X.509                   January 2022
 
+
+Acknowledgements
+
+Author's Address
 
    Jim Schaad
    August Cellars
@@ -721,8 +725,4 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-
-
-
-
-Schaad                    Expires 21 July 2022                 [Page 13]
+Schaad                    Expires 28 July 2022                 [Page 13]
