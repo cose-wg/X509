@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-01-24T21:33:44.653661+00:00",
+  "timestamp": "2022-01-30T18:59:05.443201+00:00",
   "repo": "cose-wg/X509",
   "labels": [
     {
@@ -684,12 +684,11 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
-        "x509",
-        "fixed?"
+        "x509"
       ],
       "body": "The x5u text refers to a \"trust relationship\" between the signer and the host of the URI. What is that relationship? Since trust relationships are of critical importance in what we're doing here, I would expect it to be spelled out. \r\n\r\nIt seems like there's two roots of trust involved here. One for the chain that is used to verify the COSE and the other that is used to verify the TLS connection.\r\n\r\nI think the following sentence refers to the root of trust for the TLS connection, but can be confused with the root of trust for the COSE chain.\r\n\r\n> If the retrieved certificate does not\r\n      chain to an existing trust anchor, the certificate MUST NOT be\r\n      trusted unless the server is configured as trusted to provide new\r\n      trust anchors or if an out-of-band confirmation can be received\r\n      for trusting the retrieved certificate.\r\n\r\nAlso, maybe there should be a protected header that names the root of trust for the TLS connection? If there isn't the signer can't quite control the trust relationship as they don't know what roots the receiver has been configured with.\r\n\r\nI also think it is important to point out that the certs received this way must still be validated against the root used by the COSE chain. This is not the fetching of already-validate certificates.\r\n\r\nJWS seems to have similar issues.\r\n\r\n",
       "createdAt": "2020-12-18T20:23:26Z",
-      "updatedAt": "2021-11-10T07:02:52Z",
+      "updatedAt": "2022-01-24T21:52:37Z",
       "closedAt": null,
       "comments": [
         {
@@ -803,19 +802,20 @@
       "url": "https://github.com/cose-wg/X509/issues/37",
       "state": "OPEN",
       "author": "emanjon",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [
-        "x509"
+        "x509",
+        "fixed?"
       ],
       "body": "John:\r\n\r\nWhen we discussed this at the meeting is was agreed to change application/cbor to something more specific. The PR now use \"application/cose-x509-chain\". And has the text \"When the application/cose-x509-chain media type is used, the data is a COSE_X509 structure containing a chain.\"\r\n\r\nI just noticed that an IANA section registering the media type is missing. I will add that to the PR. But before I do that:\r\n\r\n- Is application/cose-x509-chain the right thing?\r\n- Or should it be application/cose-x509 allowing for both bag and chain?\r\n- Or should there be two media types application/cose-x509-chain and application/cose-x509-bag?\r\n\r\nx5bag and x5chain separates bag and chain, while x5u could be either. Knowing that it is a chain simplifies processing, but removes the option to transfer additional certificates.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2021-06-23T14:03:50Z",
-      "updatedAt": "2021-10-10T20:22:19Z",
+      "updatedAt": "2022-01-24T21:53:28Z",
       "closedAt": null,
       "comments": [
         {
           "author": "emanjon",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Carsten:\r\n\r\n> - Or should there be two media types application/cose-x509-chain and application/cose-x509-bag?\r\n\r\nThat depends on whether the media type is needed to make the semantic distinction or that is taken from the context (here: header parameter).\r\n\r\nThe 8152 style was to have a single application/cose that would be further qualified by either an optional addition CBOR tag or an optional media-type parameter (cose-type=\u201c\u2026\u201d).\r\n\r\n(And don\u2019t forget to define CoRE Content-Formats\u2026)",
           "createdAt": "2021-06-23T14:04:17Z",
           "updatedAt": "2021-06-23T14:04:17Z"
@@ -865,11 +865,12 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [
-        "x509"
+        "x509",
+        "fixed?"
       ],
       "body": "- bstr / [ 2*certs: bstr ] is referenced\r\n- X.509 header must be placed in the unprotected bucket",
       "createdAt": "2021-10-10T14:45:17Z",
-      "updatedAt": "2021-10-10T14:45:17Z",
+      "updatedAt": "2022-01-24T21:53:44Z",
       "closedAt": null,
       "comments": []
     },
@@ -1853,26 +1854,212 @@
       "id": "PR_kwDOBHEdPc4xcxfO",
       "title": "Add Media type registration for application/cose-x509",
       "url": "https://github.com/cose-wg/X509/pull/44",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cabo",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2022-01-22T22:58:46Z",
-      "updatedAt": "2022-01-22T22:58:46Z",
+      "updatedAt": "2022-01-28T14:17:27Z",
       "baseRepository": "cose-wg/X509",
       "baseRefName": "master",
       "baseRefOid": "97d91751e21a3340a016543be22088e7468d8a4a",
       "headRepository": "cabo/X509",
       "headRefName": "media-type-registration",
       "headRefOid": "7f2beb0b84008f6f9dd20eef91644ec13c3ad8ec",
+      "closedAt": "2022-01-24T21:36:36Z",
+      "mergedAt": "2022-01-24T21:36:36Z",
+      "mergedBy": "ivajloip",
+      "mergeCommit": {
+        "oid": "8983fccc18d45cfc245becef401e04a97522d3b2"
+      },
+      "comments": [
+        {
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@cabo are you planning to kick off a review thread on the media-types list?",
+          "createdAt": "2022-01-28T06:04:21Z",
+          "updatedAt": "2022-01-28T06:04:21Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "On 2022-01-28, at 07:04, kaduk ***@***.***> wrote:\n> \n> @cabo are you planning to kick off a review thread on the media-types list?\n\nYes.  Wanted to wait until the PR is merged.\nNow wondering if we should submit a snapshot I-D so we can reference that in the media-types mail.\n\nGr\u00fc\u00dfe, Carsten\n\n",
+          "createdAt": "2022-01-28T08:22:24Z",
+          "updatedAt": "2022-01-28T08:22:24Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "On 2022-01-28, at 09:22, Carsten Bormann ***@***.***> wrote:\n> \n> Now wondering if we should submit a snapshot I-D so we can reference that in the media-types mail.\n\nBut that kicks us out of\n\nApproved-announcement to be sent::Revised I-D Needed\n\nAnd there is the approval.\n\nHmm.\n\nI\u2019ll use https://cose-wg.github.io/X509/draft-ietf-cose-x509.html#name-media-type-application-cose for the link.\n\nGr\u00fc\u00dfe, Carsten\n\n",
+          "createdAt": "2022-01-28T08:35:32Z",
+          "updatedAt": "2022-01-28T08:35:32Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Archived-At: <https://mailarchive.ietf.org/arch/msg/media-types/n6xjvQfqRPV2EkMIUyini8Q8OXI>\r\n",
+          "createdAt": "2022-01-28T08:52:49Z",
+          "updatedAt": "2022-01-28T08:52:49Z"
+        },
+        {
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> But that kicks us out of Approved-announcement to be sent::Revised I-D Needed\r\n\r\nIt should produce Approved-announcement to be sent::AD Followup and not trigger any automatic action by the secretariat",
+          "createdAt": "2022-01-28T14:17:27Z",
+          "updatedAt": "2022-01-28T14:17:27Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOBHEdPc4zWhjx",
+          "commit": {
+            "abbreviatedOid": "7f2beb0"
+          },
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-24T21:35:15Z",
+          "updatedAt": "2022-01-24T21:35:16Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "It is not entirely intuitive to me that this reference should be informative, but I trust your judgement on that one.",
+              "createdAt": "2022-01-24T21:35:15Z",
+              "updatedAt": "2022-01-24T21:35:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOBHEdPc4zmdyy",
+          "commit": {
+            "abbreviatedOid": "7f2beb0"
+          },
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-28T06:02:46Z",
+          "updatedAt": "2022-01-28T06:02:47Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "I agree that informative is okay here.",
+              "createdAt": "2022-01-28T06:02:47Z",
+              "updatedAt": "2022-01-28T06:02:47Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "id": "PR_kwDOBHEdPc4xhewo",
+      "title": "Add suggestion from Jonathan Hammell",
+      "url": "https://github.com/cose-wg/X509/pull/45",
+      "state": "OPEN",
+      "author": "ivajloip",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- And improve text around x5u protection (fixes issue #33).\r\n- fixes issue #30.\r\n",
+      "createdAt": "2022-01-24T21:51:41Z",
+      "updatedAt": "2022-01-30T18:58:42Z",
+      "baseRepository": "cose-wg/X509",
+      "baseRefName": "master",
+      "baseRefOid": "8983fccc18d45cfc245becef401e04a97522d3b2",
+      "headRepository": "cose-wg/X509",
+      "headRefName": "nits",
+      "headRefOid": "49622714e088b5e80cd400c303aa96a60110bb28",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOBHEdPc4zfCBh",
+          "commit": {
+            "abbreviatedOid": "f9f9b74"
+          },
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-26T16:14:24Z",
+          "updatedAt": "2022-01-26T16:14:25Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "...or OSCORE {{RFC8613}}...\r\n\r\n(missing word)",
+              "createdAt": "2022-01-26T16:14:24Z",
+              "updatedAt": "2022-01-26T16:14:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOBHEdPc4zmluc",
+          "commit": {
+            "abbreviatedOid": "f9f9b74"
+          },
+          "author": "kaduk",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-28T07:04:11Z",
+          "updatedAt": "2022-01-28T07:04:11Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\r\n  OSCORE {{RFC8613}} SHOULD be used.\r\n```",
+              "createdAt": "2022-01-28T07:04:11Z",
+              "updatedAt": "2022-01-28T07:04:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOBHEdPc4zm3-l",
+          "commit": {
+            "abbreviatedOid": "f9f9b74"
+          },
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-28T08:42:44Z",
+          "updatedAt": "2022-01-28T08:42:45Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "c.f. \u2794 cf.\r\n",
+              "createdAt": "2022-01-28T08:42:44Z",
+              "updatedAt": "2022-01-28T08:42:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOBHEdPc4zm49l",
+          "commit": {
+            "abbreviatedOid": "f9f9b74"
+          },
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-28T08:47:10Z",
+          "updatedAt": "2022-01-28T08:47:10Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\ncertificate authority (cf. {{Section 5.1 of RFC2634}}).\r\n```",
+              "createdAt": "2022-01-28T08:47:10Z",
+              "updatedAt": "2022-01-28T08:47:10Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
