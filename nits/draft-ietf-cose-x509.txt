@@ -4,8 +4,8 @@
 
 Network Working Group                                          J. Schaad
 Internet-Draft                                            August Cellars
-Intended status: Standards Track                         24 January 2022
-Expires: 28 July 2022
+Intended status: Standards Track                         30 January 2022
+Expires: 3 August 2022
 
 
     CBOR Object Signing and Encryption (COSE): Header parameters for
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 July 2022.
+   This Internet-Draft will expire on 3 August 2022.
 
 
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 1]
+Schaad                    Expires 3 August 2022                 [Page 1]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 2]
+Schaad                    Expires 3 August 2022                 [Page 2]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -165,7 +165,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 3]
+Schaad                    Expires 3 August 2022                 [Page 3]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -221,7 +221,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 4]
+Schaad                    Expires 3 August 2022                 [Page 4]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -277,7 +277,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 5]
+Schaad                    Expires 3 August 2022                 [Page 5]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -333,7 +333,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 6]
+Schaad                    Expires 3 August 2022                 [Page 6]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -365,7 +365,7 @@ Internet-Draft                 COSE X.509                   January 2022
       an out-of-band confirmation can be received for trusting the
       retrieved certificate.  In case an HTTP or CoAP GET request is
       used to retrieve a certificate, TLS [RFC8446], DTLS
-      [I-D.ietf-tls-dtls13] or [RFC8613] SHOULD be used.
+      [I-D.ietf-tls-dtls13] or OSCORE [RFC8613] SHOULD be used.
 
    The header parameters are used in the following locations:
 
@@ -389,7 +389,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 7]
+Schaad                    Expires 3 August 2022                 [Page 7]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -445,7 +445,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 8]
+Schaad                    Expires 3 August 2022                 [Page 8]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -501,7 +501,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 9]
+Schaad                    Expires 3 August 2022                 [Page 9]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -557,7 +557,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                 [Page 10]
+Schaad                    Expires 3 August 2022                [Page 10]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -613,7 +613,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                 [Page 11]
+Schaad                    Expires 3 August 2022                [Page 11]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -669,7 +669,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                 [Page 12]
+Schaad                    Expires 3 August 2022                [Page 12]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -725,7 +725,7 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                 [Page 13]
+Schaad                    Expires 3 August 2022                [Page 13]
 
 Internet-Draft                 COSE X.509                   January 2022
 
@@ -781,4 +781,4 @@ Author's Address
 
 
 
-Schaad                    Expires 28 July 2022                 [Page 14]
+Schaad                    Expires 3 August 2022                [Page 14]
