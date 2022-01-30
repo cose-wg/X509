@@ -280,7 +280,7 @@ x5u:
   new trust anchors or if an out-of-band confirmation can be received for trusting
   the retrieved certificate. In case an HTTP or CoAP GET request is used to
   retrieve a certificate, TLS {{RFC8446}}, DTLS {{I-D.ietf-tls-dtls13}} or
-  {{RFC8613}} SHOULD be used.
+  OSCORE {{RFC8613}} SHOULD be used.
 
 The header parameters are used in the following locations:
 
