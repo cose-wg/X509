@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-01-30T18:59:05.443201+00:00",
+  "timestamp": "2022-01-31T21:51:58.889628+00:00",
   "repo": "cose-wg/X509",
   "labels": [
     {
@@ -688,7 +688,7 @@
       ],
       "body": "The x5u text refers to a \"trust relationship\" between the signer and the host of the URI. What is that relationship? Since trust relationships are of critical importance in what we're doing here, I would expect it to be spelled out. \r\n\r\nIt seems like there's two roots of trust involved here. One for the chain that is used to verify the COSE and the other that is used to verify the TLS connection.\r\n\r\nI think the following sentence refers to the root of trust for the TLS connection, but can be confused with the root of trust for the COSE chain.\r\n\r\n> If the retrieved certificate does not\r\n      chain to an existing trust anchor, the certificate MUST NOT be\r\n      trusted unless the server is configured as trusted to provide new\r\n      trust anchors or if an out-of-band confirmation can be received\r\n      for trusting the retrieved certificate.\r\n\r\nAlso, maybe there should be a protected header that names the root of trust for the TLS connection? If there isn't the signer can't quite control the trust relationship as they don't know what roots the receiver has been configured with.\r\n\r\nI also think it is important to point out that the certs received this way must still be validated against the root used by the COSE chain. This is not the fetching of already-validate certificates.\r\n\r\nJWS seems to have similar issues.\r\n\r\n",
       "createdAt": "2020-12-18T20:23:26Z",
-      "updatedAt": "2022-01-24T21:52:37Z",
+      "updatedAt": "2022-01-30T21:30:56Z",
       "closedAt": null,
       "comments": [
         {
@@ -711,6 +711,13 @@
           "body": "Agreed.My preference would be for x5u (and c5u) to not have any special trust characteristics. It seems much cleaner and simpler that way.\r\n\r\nWe could do that in x509-cose and in cbor-cert and I think it would be good. However, JWS already has a text (that I find confusing) about some special trust.\r\n\r\n\r\n",
           "createdAt": "2021-02-08T21:00:00Z",
           "updatedAt": "2021-02-08T21:00:00Z"
+        },
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Hi,\r\nWhat is the status here? Is this issue resolved by the latest text or is there anything more to add (or remove) to make the trust relationship less confusing. ",
+          "createdAt": "2022-01-30T21:30:56Z",
+          "updatedAt": "2022-01-30T21:30:56Z"
         }
       ]
     },
@@ -800,7 +807,7 @@
       "id": "MDU6SXNzdWU5MjgyOTU3ODE=",
       "title": "media-type parameter, CoRE Content-Formats, ",
       "url": "https://github.com/cose-wg/X509/issues/37",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -810,8 +817,8 @@
       ],
       "body": "John:\r\n\r\nWhen we discussed this at the meeting is was agreed to change application/cbor to something more specific. The PR now use \"application/cose-x509-chain\". And has the text \"When the application/cose-x509-chain media type is used, the data is a COSE_X509 structure containing a chain.\"\r\n\r\nI just noticed that an IANA section registering the media type is missing. I will add that to the PR. But before I do that:\r\n\r\n- Is application/cose-x509-chain the right thing?\r\n- Or should it be application/cose-x509 allowing for both bag and chain?\r\n- Or should there be two media types application/cose-x509-chain and application/cose-x509-bag?\r\n\r\nx5bag and x5chain separates bag and chain, while x5u could be either. Knowing that it is a chain simplifies processing, but removes the option to transfer additional certificates.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2021-06-23T14:03:50Z",
-      "updatedAt": "2022-01-24T21:53:28Z",
-      "closedAt": null,
+      "updatedAt": "2022-01-30T21:33:22Z",
+      "closedAt": "2022-01-30T21:33:21Z",
       "comments": [
         {
           "author": "emanjon",
@@ -819,6 +826,13 @@
           "body": "Carsten:\r\n\r\n> - Or should there be two media types application/cose-x509-chain and application/cose-x509-bag?\r\n\r\nThat depends on whether the media type is needed to make the semantic distinction or that is taken from the context (here: header parameter).\r\n\r\nThe 8152 style was to have a single application/cose that would be further qualified by either an optional addition CBOR tag or an optional media-type parameter (cose-type=\u201c\u2026\u201d).\r\n\r\n(And don\u2019t forget to define CoRE Content-Formats\u2026)",
           "createdAt": "2021-06-23T14:04:17Z",
           "updatedAt": "2021-06-23T14:04:17Z"
+        },
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I believe this has been addressed by PR #44 and the email that followed. Please reopen if you believe otherwise.",
+          "createdAt": "2022-01-30T21:33:21Z",
+          "updatedAt": "2022-01-30T21:33:21Z"
         }
       ]
     },
@@ -1966,18 +1980,26 @@
       "labels": [],
       "body": "- And improve text around x5u protection (fixes issue #33).\r\n- fixes issue #30.\r\n",
       "createdAt": "2022-01-24T21:51:41Z",
-      "updatedAt": "2022-01-30T18:58:42Z",
+      "updatedAt": "2022-01-31T21:51:38Z",
       "baseRepository": "cose-wg/X509",
       "baseRefName": "master",
       "baseRefOid": "8983fccc18d45cfc245becef401e04a97522d3b2",
       "headRepository": "cose-wg/X509",
       "headRefName": "nits",
-      "headRefOid": "49622714e088b5e80cd400c303aa96a60110bb28",
+      "headRefOid": "feb9c5b2c55e45f2ecd365773662d644a29517df",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Unless advised otherwise, I will merge this PR in 2-3 days.",
+          "createdAt": "2022-01-30T19:02:10Z",
+          "updatedAt": "2022-01-30T19:02:10Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOBHEdPc4zfCBh",
@@ -2056,6 +2078,66 @@
               "body": "```suggestion\r\ncertificate authority (cf. {{Section 5.1 of RFC2634}}).\r\n```",
               "createdAt": "2022-01-28T08:47:10Z",
               "updatedAt": "2022-01-28T08:47:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOBHEdPc4zsFBE",
+          "commit": {
+            "abbreviatedOid": "aa9273e"
+          },
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-30T19:00:04Z",
+          "updatedAt": "2022-01-30T19:00:04Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "Done. Thanks!",
+              "createdAt": "2022-01-30T19:00:04Z",
+              "updatedAt": "2022-01-30T19:00:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOBHEdPc4zsFB9",
+          "commit": {
+            "abbreviatedOid": "aa9273e"
+          },
+          "author": "ivajloip",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-30T19:00:34Z",
+          "updatedAt": "2022-01-30T19:00:34Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Done. Thanks!",
+              "createdAt": "2022-01-30T19:00:34Z",
+              "updatedAt": "2022-01-30T19:00:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOBHEdPc4zsNEH",
+          "commit": {
+            "abbreviatedOid": "aa9273e"
+          },
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-30T22:17:13Z",
+          "updatedAt": "2022-01-30T22:17:13Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "This is not a proper use of RFC 2119 MAY.\r\n\r\n```suggestion\r\nin the protected header bucket can help mitigate some risks of a misbehaving\r\n```",
+              "createdAt": "2022-01-30T22:17:13Z",
+              "updatedAt": "2022-01-30T22:17:13Z"
             }
           ]
         }
