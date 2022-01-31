@@ -524,7 +524,7 @@ provides guidance for the path validation. The security considerations
 of {{RFC5280}} are also important for the correct usage of this document.
 
 Protecting the integrity of the x5bag, x5chain and x5t contents by placing them
-in the protected header bucket MAY mitigate some risks of a misbehaving
+in the protected header bucket can help mitigate some risks of a misbehaving
 certificate authority (cf. {{Section 5.1 of RFC2634}}).
 
 The security of the algorithm used for 'x5t' does not affect the security
