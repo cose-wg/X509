@@ -4,8 +4,8 @@
 
 Network Working Group                                          J. Schaad
 Internet-Draft                                            August Cellars
-Intended status: Standards Track                         24 January 2022
-Expires: 28 July 2022
+Intended status: Standards Track                         2 February 2022
+Expires: 6 August 2022
 
 
     CBOR Object Signing and Encryption (COSE): Header parameters for
@@ -47,15 +47,15 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 July 2022.
+   This Internet-Draft will expire on 6 August 2022.
 
 
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 1]
+Schaad                    Expires 6 August 2022                 [Page 1]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
 Copyright Notice
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 2]
+Schaad                    Expires 6 August 2022                 [Page 2]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
    provide for authentication of devices, and uses them to establish
@@ -165,9 +165,9 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 3]
+Schaad                    Expires 6 August 2022                 [Page 3]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
    Parties that intend to rely on the assertions made by a certificate
@@ -221,9 +221,9 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 4]
+Schaad                    Expires 6 August 2022                 [Page 4]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
       *  If multiple certificates are conveyed, a CBOR array of byte
@@ -277,9 +277,9 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 5]
+Schaad                    Expires 6 August 2022                 [Page 5]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
       certificate by a hash value (a thumbprint).  The 'x5t' header
@@ -333,9 +333,9 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 6]
+Schaad                    Expires 6 August 2022                 [Page 6]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
       *  application/pkix-cert [RFC2585]
@@ -359,13 +359,13 @@ Internet-Draft                 COSE X.509                   January 2022
       does not need to provide any protection.
 
       If a retrieved certificate does not chain to an existing trust
-      anchor, the certificate MUST NOT be trusted unless the URI
+      anchor, that certificate MUST NOT be trusted unless the URI
       provided integrity protection and server authentication and the
       server is configured as trusted to provide new trust anchors or if
       an out-of-band confirmation can be received for trusting the
-      retrieved certificate.  For example, an HTTP or CoAP GET request
-      to retrieve a certificate MUST use TLS [RFC8446] or DTLS
-      [I-D.ietf-tls-dtls13].
+      retrieved certificate.  In case an HTTP or CoAP GET request is
+      used to retrieve a certificate, TLS [RFC8446], DTLS
+      [I-D.ietf-tls-dtls13] or OSCORE [RFC8613] SHOULD be used.
 
    The header parameters are used in the following locations:
 
@@ -389,9 +389,9 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 7]
+Schaad                    Expires 6 August 2022                 [Page 7]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
          +=========+=======+===============+=====================+
@@ -445,9 +445,9 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 8]
+Schaad                    Expires 6 August 2022                 [Page 8]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
       key exchange certificate.  The structure and processing are the
@@ -501,9 +501,9 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                  [Page 9]
+Schaad                    Expires 6 August 2022                 [Page 9]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
 4.3.  Media Type application/cose-x509
@@ -557,9 +557,9 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                 [Page 10]
+Schaad                    Expires 6 August 2022                [Page 10]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
    Intended usage:  COMMON
@@ -613,9 +613,9 @@ Internet-Draft                 COSE X.509                   January 2022
 
 
 
-Schaad                    Expires 28 July 2022                 [Page 11]
+Schaad                    Expires 6 August 2022                [Page 11]
 
-Internet-Draft                 COSE X.509                   January 2022
+Internet-Draft                 COSE X.509                  February 2022
 
 
    End-entity X.509 certificates contain identities that a passive on-
@@ -644,6 +644,11 @@ Internet-Draft                 COSE X.509                   January 2022
    considerations of [RFC5280] are also important for the correct usage
    of this document.
 
+   Protecting the integrity of the x5bag, x5chain and x5t contents by
+   placing them in the protected header bucket can help mitigate some
+   risks of a misbehaving certificate authority (cf.  Section 5.1 of
+   [RFC2634]).
+
    The security of the algorithm used for 'x5t' does not affect the
    security of the system as this header parameter selects which
    certificate that is already present on the system should be used, but
@@ -658,21 +663,22 @@ Internet-Draft                 COSE X.509                   January 2022
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
+
+
+
+
+
+
+Schaad                    Expires 6 August 2022                [Page 12]
+
+Internet-Draft                 COSE X.509                  February 2022
+
+
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
               Infrastructure Certificate and Certificate Revocation List
               (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
               <https://www.rfc-editor.org/info/rfc5280>.
-
-
-
-
-
-
-Schaad                    Expires 28 July 2022                 [Page 12]
-
-Internet-Draft                 COSE X.509                   January 2022
-
 
    [RFC8152]  Schaad, J., "CBOR Object Signing and Encryption (COSE)",
               RFC 8152, DOI 10.17487/RFC8152, July 2017,
@@ -717,18 +723,21 @@ Internet-Draft                 COSE X.509                   January 2022
               RFC 2585, DOI 10.17487/RFC2585, May 1999,
               <https://www.rfc-editor.org/info/rfc2585>.
 
+
+
+Schaad                    Expires 6 August 2022                [Page 13]
+
+Internet-Draft                 COSE X.509                  February 2022
+
+
+   [RFC2634]  Hoffman, P., Ed., "Enhanced Security Services for S/MIME",
+              RFC 2634, DOI 10.17487/RFC2634, June 1999,
+              <https://www.rfc-editor.org/info/rfc2634>.
+
    [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
               Resource Identifier (URI): Generic Syntax", STD 66,
               RFC 3986, DOI 10.17487/RFC3986, January 2005,
               <https://www.rfc-editor.org/info/rfc3986>.
-
-
-
-
-Schaad                    Expires 28 July 2022                 [Page 13]
-
-Internet-Draft                 COSE X.509                   January 2022
-
 
    [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
               Specifications and Registration Procedures", BCP 13,
@@ -754,6 +763,11 @@ Internet-Draft                 COSE X.509                   January 2022
               JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
               June 2019, <https://www.rfc-editor.org/info/rfc8610>.
 
+   [RFC8613]  Selander, G., Mattsson, J., Palombini, F., and L. Seitz,
+              "Object Security for Constrained RESTful Environments
+              (OSCORE)", RFC 8613, DOI 10.17487/RFC8613, July 2019,
+              <https://www.rfc-editor.org/info/rfc8613>.
+
 Acknowledgements
 
 Author's Address
@@ -767,18 +781,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Schaad                    Expires 28 July 2022                 [Page 14]
+Schaad                    Expires 6 August 2022                [Page 14]
