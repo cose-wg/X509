@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-01-31T21:51:58.889628+00:00",
+  "timestamp": "2022-02-02T20:51:24.136589+00:00",
   "repo": "cose-wg/X509",
   "labels": [
     {
@@ -1973,24 +1973,26 @@
       "id": "PR_kwDOBHEdPc4xhewo",
       "title": "Add suggestion from Jonathan Hammell",
       "url": "https://github.com/cose-wg/X509/pull/45",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ivajloip",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "- And improve text around x5u protection (fixes issue #33).\r\n- fixes issue #30.\r\n",
       "createdAt": "2022-01-24T21:51:41Z",
-      "updatedAt": "2022-01-31T21:51:38Z",
+      "updatedAt": "2022-02-02T20:51:23Z",
       "baseRepository": "cose-wg/X509",
       "baseRefName": "master",
       "baseRefOid": "8983fccc18d45cfc245becef401e04a97522d3b2",
       "headRepository": "cose-wg/X509",
       "headRefName": "nits",
       "headRefOid": "feb9c5b2c55e45f2ecd365773662d644a29517df",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-02-02T20:51:01Z",
+      "mergedAt": "2022-02-02T20:51:01Z",
+      "mergedBy": "ivajloip",
+      "mergeCommit": {
+        "oid": "c489be7b2af233e1a76314eb52e780119ed1062e"
+      },
       "comments": [
         {
           "author": "ivajloip",
