@@ -212,11 +212,11 @@ x5t:
   value (a thumbprint).
   The 'x5t' header parameter is represented as an array of two elements.
   The first element is an algorithm identifier which is an integer or a string
-  containing the hash algorithm identifier corresponding to either the Value
-  (integer) or Name (string) column of the algorithm registered in the "COSE
-  Algorithms" registry [](https://www.iana.org/assignments/cose/cose.xhtml#algorithms).
-  The second element is a binary string containing the hash value computed
-  over the DER encoded certificate.
+  containing the hash algorithm identifier corresponding to the Value column
+  (integer or text string) of the algorithm registered in the "COSE Algorithms"
+  registry [](https://www.iana.org/assignments/cose/cose.xhtml#algorithms). The
+  second element is a binary string containing the hash value computed over the
+  DER encoded certificate.
 
   As this header parameter does not provide any trust, the header parameter
   can be in either a protected or unprotected header bucket.
